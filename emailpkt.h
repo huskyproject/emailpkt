@@ -9,7 +9,11 @@
  */
 
 #if UNIX==1
+#if LINUX==1
 #include <sys/syslimits.h>     /* for PATH_MAX */
+#else
+#include <linux/limits.h>      /* for PATH_MAX */
+#endif
 #else
 #define PATH_MAX 128
 #endif
@@ -25,10 +29,10 @@
   #define DEFAULTCFGFILE   CFGDIR"/email.cfg"
 #endif
 
-/* Should we backup incoming and outgoing plain texts? I don't see why not...
+/* Should we backup incoming and outgoing plain texts? If yes set SAVE to 1...
    TODO: put this in the configuration */
 #ifndef SAVE
-  #define SAVE             1
+  #define SAVE             0
 #endif
 
 #define strip(s)  if(s[strlen(s)-1]=='\n') s[strlen(s)-1] = 0

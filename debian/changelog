@@ -2,8 +2,9 @@ emailpkt (0.3-1) unstable; urgency=low
 
   * New CVS version (0.3-current)
   * debian/rules: DH_COMPAT=4
+  * debian/copyright: new http-location of sources
 
- -- Pavel Andreew <pavel@collage.etel.ru>  Fri, 23 Aug 2002 15:44:27 +0600
+ -- Pavel Andreew <pavel@collage.etel.ru>  Mon, 26 Aug 2002 13:52:54 +0600
 
 emailpkt (0.2-2) unstable; urgency=low
 
