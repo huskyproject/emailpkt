@@ -91,7 +91,7 @@
   Take a look at it and its comments, and change whatever you want to meet
   your needs.
   
-  Assuming you have already instaled at least one package from HUSKY, the
+  Assuming you have already installed at least one package from HUSKY, the
   compiling process for EmailPKT is the same. Note that the makefile that
   must be used is called 'makefile', so you do not have to worry about extra
   arguments to make. For example, just write:
@@ -113,7 +113,7 @@
   one ('makefile') is used to compile a HUSKY dependant version. Right now, the
   only target platform for the standalone version is Linux, so the makefile to
   use is called 'makefile.lnx' (Hey, you Unix guru! If you change it to compile
-  on your-favorite-os-here, plasea mail me back with a copy of your legacy
+  on your-favorite-os-here, please mail me back with a copy of your legacy
   makefile!). Thus, the steps to compile EmailPKT are:
   
     $ make -f makefile.lnx
@@ -172,7 +172,7 @@
     export EMAILPKT
     
   If it is not set, EmailPKT will try to open "/usr/local/etc/email.cfg". If
-  boths methods fail, it will exit with an error.
+  both methods fail, it will exit with an error.
   
   The config file uses the following keywords:
   
@@ -237,7 +237,7 @@
  --------------
   
   The receiving part of EmailPKT acts like a filter. You can call it from
-  from the ~/.forward file or from procmail.
+  the ~/.forward file or from procmail.
     
  4.2.1. ~/.forward
  -----------------
@@ -258,7 +258,7 @@
  4.2.2. procmail
  ---------------
   
-  If do not have a dedicated account, you must pipe to EmailPKT only some
+  If you do not have a dedicated account, you must pipe to EmailPKT only some
   mails. To do this with procmail, add a new rule to your ~/.procmail:
      
        LOGFILE=/home/fido/logs/procmail.log
@@ -329,8 +329,9 @@
 
    *  Outgoing attachments are always BASE64. It generates bigger data, but it
       is an Internet standard and almost any program can handle MIME.
-      UUENCODING is smaller, but nor standard nor every program is capable of
-      decoding it.
+      UUENCODING is smaller, but neither standard nor every program is capable
+      of decoding it. However, there _ARE_ plans to add at least, UUE for
+      outgoing bundles.
 
    *  EmailPKT understands PLAIN TEXT, BASE64, QUOTED-PRINTABLE and UUENCODING.
       S.E.A.T. (Simple Email Attach Transport) support will be added in the
@@ -348,8 +349,8 @@
  6. Contacting the author
  ------------------------
   
-  If you have trouble using this software, have a bug report or have had a
-  core dump write to:
+  If you have troubles using this software, have a bug report or have had a
+  core dump write me. I will reply you ASAP.
    
      German Theler
      german@linuxfreak.com
