@@ -35,14 +35,12 @@
 
 #include "cvsdate.h"
 
+#include <fidoconf/version.h>
+
 #define VER_MAJOR 0
 #define VER_MINOR 9
 #define VER_PATCH 0
-
-/* branch is "" for CVS current, "-stable" for the release candiate branch
-   and "-release" for released version.
- */
-#define VER_BRANCH ""
+#define VER_BRANCH BRANCH_CURRENT
 
 extern char *versionStr;
 

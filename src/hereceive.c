@@ -44,18 +44,20 @@
 #include <fcntl.h>
 
 /* husky */
+#include <smapi/progprot.h>
+#include <smapi/patmat.h>
+
 #include <fidoconf/log.h>
 #include <fidoconf/temp.h>
 #include <fidoconf/xstr.h>
 #include <fidoconf/crc.h>
 #include <fidoconf/common.h>
-#include <smapi/patmat.h>
-/*#include <smapi/strextra.h>*/
-#include <smapi/progprot.h>
-
 
 /* ./ */
 #include "ecommon.h"
+#include "version.h"
+
+#define PROGRAMNAME "hereceive"
 
 #define BUF_SIZE 65530      /* for DOS compatibility */
 
@@ -1306,8 +1308,8 @@ int receive(FILE *fd)
 
 void printver()
 { fprintf( stderr,	/* ITS4: ignore */
-           "hereceive v%s - receive FTN files via email\n\n(part of the EmailPkt package, The Husky FidoSoft Project module) \n\n",
-           version() );
+           "%s - receive FTN files via email\n\n(part of the EmailPkt package, The Husky FidoSoft Project module) \n\n",
+           program_name );
 }
 
 void usage()
@@ -1329,7 +1331,7 @@ main( int argc, char **argv)
   char *cp=NULL, *inputfile=NULL;
   FILE *fd;
 
-  program_name = sstrdup(basename(argv[0]));
+  program_name = GenVersionStr( PROGRAMNAME, VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH, cvs_date );
 
 #if UNIX
   opterr = 0;
@@ -1450,11 +1452,11 @@ main( int argc, char **argv)
     { cp = sstrdup(argv[0]);
       for ( rc=1; rc<argc; rc++ )
         xstrscat( &cp, " ", argv[rc], NULL );
-      w_log(LL_PRG,"Start %s %s ( %s )", program_name, version(), cp);
+      w_log(LL_PRG,"Start %s ( %s )", program_name, cp);
       nfree(cp);
     }
     else
-      w_log(LL_PRG,"Start %s %s", program_name, version() );
+      w_log(LL_PRG,"Start %s", program_name );
 
 
   if( !sstrlen(config->protInbound) )

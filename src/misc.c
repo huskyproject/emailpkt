@@ -49,7 +49,6 @@
 #include <smapi/progprot.h>
 
 #include "ecommon.h"
-#include "version.h"
 
 #ifndef O_EXLOCK
 # ifdef O_EXCL
@@ -67,7 +66,6 @@
 
 
 char *program_name=NULL;
-char *versionStr=NULL;
 
 #define markslen 16
 static const char marks[markslen+1] = "!?>+-56789ABCDEF";
@@ -145,34 +143,6 @@ int truncat (const char *path)
   return 0;
 }
 
-
-char *version()
-{
-  if( !versionStr ){
-    xscatprintf(&versionStr, "%u.%u.%u%s", VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH);
-
-    #ifdef __linux__
-       xstrcat(&versionStr, "/lnx");
-    #elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
-       xstrcat(&versionStr, "/bsd");
-    #elif defined(__OS2__) || defined(OS2)
-       xstrcat(&versionStr, "/os2");
-    #elif defined(_WIN32) || defined (_MSC_VER) || defined (__CYGWIN__) || defined (__MINGW32__)
-       xstrcat(&versionStr, "/win32");
-    #elif defined(__sun__)
-       xstrcat(&versionStr, "/sun");
-    #elif defined(__DJGPP__)
-       xstrcat(&versionStr, "/dpmi");
-    #elif defined(MSDOS) || defined(__DOS__)
-       xstrcat(&versionStr, "/dos");
-    #elif defined(__BEOS__)
-       xstrcat(&versionStr, "/beos");
-    #endif
-
-    if (strlen(VER_BRANCH)==0) xscatprintf(&versionStr, " %s", cvs_date);
-  }
-  return versionStr;
-}
 
 char *snprintaddr(char *string, const int size, const hs_addr addr)
 { char *temp=NULL;

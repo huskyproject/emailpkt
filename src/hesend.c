@@ -49,6 +49,7 @@
 
 /* ./ */
 #include "ecommon.h"
+#include "version.h"
 
 #if defined(__MINGW32__)
 #  define random() rand()
@@ -58,6 +59,7 @@
 #  define nfree(a) ({ if (a != NULL) { fprintf(stderr,"hesend.c:%d nfree()\n",__LINE__); free(a); a = NULL; } })
 #endif
 
+#define PROGRAMNAME "hesend"
 #define TEMPEXT "eml"
 #define TEMPFLOEXT "flo"
 #define myboundary MIMEBOUNDARY
@@ -162,7 +164,7 @@ char *writeMessage(const char *fullFileName, s_link link)
                     link.ourAka[0].domain ? link.ourAka[0].domain : "fidonet" );
 
   fprintf( tempfd, "Message-ID: <%s>\n", msgidbuf );
-  fprintf( tempfd, "X-Mailer: %s %s\n", program_name, version());
+  fprintf( tempfd, "X-Mailer: %s\n", program_name);
 
   switch( link.emailEncoding ){
 
@@ -647,8 +649,8 @@ int send(void)
 void
 printver()
 { fprintf( stderr,	/* ITS4: ignore */
-           "hesend v%s - send FTN over email\n(part of the EmailPkt package, The Husky FidoSoft Project module) \n\n",
-           version() );
+           "%s - send FTN over email\n(part of the EmailPkt package, The Husky FidoSoft Project module) \n\n",
+           program_name );
 }
 
 void
@@ -670,7 +672,7 @@ main( int argc, char **argv)
 { int rc=0, op=0, quiet=0;
   char *cp=NULL;
 
-  program_name = sstrdup(basename(argv[0]));
+  program_name = GenVersionStr( PROGRAMNAME, VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH, cvs_date );
 
 #ifdef UNIX
   opterr = 0;
@@ -755,8 +757,8 @@ main( int argc, char **argv)
   if( sstrlen(config->sendmailcmd) )
   {
     if( debugflag )
-      w_log(LL_PRG,"Start %s %s (debug%u mode)", program_name, version(), debugflag);
-    else w_log(LL_PRG,"Start %s %s", program_name, version());
+      w_log(LL_PRG,"Start %s (debug%u mode)", program_name, debugflag);
+    else w_log(LL_PRG,"Start %s", program_name);
 
     if (debugflag == 1)
     {  SAVEFLAG++;
@@ -775,4 +777,3 @@ main( int argc, char **argv)
 
   return rc;
 }
-
