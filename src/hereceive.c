@@ -32,10 +32,6 @@
 /*#include <math.h> */  /*log()*/
 #include <string.h>
 #include <stdio.h>  /*FILE operations*/
-#ifdef UNIX
-#   include <unistd.h> /*mktemp()*/
-#   include <dirent.h>
-#endif
 #include <time.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -43,6 +39,15 @@
 #include <limits.h>
 #include <ctype.h>
 #include <fcntl.h>
+
+#include <smapi/compiler.h>
+
+#ifdef HAS_UNISTD_H
+#  include <unistd.h>
+#endif
+#ifdef HAS_DIRENT_H
+#  include <dirent.h>
+#endif
 
 /* husky */
 #include <smapi/progprot.h>
@@ -61,7 +66,11 @@
 #define PROGRAMNAME "hereceive"
 #define TEMPEXT "emi"    /* "e-mail incoming" */
 
-#define BUF_SIZE 65530      /* for DOS compatibility */
+#if defined(__UNIX_) || defined(__WIN32__) || defined(__FLAT__)
+#define BUF_SIZE 128000
+#else
+#define BUF_SIZE 32000    /* for DOS compatibility */
+#endif
 
 /* processUUE inteernal codes (negative!) */
 #define processUUE_end    -1   /* end line detected */
@@ -676,11 +685,11 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
   UINT32 CRC32val=0xFFFFFFFFUl; /*  CRC32; init value */
   UINT32 sectsumr=0, sectsize=0, fullsumr=0, fullsize=0; /* from sum lines */
   struct dirent **ls=NULL;       /* 2nd arg of scandir() */
-#ifndef UNIX
+#ifndef __UNIX__
   DIR *dirp=NULL;
 #endif
 
-#if UNIX
+#if __UNIX__
   /* scandir only for UNIXes */
   /* compare dirent with mask: inbound/file.suffix
      use in scandir */
@@ -783,7 +792,7 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
         return NULL;
       }
     }
-
+#if 0
 //  Use this instead previous block. Possible...
 //#if defined(__DOS__) || defined(__MSDOS__) || defined(MSDOS)  /* this branch are spare ? */
 //    /* generate section file name (main filename with num suffix) */
@@ -804,6 +813,7 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
 //    /* section file name (main filename with added num suffix) */
 //    xscatprintf( &tp, "%s%s.%3u", inbound, filename, sectnum );
 //#endif
+#endif
 
     if( !(file = createFileExcl(cp,"wb")) )
     {  nfree(filename);
@@ -891,8 +901,10 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
                 filename, ci, CRC32val);
 /*     w_log( LL_INFO, "CRC32 of file '%s' is %08X", tp, filecrc32(tp)^0xFFFFFFFFl ); */
 
-//       fgets( buf, sizeof(buf), ifd );   /* read 'sum...' (if present)*/
-//       if( sstrnicpy(buf,"sum",3) ) break; /* not 'sum...', exit*/
+#if 0
+       fgets( buf, sizeof(buf), ifd );   /* read 'sum...' (if present)*/
+       if( sstrnicpy(buf,"sum",3) ) break; /* not 'sum...', exit*/
+#endif
 
        /* read untile 'sum' line or eof  */
        while( fgets(buf,sizeof(buf),ifd)  &&  (*buf=='\r' || *buf=='\n')
@@ -913,7 +925,7 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
   if(sectnum /*&& sectnum==sectlast*/)
   {  /* check for all parts received (& compose file) */
 
-#if UNIX
+#if __UNIX__
      if ( scandir( tp, &ls, dirfilter, dircmp)==sectlast ) /* all part files exists */
 #else
      i=0;
@@ -1090,7 +1102,7 @@ int processSEAT( const char *inbound, FILE *fd, const s_link *link )
           w_log( LL_DEBUG, "File %s renamed to %s", fname, tofname );
         nfree(tofname);
         /* Check for all sections */
-#if UNIX && 0
+#if __UNIX__ && 0
      /* Need declare dirfilter() and dircmp() local for processSEAT() */
         if ( scandir( inbound, &ls, dirfilter, dircmp)==SEAThdr.SegCount ) /* all part files exists */
 #else
@@ -1319,7 +1331,7 @@ void usage()
   fprintf( stderr,	/* ITS4: ignore */
 /*           "Usage: %s [-qVD] [-c configfile]\n", program_name);*/
            "Usage: hereceive [-qVD] [-c configfile] [input_file]\n");
-#ifndef UNIX
+#ifndef __UNIX__
   fprintf( stderr,	/* ITS4: ignore */
 /*           "or:    %s [--help] [--version] [--debug] [--quiet] [--config=configfile]\n", program_name);*/
            "or:    hereceive [--help] [--version] [--debug] [--quiet] [--config=configfile] [input_file]\n");
@@ -1335,7 +1347,7 @@ main( int argc, char **argv)
 
   program_name = GenVersionStr( PROGRAMNAME, VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH, cvs_date );
 
-#if UNIX
+#if __UNIX__
   opterr = 0;
   while ((op = getopt(argc, argv, "DVc:d:hq")) != -1)
     switch (op) {

@@ -79,7 +79,7 @@
 #endif
 
 #ifndef DIRSEP
-# if ((OSTYPE==UNIX)  || defined(UNIX)) && !defined (__MINGW32__)
+# if ((OSTYPE==UNIX)  || defined(__UNIX__))
 #  define DIRSEP '/'
 # else
 #  define DIRSEP '\\'

@@ -37,8 +37,13 @@
 #include <sys/types.h>
 #include <ctype.h>
 #include <limits.h>
-#ifdef UNIX
+
+#include <smapi/compiler.h>
+
+#ifdef HAS_UNISTD_H
 #  include <unistd.h>
+#endif
+#ifdef HAS_DIRENT_H
 #  include <dirent.h>
 #endif
 
@@ -62,8 +67,6 @@
 #define PROGRAMNAME "hesend"
 #define TEMPEXT "emo"        /* "e-mail outgoing" */
 #define TEMPFLOEXT "flo"
-#define myboundary MIMEBOUNDARY
-/*static char *myboundary=MYBOUNDARY;*/
 
 s_fidoconfig *config=NULL;
 static int sent = 0, allsent=0;           /* sent files count */
@@ -185,7 +188,7 @@ char *writeMessage(const char *fullFileName, s_link link)
   case eeIREX:
 
       fprintf(tempfd, "Mime-Version: 1.0\n");
-      fprintf(tempfd, "Content-Type: multipart/mixed; boundary=\"%s\"\n",myboundary);
+      fprintf(tempfd, "Content-Type: multipart/mixed; boundary=\"%s\"\n",MIMEBOUNDARY);
 
       fprintf(tempfd, "Ftn-File-ID: %s\n", msgidbuf );
       fprintf(tempfd, "Ftn-Crc32: %X\n", crc32 );
@@ -214,9 +217,9 @@ char *writeMessage(const char *fullFileName, s_link link)
 
       /* Main section */
       fprintf(tempfd, "Mime-Version: 1.0\n");
-      fprintf(tempfd, "Content-Type: multipart/mixed; boundary=\"%s\"\n",myboundary);
+      fprintf(tempfd, "Content-Type: multipart/mixed; boundary=\"%s\"\n",MIMEBOUNDARY);
 
-      fprintf(tempfd, "\n--%s\n",myboundary);
+      fprintf(tempfd, "\n--%s\n",MIMEBOUNDARY);
       fprintf(tempfd, "Content-Type: text/plain");
       if( strlen(DEFAULTBODY)>0 )
       {
@@ -224,14 +227,14 @@ char *writeMessage(const char *fullFileName, s_link link)
       }
 
       /* Attachment section */
-      fprintf(tempfd, "\n--%s\n",myboundary);
+      fprintf(tempfd, "\n--%s\n",MIMEBOUNDARY);
       fprintf(tempfd, "Content-Type: application/octet-stream; name=\"%s\"\n", basefilename);
       fprintf(tempfd, "Content-Transfer-Encoding: base64\n");
       fprintf(tempfd, "Content-Disposition: attachment; filename=\"%s\"\n\n", basefilename);
 
       base64encodeFile(infd, tempfd);
 
-      fprintf(tempfd, "\n\n--%s--\n",myboundary);
+      fprintf(tempfd, "\n\n--%s--\n",MIMEBOUNDARY);
       break;
 
 
@@ -659,7 +662,7 @@ usage()
   fprintf( stderr,	/* ITS4: ignore */
 /*           "Usage: %s [-qVD] [-c configfile]\n", program_name); */
            "Usage: hesend [-qVD] [-c configfile]\n");
-#ifndef UNIX
+#ifndef __UNIX__
   fprintf( stderr,	/* ITS4: ignore */
 /*           "or:    %s [--help] [--version] [--debug] [--quiet] [--config=configfile]\n", program_name);*/
            "or:    hesend [--help] [--version] [--debug] [--quiet] [--config=configfile]\n");
@@ -674,7 +677,7 @@ main( int argc, char **argv)
 
   program_name = GenVersionStr( PROGRAMNAME, VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH, cvs_date );
 
-#ifdef UNIX
+#ifdef __UNIX__
   opterr = 0;
   while ((op = getopt(argc, argv, "DVc:d:hq")) != EOF)
     switch (op) {

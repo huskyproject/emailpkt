@@ -62,7 +62,7 @@
 # endif
 #endif
 
-#if UNIX || __WIN32__ || __OS2__
+#if defined(__UNIX_) || defined(__WIN32__) || defined(__FLAT__)
 #define COPY_FILE_BUFFER_SIZE 128000
 #else
 #define COPY_FILE_BUFFER_SIZE 32000
@@ -82,9 +82,6 @@
 
 
 char *program_name=NULL;
-
-#define markslen 16
-static const char marks[markslen+1] = "!?>+-56789ABCDEF";
 
 /* Return 0 if file not exist or not file (directory)
  * Return not zero if file exist
@@ -201,7 +198,7 @@ FILE *createbsy(s_link link)
       w_log(LL_FUNC,"createbsy() failed");
       return NULL;
     }
-#if defined (_WIN32) || defined (__CYGWIN__) ||  defined (__MINGW32__) || defined (_MSC_VER) || defined (MSDOS)
+#if defined (__WIN32__) || defined (__CYGWIN__) || defined (__DOS__)
   if( (fh = sopen(link.bsyFile, O_CREAT | O_TRUNC | O_WRONLY | O_EXCL, SH_DENYWR))<0 )
 #else
   if( (fh = open(link.bsyFile, O_CREAT | O_TRUNC | O_WRONLY | O_EXCL))<0 )
@@ -214,7 +211,7 @@ FILE *createbsy(s_link link)
     return NULL;
   }
   fd = fdopen(fh, "w");
-#ifdef UNIX
+#ifdef __UNIX__
   fprintf(fd,"%u", (unsigned)getpid());
 #endif
   w_log(LL_FILE,"Created '%s'",link.bsyFile );
@@ -229,7 +226,7 @@ FILE *createbsy(s_link link)
 int
 removebsy(s_link link)
 { FILE *fd; int rc=0; char adr[ADRS_MAX];
-#ifdef UNIX
+#ifdef __UNIX__
   char buf[6];
 #endif
   w_log(LL_FUNC,"removebsy()");
@@ -247,7 +244,7 @@ removebsy(s_link link)
     rc=-1;    /* file not exists */
   }else if( (fd=fopen(link.bsyFile,"r")) )
   {
-#ifdef UNIX
+#ifdef __UNIX__
      /* Verify PID */
      fgets(buf, sizeof(buf), fd);
      fclose(fd);
@@ -255,7 +252,7 @@ removebsy(s_link link)
      if( atol(buf)==getpid() )
 #endif
        delete(link.bsyFile);
-#ifdef UNIX
+#ifdef __UNIX__
      else w_log(LL_ALERT, "removebsy(): some program (PID %s) change .BSY for %s .", buf, adr);
 #endif
   }else if( testfile(link.bsyFile) )
