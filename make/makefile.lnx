@@ -6,29 +6,25 @@ CFGDIR = /usr/local/etc
 CC     = gcc
 CFLAGS = -Wall -O3 -DCFGDIR=\"$(CFGDIR)\"
 
+OBJ=.o
+EXE=
+TPU=.tpu
+RM=rm
+LIB=.a
+AR=ar
+AR_R=rs
+
+
 .o: %.c
 	$(CC) -c $(CFLAGS) $*.c 
 
-OBJFILES = \
- config.o \
- emailpkt.o \
- log.o \
- mime.o \
- receive.o \
- send.o \
- uue.o
+include makefile.inc
 
-all: emailpkt
-
-emailpkt: $(OBJFILES)
-	$(CC) -o emailpkt $(OBJFILES)
+all: commonall
 
 install:
 	install -s emailpkt $(BINDIR)
 
-clean:
-	-rm *.o
+clean: commonclean
 
-distclean: clean
-	-rm emailpkt
-
+distclean: commondistclean
