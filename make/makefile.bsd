@@ -32,6 +32,7 @@ MKDIR	= install -d
 MKDIROPT= -m 755
 
 SRC_DIR = ../src/
+MANSRCDIR= ../man
 LIBS	= -lfidoconfigbsd -lsmapibsd
 
 
