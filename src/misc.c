@@ -288,6 +288,7 @@ setOutboundFilenames(s_link *link, e_flavour prio)
 { char *s=NULL, ch, *buf=NULL, *fn=NULL;
   const char netmailchars[]="ocihd";
   const char echomailchars[]="fcihd";
+  unsigned short pos;
   e_bundleFileNameStyle bundleNameStyle = eUndef;
 
   w_log(LL_FUNC,"setOutboundFilenames()");
@@ -332,6 +333,7 @@ setOutboundFilenames(s_link *link, e_flavour prio)
 
   w_log(LL_SRCLINE,"setOutboundFilenames():%d",__LINE__);
   xstrcat( &buf, fn );
+  pos = strlen(buf);
 
   switch(prio){
   case normal:    ch=netmailchars[0]; break;
@@ -355,13 +357,17 @@ setOutboundFilenames(s_link *link, e_flavour prio)
   case direct:    ch=echomailchars[4]; break;
   default:        ch=echomailchars[0];
   }
-  xscatprintf( &buf, "%clo", ch );
+/*  buf[pos]='\0';
+  xscatprintf( &buf, "%clo", ch );*/
+  sprintf( buf+pos, "%clo", ch );
   link->floFile = sstrdup(buf);
   if( link->floFile == NULL )
      w_log(LL_CRIT, "setOutboundFilenames():%s cannot set name to floFile", __LINE__);
 
-  w_log(LL_SRCLINE,"setOutboundFilenames():%d",__LINE__);
-  xstrcat( &buf, "bsy" );
+/*  w_log(LL_SRCLINE,"setOutboundFilenames():%d",__LINE__);*/
+/*  buf[pos]='\0';
+';xstrcat( &buf, "bsy" );*/
+  sprintf( buf+pos, "bsy");
   link->bsyFile = sstrdup(buf);
   if( link->bsyFile == NULL )
      w_log(LL_CRIT, "setOutboundFilenames():%s cannot set name to bsyFile", __LINE__);
