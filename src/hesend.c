@@ -104,7 +104,7 @@ char *writeMessage(const char *fullFileName, s_link link)
   /* for netmail (.?ut) change ext to pkt */
   i = sstrlen(fullFileName);
   if( tolower(fullFileName[i-2]) == 'u' && tolower(fullFileName[i-1]) == 't' )
-  { if( (cp = makeUniqueDosFileName( "", "pkt", config))==NULL )
+  { if( (cp = makeUniqueDosFileName( "", "pkt", config)) )
     { strncpy(basefilename, cp, sizeof(basefilename));
       nfree( cp );
     }else w_log(LL_CRIT, "Can't generate unique dos file name: memory too low" );
