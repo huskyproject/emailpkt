@@ -8,11 +8,26 @@
  */
 
 #define VERSION          "0.1"
-#define DEFAULTCFGFILE   "./email.cfg"
-#define SAVE             1
 #define MAX              64
 
+#ifndef DEFAULTCFGFILE
+  #define DEFAULTCFGFILE   "/usr/local/etc/email.cfg"
+#endif
+#ifndef SAVE
+  #define SAVE             1
+#endif
+
 #define strip(s)  s[strlen(s)-1] = 0
+
+/*
+ * note for developers:
+ *   I _*HATE*_ pointers. They only cause problems (seg faults) and make weird
+ *   code. Thus, I have replaced them with arrays and hardcoded their
+ *   subscripts. If you need more, you are having problems with this or you
+ *   think you will, either change the hardcoded values or write a new
+ *   pointer version. It's up to you.
+ *     
+*/
 
 typedef struct address {
     unsigned int zone;

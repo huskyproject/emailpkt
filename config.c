@@ -132,12 +132,6 @@ int config(void)
     int i;
 #endif
     
-
-    if (getenv("EMAILPKT") != NULL)
-        strncpy(file, getenv("EMAILPKT"), MAX);
-    else
-        strncpy(file, DEFAULTCFGFILE, MAX);
-
     memset(&cfg, 0, sizeof(cfg));
 
 #ifdef HUSKY
@@ -187,6 +181,11 @@ int config(void)
         fclose(f);
 #endif
 
+
+    if (getenv("EMAILPKT") != NULL)
+        strncpy(file, getenv("EMAILPKT"), MAX);
+    else
+        strncpy(file, DEFAULTCFGFILE, MAX);
 
     if ((f = fopen(file, "rt")) == NULL)
          return -1;

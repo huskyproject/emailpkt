@@ -1,4 +1,5 @@
-# Husky support
+# Makefile with Husky support
+# you will need huskymak.cfg that comes in the huskybse package.
 
 include ../huskymak.cfg
 
@@ -28,7 +29,7 @@ OBJFILES = \
  log$(OBJ) \
  mime$(OBJ) \
  receive$(OBJ) \
- send$(OBJ) \
+ send$(OBJ)
 
 all: emailpkt$(EXE)
 
