@@ -1331,15 +1331,7 @@ main( int argc, char **argv)
   char *cp=NULL, *inputfile=NULL;
   FILE *fd;
 
-
-printf("%c\n", DIRSEP);
-
-  if ((cp = strrchr(argv[0], DIRSEP)) != NULL)
-  {  program_name = sstrdup(cp + 1);
-     cp=NULL;
-  }
-  else
-    program_name = sstrdup(argv[0]);
+  program_name = sstrdup(basename(argv[0]));
 
 #if UNIX
   opterr = 0;
@@ -1453,9 +1445,8 @@ printf("%c\n", DIRSEP);
   nfree(cp);
   if(quiet) config->logEchoToScreen=0;
 
-  xscatprintf(&cp,"%s%s",config->logFileDir, LOGFILE);
-  if( openLog( LOGFILE, program_name, config) )
-    fprintf(stderr, "Can't init log! Use stderr");
+  if( !openLog( LOGFILE, program_name, config) )
+    fprintf(stderr, "Can't init log! Use stderr instead\n");
 
   if( argc>0 )
     { cp = sstrdup(argv[0]);

@@ -667,12 +667,7 @@ main( int argc, char **argv)
 { int rc=0, op=0, quiet=0;
   char *cp=NULL;
 
-  if ((cp = strrchr(argv[0], '/')) != NULL)
-  {  program_name = sstrdup(cp + 1);
-     cp=NULL;
-  }
-  else
-    program_name = sstrdup(argv[0]);
+  program_name = sstrdup(basename(argv[0]));
 
 #ifdef UNIX
   opterr = 0;
@@ -751,23 +746,22 @@ main( int argc, char **argv)
   nfree(cp);
   if(quiet) config->logEchoToScreen=0;
 
-  if( openLog( LOGFILE, program_name, config) )
-  { fprintf(stderr, "Can't init log()! Aborting\n");
+  if( !openLog( LOGFILE, program_name, config) )
+  { fprintf(stderr, "Can't init log()! Use stderr instead.\n");
     nfree(cp);
   }
-  else
-  {
-    if( debugflag )
-      w_log(LL_PRG,"Start %s %s (debug mode)", program_name, version());
-    else w_log(LL_PRG,"Start %s %s", program_name, version());
 
-    rc = send();
-    w_log(LL_SUMMARY, "Summary sent %d files", allsent);
+  if( debugflag )
+    w_log(LL_PRG,"Start %s %s (debug mode)", program_name, version());
+  else w_log(LL_PRG,"Start %s %s", program_name, version());
 
-    disposeConfig(config);
-    w_log(LL_PRG,"Stop %s", program_name);
-    nfree(program_name);
-    closeLog();
-  }
+  rc = send();
+  w_log(LL_SUMMARY, "Summary sent %d files", allsent);
+
+  disposeConfig(config);
+  w_log(LL_PRG,"Stop %s", program_name);
+  nfree(program_name);
+  closeLog();
+
   return rc;
 }
