@@ -1,3 +1,13 @@
+2004-01-26 Monday 11:21  andr_lukyanov
+
+	* make/makefile.mvcdll (1.1): file makefile.mvcdll was initially
+	added on branch emailpkt-1_4-stable.
+
+2004-01-26 Monday 11:21  andr_lukyanov
+
+	* make/makefile.mvc (1.1): file makefile.mvc was initially added on
+	branch emailpkt-1_4-stable.
+
 2003-04-13 Sunday 18:33  stas_degteff
 
 	* h/ecommon.h (1.13), src/hereceive.c (1.16), src/misc.c (1.16):
