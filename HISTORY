@@ -1,0 +1,24 @@
+EmailPkt 0.2-stable
+=====================
+
+2002/06/04 20:14:09, Stas
+* Start "emailpkt-0_2-stable" branch.
+* Change 'SAVE' define to 0 (don't save temporary files)
+
+EmailPkt 0.2-unstable
+=====================
+
+Fri mar 23 13:52:52 ART 2001
+german.theler
+* make use of EmailFrom, EmailSubj and EmailEncoding keywords from fidoconf
+* support for UUE in outgoing emails
+* changed default location for sendmail to /usr/sbin/sendmail to work
+with FreeBSD.
+
+EmailPkt 0.1-stable
+===================
+(released on Mon oct 16 19:24:12 ART 2000)
+
+Mon oct 16 19:24:12 ART 2000
+german.theler:
+* First stable release
