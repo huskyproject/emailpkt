@@ -73,7 +73,7 @@
 #include <limits.h>
 
 #if defined (_MSC_VER) || defined (__CYGWIN__) || defined (__MINGW32__) || defined (_WIN32)
-#  include <stdint.h>
+/*#  include <stdint.h>*/
 #else
 #  include <inttypes.h>
 #endif

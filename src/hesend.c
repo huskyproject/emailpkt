@@ -51,7 +51,7 @@
 #include "ecommon.h"
 #include "version.h"
 
-#if defined(__MINGW32__)
+#if defined(__MINGW32__) || defined(_MSC_VER) 
 #  define random() rand()
 #endif
 
