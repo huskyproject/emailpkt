@@ -1,6 +1,7 @@
 # $Id$
 #
-# Sample file for use emailpkt/hereceive with dedicated unix/email account
+# Sample file for use emailpkt/hereceive with dedicated email account on unix
+# clone OS
 #
 
 "|/usr/local/bin/hereceive -q"
