@@ -1,3 +1,47 @@
+2002-11-19 Tuesday 07:05  stas_degteff
+
+	* man/: hereceive.1 (1.2), hesend.1 (1.4): Fix man pages
+
+2002-11-19 Tuesday 06:54  stas_degteff
+
+	* src/hereceive.c (1.7): Fix compilation warnings (UNIXes)
+
+2002-11-19 Tuesday 06:47  stas_degteff
+
+	* src/hesend.c (1.11): basename() usage more accuracy
+
+2002-11-19 Tuesday 06:23  stas_degteff
+
+	* h/ecommon.h (1.6), src/hereceive.c (1.6), src/hesend.c (1.10):
+	Fix includes
+
+2002-11-19 Tuesday 06:21  stas_degteff
+
+	* make/: makefile.bsd (1.7), makefile.lnx (1.8): Fix makefiles
+
+2002-11-18 Monday 20:20  stas_degteff
+
+	* contrib/blat/: Readme.txt (1.1), announce.txt (1.1), blat.cpp
+	(1.1), blat.dsp (1.1), blat.dsw (1.1), file_id.diz (1.1),
+	makefile.cyg (1.1), makefile.wcw (1.1), gensock/gensck32.def (1.1),
+	gensock/gensck32.mak (1.1), gensock/gensock.cpp (1.1),
+	gensock/gensock.h (1.1), gensock/gensock.rc (1.1), gensock/makefile
+	(1.1): BLAT (windows SMTP agent) added as contribution
+
+2002-11-18 Monday 14:33  stas_degteff
+
+	* src/misc.c (1.8): Fix open() for unixes
+
+2002-11-18 Monday 14:31  stas_degteff
+
+	* Makefile (1.11), make/makefile.bsd (1.6), make/makefile.inc
+	(1.4), make/makefile.lnx (1.7): Fix makefiles
+
+2002-11-18 Monday 14:11  stas_degteff
+
+	* h/ecommon.h (1.5), src/misc.c (1.7): basename() moved to
+	fidoconfig
+
 2002-11-02 Saturday 00:04  stas_degteff
 
 	* Makefile (1.10): fix generic makefile
