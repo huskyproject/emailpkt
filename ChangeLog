@@ -1,3 +1,30 @@
+2002-12-16 Monday 07:16  stas_degteff
+
+	* h/ecommon.h (1.10), src/hereceive.c (1.12), src/hesend.c (1.16):
+	Use different temporary files extensions: .emo & .emi
+
+2002-12-16 Monday 07:14  stas_degteff
+
+	* make/makefile.bsd (1.8): Add MANSRCDIR
+
+2002-12-06 Friday 14:25  mche
+
+	* h/ecommon.h (1.9), src/hesend.c (1.15): try to compile with msvc
+
+2002-12-06 Friday 14:21  mche
+
+	* src/hereceive.c (1.11): try to compile with msvc
+
+2002-12-06 Friday 14:11  mche
+
+	* emailpkt.dsp (1.1), src/hereceive.c (1.10), src/hesend.c (1.14),
+	src/misc.c (1.11): try to compile with msvc
+
+2002-12-06 Friday 14:01  stas_degteff
+
+	* h/ecommon.h (1.8), src/hereceive.c (1.9): Use UINT32 instead
+	uint32_t.
+
 2002-12-05 Thursday 13:41  stas_degteff
 
 	* h/version.h (1.4), src/hereceive.c (1.8), src/hesend.c (1.13),
