@@ -305,6 +305,9 @@ int uuencodeFile( FILE *infd, FILE *outfd, const char*filename,
 
   w_log(LL_FUNC,"uuencodeFile()");
 
+  /* prevent compiler warnings */
+  i = sectsize;
+
   switch( section ){
    case 1: fprintf(outfd, "section 1 of file %s\n\nbegin 664 %s\n", filename, filename);
    case 0: fprintf(outfd, "\n\nbegin 664 %s\n", filename);

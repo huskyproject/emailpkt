@@ -1121,6 +1121,8 @@ char *processTextPlain( const char *inbound, FILE *fd, const s_link *link )
 
   w_log( LL_FUNC, "processTextPlain()" );
 
+  /* prevent compiler warning */
+  link = link;
   ofd = createTempFileIn(inbound, "txt", 't', &filename);
   if(ofd)
     while( (got = fread( buf, 1, sizeof(buf), fd))>0 )
@@ -1190,18 +1192,26 @@ char *processTextOrUUE( const char *inbound, FILE *fd, const s_link *link )
 
 int processAttUUCP( const char *inbound, FILE *fd, const s_link *link )
 {
-  w_log( LL_FUNC, "processAttUUCP()" );
-  w_log( LL_FUNC, "processAttUUCP() OK (rc=0)" );
-  return 0;
+    w_log( LL_FUNC, "processAttUUCP()" );
+    /* prevent compiler warnings */
+    inbound = inbound;
+    fd = fd;
+    link = link;
+    w_log( LL_FUNC, "processAttUUCP() OK (rc=0)" );
+    return 0;
 }
 
 
 /* заготовка */
 int process( const char *inbound, FILE *fd, const s_link *link )
 {
-  w_log( LL_FUNC, "process()" );
-  w_log( LL_FUNC, "process() OK (rc=0)" );
-  return 0;
+    w_log( LL_FUNC, "process()" );
+    /* prevent compiler warnings */
+    inbound = inbound;
+    fd = fd;
+    link = link;
+    w_log( LL_FUNC, "process() OK (rc=0)" );
+    return 0;
 }
 
 
