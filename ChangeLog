@@ -1,6 +1,11 @@
 EmailPkt 0.2-unstable
 =====================
 
+Sat mar 17 03:56:30 ART 2001
+german.theler
+* changed default location for sendmail to /usr/sbin/sendmail to work
+with FreeBSD.
+
 Sun oct 29 12:16:16 ART 2000
 german.theler:
 * another fix when creating temp outbound files
@@ -14,5 +19,5 @@ EmailPkt 0.1-stable
 (released on Mon oct 16 19:24:12 ART 2000)
 
 Mon oct 16 19:24:12 ART 2000
-German Theler:
+german.theler:
 * First stable release
