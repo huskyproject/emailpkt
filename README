@@ -1,8 +1,8 @@
 
-                             EmailPKT v0.1 |
+                             EmailPKT v0.2 |
                             ---------------+
 	                                FidoNet over Email
-                                              October 2000
+                                                March 2001
 
   Table of contents
   
@@ -28,11 +28,12 @@
  --------------------
  
   EmailPKT is a program to send & receive FTN bundles (echomail, netmail,
-  tics and files in general) via e-mail. It sends outgoing files as MIME
-  Base64 attachments that can be decoded and processed either manually with
-  a normal email client or automatically with any software like EmailPKT. To
-  receive incoming files, it reads the standard input and processes emails
-  with either MIME attachments or UUENCODED files.
+  tics and files in general) via e-mail. It sends outgoing files either as
+  MIME Base64 or UUE attachments that can be decoded and processed either
+  manually with a normal email client or automatically with any software like
+  EmailPKT. To receive incoming files, it reads the standard input and
+  processes emails with either MIME attachments (base64, quoted printable or
+  plain text) or UUENCODED files.
   
 
  1.1. Why Email routing?
@@ -50,16 +51,16 @@
   generated is 30% more than the used for example in BinkD and there is no
   simple and 100% compatible with other software way of authentication.
   Nevertheless, it is a good idea to have an email system set up even if you
-  have no need of it today (maybe tomorrow you will need it).
+  have no need of it today (maybe you will need it tomorrow).
 
 
 
  2. Compiling & installing EmailPKT
  ----------------------------------
 
-  Currently, EmailPKT works only under Linux (and hopefully in any kind of
-  Unix). Future ports to non-Unix systems could (and should) be done in the
-  (not so near) future.
+  Currently, EmailPKT works only under Linux and BSD (and hopefully under any
+  kind of Unix). Future ports to non-Unix systems could (and should) be done
+  in the (not so near) future.
 
   EmailPKT can be installed either standalone or with Husky support. The
   source distribution is the same for the two versions, but the installed
@@ -71,7 +72,9 @@
  
   It is recommended that you install EmailPKT with HUSKY support only if you
   already have a working version of at least fidoconf. If not, go to the
-  standalone section.
+  standalone section. BTW, if you have some free time and like to spend it
+  in a good way, get HUSKY from http://husky.physcip.uni-stuttgart.de and
+  take a look at it.
 
   Husky is a joint effort of over a dozen developers from Germany, Russia and
   all over the world to develop a completely free, open-sourced and portable
@@ -88,12 +91,12 @@
   comes in the huskybse package. It can be downloaded from
   http://husky.physcip.uni-sttutgart.de in the huskybse section.
   
-  Take a look at it and its comments, and change whatever you want to meet
+  Take a look at it and its comments, and change whatever you want to fit
   your needs.
   
   Assuming you have already installed at least one package from HUSKY, the
   compiling process for EmailPKT is the same. Note that the makefile that
-  must be used is called 'makefile', so you do not have to worry about extra
+  must be used is called 'Makefile', so you do not have to worry about extra
   arguments to make. For example, just write:
 
     $ make
@@ -108,13 +111,15 @@
  
   If you do not have a working HUSKY environment or do not want to use it,
   you can use EmailPKT with an own config file instead of using a common one.
+  Note that EmailPKT own configuration file has less features than the
+  fidoconf file.
   
   To compile the program standalone, you must use another makefile. The default
-  one ('makefile') is used to compile a HUSKY dependant version. Right now, the
+  one ('Makefile') is used to compile a HUSKY dependant version. Right now, the
   only target platform for the standalone version is Linux, so the makefile to
   use is called 'makefile.lnx' (Hey, you Unix guru! If you change it to compile
   on your-favorite-os-here, please mail me back with a copy of your legacy
-  makefile!). Thus, the steps to compile EmailPKT are:
+  makefile!). Thus, the steps to compile EmailPKT for Linux are:
   
     $ make -f makefile.lnx
     $ make -f makefile.lnx install
@@ -131,31 +136,55 @@
  ----------------------
  
   EmailPKT will use the following fidoconf keywords if available:
+
+     Global  
+         sysop
+         address
+         protinbound
+         tempinbound
+         outbound
+         tempoutbound
+         logfiledir        - Optional (if none specified, logging is off)
   
-     sysop
-     address
-     protinbound
-     tempinbound
-     outbound
-     tempoutbound
-     logfiledir        - Optional (if none specified, logging is off)
+     For each link
+         Email
+	 EmailFrom
+	 EmailSubj
+	 EmailEncoding
      
   For each link that you want to route via e-mail, specify an email address
   for him. If you do not want to route via e-mail with a link, do not give
-  an email address. For example:
+  an email address. For example, the simpliest form:
   
-      Link	Joe Sysop
-      Aka	4:905/100
-      ourAka	4:905/210
-      Email	joe@fidonet.org
+      Link		Joe Sysop
+      Aka		4:905/100
+      ourAka		4:905/210
+      Email		joe@fidonet.org
 
   EmailPKT _will_ route files to this link via e-mail.
   
-      Link      Pepe Bondiola
-      Aka	4:905/209
-      ourAka	4:905/210
+      Link      	Pepe Bondiola
+      Aka		4:905/209
+      ourAka		4:905/210
       
-  EmailPKT _won't_ route files to this link via e-mail.
+  EmailPKT _won't_ route files to this link via e-mail, as it has not any
+  address defined.
+  
+  You can also use all of the keywords:
+
+      Link		Joe Sysop
+      Aka		4:905/100
+      ourAka		4:905/210
+      Email		joe@fidonet.org
+      EmailFrom 	pepe@bondiola.net.ar
+      EmailSubj 	A Fido packet for you, Joe
+      EmailEncoding	UUE
+      
+  Adding all this info for each would be a waste of time, so it is recommended
+  that you put common information (like EmailFrom and EmailSubj) in a
+  LinkDefaults section. See fidoconf documentation for details.
+  
+  The default encoding method is MIME Base64.
 
   If for some reason you do no want to use the values above, you can override
   fidoconf by using an EmailPKT own config file. See below.
@@ -203,9 +232,10 @@
     LogDir <string>
       Directory for storing logs (Optional). If none is given, logging is off.
              
-    Link <aka> <email> <name>
+    Link <aka> <email> (MIME | UUE) <name>
       Defintion of link. The first token is the link's aka, the second one is
-      the link's email and the third one is the link's name.
+      the link's email, the third is either MIME or UUE and the rest of
+      the line is the link's name.
       
   Notes:
     *  Keywords are CaSe InSeNsItIvE.
@@ -326,12 +356,6 @@
 
    *  Be carefull with directory permissions! You will loose data if EmailPKT
       cannot write to a directory.
-
-   *  Outgoing attachments are always BASE64. It generates bigger data, but it
-      is an Internet standard and almost any program can handle MIME.
-      UUENCODING is smaller, but neither standard nor every program is capable
-      of decoding it. However, there _ARE_ plans to add at least, UUE for
-      outgoing bundles.
 
    *  EmailPKT understands PLAIN TEXT, BASE64, QUOTED-PRINTABLE and UUENCODING.
       S.E.A.T. (Simple Email Attach Transport) support will be added in the

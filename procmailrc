@@ -10,7 +10,7 @@ LOGFILE=/home/fido/logs/procmail.log
 # want to use it, _even_ if you have already set the EMAILPKT environment
 # value before. I don't know why, simply procmail ignores it...
 
-EMAILPKT=$HOME/cfg/main
+#EMAILPKT=$HOME/cfg/email.cfg
 
 # Here's the main thing. 
 # Of course, you should change this regexp for one that suits you. See

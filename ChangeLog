@@ -1,6 +1,11 @@
 EmailPkt 0.2-unstable
 =====================
 
+Fri mar 23 13:52:52 ART 2001
+german.theler
+* make use of EmailFrom, EmailSubj and EmailEncoding keywords from fidoconf
+* support for UUE in outgoing emails
+
 Sat mar 17 03:56:30 ART 2001
 german.theler
 * changed default location for sendmail to /usr/sbin/sendmail to work

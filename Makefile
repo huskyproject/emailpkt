@@ -29,7 +29,8 @@ OBJFILES = \
  log$(OBJ) \
  mime$(OBJ) \
  receive$(OBJ) \
- send$(OBJ)
+ send$(OBJ) \
+ uue$(OBJ)
 
 all: emailpkt$(EXE)
 

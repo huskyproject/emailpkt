@@ -15,7 +15,8 @@ OBJFILES = \
  log.o \
  mime.o \
  receive.o \
- send.o
+ send.o \
+ uue.o
 
 all: emailpkt
 

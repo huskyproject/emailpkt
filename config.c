@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------------------
  * config.c
- *     Parses the config file
+ *     Parses the config file and/or reads fidoconf
  * ------------------------------------------------------------------------
  *
  *  This file is part of EMAILPKT
@@ -23,8 +23,6 @@ void trim(char *s)
     if (s[strlen(s)-1] == '/')
         s[strlen(s)-1] = 0;
 }
-
-
 
 void getAddress(char *s, AKA *aka)
 {
@@ -109,7 +107,15 @@ void processLink(char *s)
     strcpy(buff, strtok(line, " \t"));
 
     getAddress(buff, &(cfg.link[cfg.linkCount].aka));
+
     strncpy(cfg.link[cfg.linkCount].email, strtok(NULL, " \t"), MAX);
+
+    strncpy(buff, strtok(NULL, " \t"), MAX);
+    if (strncasecmp(buff, "UUE", 3) == 0)
+        cfg.link[cfg.linkCount].encoding = UUENCODE;
+    else
+        cfg.link[cfg.linkCount].encoding = BASE64;
+
     strncpy(cfg.link[cfg.linkCount].name, strtok(NULL, "#\n"), MAX);
 
     trimComments(cfg.link[cfg.linkCount].name);
@@ -160,9 +166,23 @@ int config(void)
 
         if (husky->links[i].name != NULL)
             strncpy(cfg.link[i].name, husky->links[i].name, MAX);
+
         if (husky->links[i].email != NULL)
             strncpy(cfg.link[i].email, husky->links[i].email, MAX);
-    
+
+        if (husky->links[i].emailFrom != NULL)
+            strncpy(cfg.link[i].emailFrom, husky->links[i].emailFrom, MAX);
+            
+        if (husky->links[i].emailSubj != NULL)
+            strncpy(cfg.link[i].emailSubject, husky->links[i].emailSubj, MAX);
+
+        if (husky->links[i].emailEncoding == eeMIME)
+            cfg.link[i].encoding = BASE64;
+        else if (husky->links[i].emailEncoding == eeSEAT)
+            cfg.link[i].encoding = BASE64;        
+        else if (husky->links[i].emailEncoding == eeUUE)
+            cfg.link[i].encoding = UUENCODE;
+
         cfg.linkCount++;
     }
 
@@ -171,7 +191,7 @@ int config(void)
     if (cfg.name[0] == 0)
         strncpy(cfg.name, "Joe Sysop", MAX);
     if (cfg.email[0] == 0)
-        strncpy(cfg.email, "undefined@undefined", MAX);
+        strncpy(cfg.email, "undefined@fidonet.org", MAX);
     if (cfg.subject[0] == 0)
         strncpy(cfg.subject, "FIDONET Packet", MAX);
 
@@ -183,9 +203,11 @@ int config(void)
         strncpy(file, DEFAULTCFGFILE, MAX);
 
 #ifdef HUSKY
+/* if we are using husky, there is no need of emailpkt cfg file */
     if ((f = fopen(file, "rt")) == NULL)
         return 0;
 #else
+/* but we need it otherwise! */
     if ((f = fopen(file, "rt")) == NULL) {
          fprintf(stderr, "Cannot find %s!\n", file);
          return -1;
@@ -233,6 +255,7 @@ int config(void)
         }
     }
 
+    /* we now have all the config we need. check if they are enough */
     if (cfg.inbound[0] == 0) {
         fprintf(stderr, "INBOUND not defined.\n");
         return 1;
@@ -258,7 +281,7 @@ int config(void)
     if (cfg.name[0] == 0)
         strncpy(cfg.name, "Joe Sysop", MAX);
     if (cfg.email[0] == 0)
-        strncpy(cfg.email, "undefined@undefined", MAX);
+        strncpy(cfg.email, "undefined@fidonet.org", MAX);
     if (cfg.subject[0] == 0)
         strncpy(cfg.subject, "FIDONET Packet", MAX);
 

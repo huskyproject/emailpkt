@@ -13,8 +13,6 @@
 
 #include "emailpkt.h"
 
-#define UU(n) (n-' ')&077
-
 char base64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
 
@@ -126,38 +124,6 @@ int fromQuoted(char *name, char *boundary, FILE *in)
 
     return 0;
 }
-
-int fromUUencode(char *name, FILE *from)
-{
-    FILE *to;
-    char buff[255];
-    int i;
-    int a, b, c, d;
-
-    if ((to = fopen(name, "wb")) == NULL)
-        return -1;
-
-    while ((i = UU(fgetc(from))) != 0) {
-        while (i > 0) {
-            a = UU(fgetc(from));
-            b = UU(fgetc(from));
-            c = UU(fgetc(from));
-            d = UU(fgetc(from));
-
-            if (i-- > 0)
-                fputc((char)(a<<2)|(b>>4), to);
-            if (i-- > 0)
-                fputc((char)(b<<4)|(c>>2), to);
-            if (i-- > 0)
-                fputc((char)(c<<6)|(d), to);
-        }
-        fgets(buff, 255, from);
-    }
-    fclose(to);
-
-    return 0;
-}
-
 
 int toBase64(FILE *inFile, FILE *outFile)
 {

@@ -26,11 +26,22 @@
 
 #define strip(s)  s[strlen(s)-1] = 0
 
+
+#define UNKNOWN          0
+#define MULTIPART        1
+#define APPLICATION      2
+
+#define TEXT             3
+#define BASE64           4
+#define QUOTED_PRINTABLE 5
+#define UUENCODE         6
+
+
 /*
  * note for developers:
  *   I _*HATE*_ pointers. They only cause problems (seg faults) and make weird
  *   code. Thus, I have replaced them with arrays and hardcoded their
- *   subscripts. If you need more, you are having problems with this or you
+ *   sizes. If you need more, you are having problems with this or you
  *   think you will, either change the hardcoded values or write a new
  *   pointer version. It's up to you.
  *     
@@ -48,15 +59,18 @@ typedef struct system {
     AKA aka;                  /* link's aka                             */
     char name[MAX];           /* link's name                            */
     char email[MAX];          /* link's email                           */
+    char emailFrom[MAX];      /* our email to send from                 */
+    char emailSubject[MAX];   /* email's subject                        */
+    int encoding;             /* method of encoding                     */
 } LINK;
 
 typedef struct config {
 
     char name[MAX];           /* sysop's name                           */
-    AKA aka;                  /* sysop's aka                            */
-    char email[MAX];          /* sysop's email                          */
+    AKA aka;                  /* sysop's main aka                       */
+    char email[MAX];          /* sysop's main email                     */
 
-    char subject[MAX];        /* outgoing mail subject                  */
+    char subject[MAX];        /* outgoing mail default subject          */
 
     char inbound[MAX];        /* non-secure inbound                     */
     char tempinbound[MAX];
@@ -85,10 +99,13 @@ int log(char *string);
 
 /* mime.c */
 int fromBase64(char *name, FILE *from);
-int fromUUencode(char *name, FILE *from);
 int fromText(char *name, char *boundary, FILE *in);
 int fromQuoted(char *name, char *boundary, FILE *in);
 int toBase64(FILE *inFile, FILE *outFile);
+
+/* uue.c */
+int fromUUE(char *name, FILE *from);
+int toUUE(FILE *inFile, FILE *outFile);
 
 /* receive.c */
 int findName(char *dir, char *name);

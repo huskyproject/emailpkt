@@ -27,7 +27,7 @@ int encodeAndSend(char *fullFileName, int n)
     FILE *output;
 
     /* make a pseudo-random filename to store the temp file */
-    sprintf(random, "%04x", (unsigned int)time(0));
+    sprintf(random, "%08x", (unsigned int)time(0));
 
     /* search for an available name in the temp dir*/
     findName(cfg.tempoutbound, random);
@@ -42,48 +42,71 @@ int encodeAndSend(char *fullFileName, int n)
     /* get the fileName */
     strcpy(shortFileName, strrchr(fullFileName, '/')+1);
 
-    /* is it a netmail pkt? change its name */
+    /* is it a netmail pkt? if so, change its name */
     if (shortFileName[10] == 'u' && shortFileName[11] == 't')
         sprintf(shortFileName, "%04x.pkt", (unsigned int)time(0));
 
 
     /* print some headers */
-    fprintf(output, "From: \"%s\" <%s>\n", cfg.name, cfg.email);
-    fprintf(output, "X-Mailer: EmailPKT v%s\n", VERSION);
+    fprintf(output, "From: \"%s\" <%s>\n", cfg.name, (cfg.link[n].emailFrom[0] != 0) ? cfg.link[n].emailFrom : cfg.email);
     fprintf(output, "To: %s\n", cfg.link[n].email);
-    fprintf(output, "Subject: %s\n", cfg.subject);
+    fprintf(output, "Subject: %s\n", (cfg.link[n].emailSubject[0] != 0) ? cfg.link[n].emailSubject : cfg.subject);
+    fprintf(output, "X-Mailer: EmailPKT v%s\n", VERSION);
 
-    fprintf(output, "Mime-Version: 1.0\n");
-    fprintf(output, "Content-Type: multipart/mixed; boundary=\"-emailpktboundary\"\n\n");
-    fprintf(output, "This MIME encoded message is a FTN packet created by\n");
-    fprintf(output, "EMAILPKT, available at http://husky.physcip.uni-stuttgart.de\n");
-    fprintf(output, "Decode it with EMAILPKT or any MUA supporting MIME.\n");
+    if (cfg.link[n].encoding == BASE64) {
+        fprintf(output, "Mime-Version: 1.0\n");
+        fprintf(output, "Content-Type: multipart/mixed; boundary=\"-emailpktboundary\"\n\n");
+        fprintf(output, "This MIME encoded message is a FTN packet created by\n");
+        fprintf(output, "EMAILPKT, available at http://husky.physcip.uni-stuttgart.de\n");
+        fprintf(output, "Decode it with EMAILPKT or any MUA supporting MIME.\n");
 
-    fprintf(output, "\n---emailpktboundary\n\n");
+        fprintf(output, "\n---emailpktboundary\n\n");
 
-    /* now the body text */
-    /* TODO: come up with a better idea to do this */
-    fprintf(output, DEFAULTBODY);
+        /* now the body text */
+        /* TODO: come up with a better idea to do this */
+        fprintf(output, DEFAULTBODY);
     
-    fprintf(output, "\n\n---emailpktboundary\n");
+        fprintf(output, "\n\n---emailpktboundary\n");
 
-    /* and finally the encoded file */
-    fprintf(output, "Content-Type: application/octet-stream; name=\"%s\"\n", shortFileName);
-    fprintf(output, "Content-Transfer-Encoding: base64\n");
-    fprintf(output, "Content-Disposition: attachment; filename=\"%s\"\n\n", shortFileName);
+        /* and finally the encoded file */
+        fprintf(output, "Content-Type: application/octet-stream; name=\"%s\"\n", shortFileName);
+        fprintf(output, "Content-Transfer-Encoding: base64\n");
+        fprintf(output, "Content-Disposition: attachment; filename=\"%s\"\n\n", shortFileName);
 
-    if ((input = fopen(fullFileName, "r")) == NULL) {
-        sprintf(buff, "[!] Can't open %s\n", fullFileName);
-        log(buff);
-        fclose(output);
-        return 2;
+        if ((input = fopen(fullFileName, "r")) == NULL) {
+            sprintf(buff, "[!] Can't open %s\n", fullFileName);
+            log(buff);
+            fclose(output);
+            return 2;
+        }
+        toBase64(input, output);
+        fprintf(output, "\n---emailpktboundary--");
+        fclose(input);
+        
+    } else if (cfg.link[n].encoding == UUENCODE) {
+
+        /* now the body text */
+        /* TODO: come up with a better idea to do this */
+        fprintf(output, "\n\n");
+        fprintf(output, DEFAULTBODY);
+
+        /* should the mode be taken seriously? */
+        fprintf(output, "\n\nbegin 664 %s\n", shortFileName);
+
+        if ((input = fopen(fullFileName, "r")) == NULL) {
+            sprintf(buff, "[!] Can't open %s\n", fullFileName);
+            log(buff);
+            fclose(output);
+            return 2;
+        }
+        toUUE(input, output);
+        fprintf(output, "end\n");
+        fclose(input);
+
     }
-    toBase64(input, output);
-    fclose(input);
-
-    fprintf(output, "\n---emailpktboundary--");
 
     fclose(output);
+    
 
     /* now we send the email */
     sprintf(buff, "%s %s < %s/%s", SENDMAIL, cfg.link[n].email, cfg.tempoutbound, random);
@@ -97,9 +120,10 @@ int encodeAndSend(char *fullFileName, int n)
 
     /* we should keep this file until we receive a confirmation that the
        file was received OK -> TODO! */
-    sprintf(buff, "%s/%s", cfg.tempoutbound, random);
-    if (!SAVE)
+    if (!SAVE) {
+        sprintf(buff, "%s/%s", cfg.tempoutbound, random);
         remove(buff);
+    }
 
     return 0;
 
@@ -138,8 +162,9 @@ int processFlow(int n)
                                                       cfg.link[n].aka.net,
                                                       cfg.link[n].aka.node);
 
+    /* if no flowfile found */
     if ((flowFile = fopen(flowName, "rb")) == NULL) {
-        flowName[strlen(flowName)-3] = 'd';     /* else try direct routing */
+        flowName[strlen(flowName)-3] = 'd';     /* try direct routing */
         if ((flowFile = fopen(flowName, "rb")) == NULL)
             flowName[strlen(flowName)-3] = 'c'; /* try crash finally */
             if ((flowFile = fopen(flowName, "rb")) == NULL)
@@ -156,7 +181,7 @@ int processFlow(int n)
         } else
             strcpy(pktName, buff);
 
-        strip(pktName);   /* remove the final \n */
+        strip(pktName);   /* remove the trailing \n */
 
         if (encodeAndSend(pktName, n) == 0) {
             if (cfg.link[n].aka.point != 0) {
@@ -179,7 +204,8 @@ int processFlow(int n)
                 printf("%s", buff);
                 sent++;
             }
-        }
+        } else
+            return 1;
     }
 
     fclose(flowFile);

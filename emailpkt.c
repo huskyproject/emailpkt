@@ -1,11 +1,12 @@
-/* --------------------------------------------------------- October 2000 --
+/* --------------------------------------------------------- March 2001 ---
  * emailpkt.c
  * ------------------------------------------------------------------------
  *
  *  EmailPKT is a program to send & receive a FTN bundles (echomail, netmail,
- *  tics and regular files) via e-mail. It is part of the HUSKY project.
+ *  tics and regular files) via e-mail. It is part of the HUSKY project,
+ *  although it can be run standalone.
  *
- *    Copyright (C) 2000 German Theler
+ *    Copyright (C) 2000-2001 German Theler
  *     Fidonet: 4:905/210
  *       Email: german@linuxfreak.com
  *
@@ -77,6 +78,6 @@ int main(int argc, char *argv[])
     }
 
     return 0;
-    
+
 }
 

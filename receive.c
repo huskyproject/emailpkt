@@ -234,7 +234,7 @@ int parseUUencode(char *fileName)
             lowercase(name);
             findName(cfg.inbound, name);
             sprintf(buff, "%s/%s", cfg.inbound, name);
-            fromUUencode(buff, file);
+            fromUUE(buff, file);
             sprintf(buff, "Received %s\n", name);
             log(buff);
         }
