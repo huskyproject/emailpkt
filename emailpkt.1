@@ -1,0 +1,22 @@
+.TH EMAILPKT 1 "emailpkt (v0.2)"
+.SH NAME
+emailpkt \- send FTN bundles via mail
+.SH SYNTAX
+.TP
+.B Process and send outgoing messages
+emailpkt send
+.br
+.TP
+.B Receive and process an email from the standard input
+emailpkt receive
+.SH DESCRIPTION
+EmailPKT is a program to send & receive FTN bundles (echomail, netmail,
+tics and files in general) via e-mail. It sends outgoing files either as
+MIME Base64 or UUE attachments that can be decoded and processed either
+manually with a normal email client or automatically with any software like
+EmailPKT. To receive incoming files, it reads the standard input and
+processes emails with either MIME attachments (base64, quoted printable or
+plain text) or UUENCODED files.
+
+.SH AUTHOR
+German Theler (german@linuxfreak.com) 4:905/210@fidonet
