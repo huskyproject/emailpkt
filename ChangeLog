@@ -1,3 +1,12 @@
+2002-11-01 Friday 14:35  stas_degteff
+
+	* src/hesend.c (1.9): Fix compilation warning
+
+2002-11-01 Friday 14:15  stas_degteff
+
+	* src/hesend.c (1.8): Fix nfree (memory likes and free
+	non-malloc'ed variable)
+
 2002-10-30 Wednesday 20:35  stas_degteff
 
 	* make/makefile.bsd (1.5), man/hesend.1 (1.3), src/hesend.c (1.7):
