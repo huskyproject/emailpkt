@@ -185,8 +185,6 @@ int config(void)
 #ifdef HUSKY
     if ((f = fopen(file, "rt")) == NULL)
         return 0;
-    else
-        fclose(f);
 #else
     if ((f = fopen(file, "rt")) == NULL) {
          fprintf(stderr, "Cannot find %s!\n", file);
