@@ -1,3 +1,8 @@
+2003-04-13 Sunday 18:33  stas_degteff
+
+	* h/ecommon.h (1.13), src/hereceive.c (1.16), src/misc.c (1.16):
+	Fix memory leak & fault
+
 2003-03-07 Friday 17:59  stas_degteff
 
 	* README (1.10): Fix manual
