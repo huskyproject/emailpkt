@@ -11,16 +11,16 @@
  * This file is part of EMAILPKT, module of The HUSKY Fidonet Software.
  *
  * EMAILPKT is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * EMAILPKT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU General Public
  * License along with this library; see file COPYING. If not, write to the Free
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
@@ -649,7 +649,7 @@ char *processBASE64( const char *inbound, FILE *fd, const char *filename )
     if( !buf[0] ) continue; /* skip empty line */
     if( !(sstrcmp( buf, msgHeader.boundary ) && sstrcmp( buf, msgHeader.endboundary )) )
       break;
-    len = base64DecodeLine(&buf2,buf);
+    len = base64DecodeLine(&buf2,(unsigned char*)buf);
     if( len>0 ) fwrite( buf2, len, 1, fout );
     nfree(buf2);
   }while( len>=0 );
@@ -825,11 +825,11 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
     else if( ferror(ifd) )
       i = processUUE_ierr;
     else{
-      i = uudecodeLine(&linebuf, buf);
+      i = uudecodeLine(&linebuf, (unsigned char*)buf);
       if ( i<0 )
         i = processUUE_uue;
       else if( i>0 ){
-        CRC32val = memcrc32( linebuf, i, CRC32val);
+        CRC32val = memcrc32( (char*)linebuf, i, CRC32val);
         if( fwrite( linebuf, 1, i, file) != i )
         { w_log( LL_ERR, "Write error where decoding file '%s': %s. "
              "File saved partially (%d bytes)", filename, strerror(errno), ci+i);
@@ -893,7 +893,7 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
 //       if( sstrnicpy(buf,"sum",3) ) break; /* not 'sum...', exit*/
 
        /* read untile 'sum' line or eof  */
-       while( fgets(buf,sizeof(buf),ifd)>0  &&  (*buf=='\r' || *buf=='\n')
+       while( fgets(buf,sizeof(buf),ifd)  &&  (*buf=='\r' || *buf=='\n')
            && !feof(ifd) && !ferror(ifd) && sstrnicmp(buf,"sum",3) ) *buf='\0';
        if( feof(ifd) || ferror(ifd) ) break; /*else parce "sum -r/size"*/
 
@@ -901,7 +901,7 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
        strLower(buf);
        if( !sstrstr(buf,"section") )
        { sscanf( buf, "sum -r/size %u/%u section", &sectsumr, &sectsize );
-         while( fgets(buf,sizeof(buf),ifd)>0  &&  (*buf=='\r' || *buf=='\n')
+         while( fgets(buf,sizeof(buf),ifd)  &&  (*buf=='\r' || *buf=='\n')
                 && !feof(ifd) && !ferror(ifd) );
        }
        if( !sstristr(buf,"entire input file") )

@@ -13,16 +13,16 @@
  * This file is part of EMAILPKT, module of The HUSKY Fidonet Software.
  *
  * EMAILPKT is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * EMAILPKT is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU General Public
  * License along with this library; see file COPYING. If not, write to the Free
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
@@ -64,7 +64,11 @@ int base64DecodeLine(unsigned char **dstbuffer, const unsigned char * line)
   register int a=-1, b=-1, c=-1, d=-1;
   register unsigned bytes=0;  /* length of decoded data */
 
-  len = strlen(line) & ~3; /* cut to n*4 */
+  if(!line)
+  { if(dstbuffer) *dstbuffer=NULL;
+    return 0;
+  }
+  len = strlen((char*)line) & ~3; /* cut to n*4 */
   ep=line+len;
   temp=smalloc((int)(len*0.75)+2);
 #ifdef DEBUG
@@ -133,7 +137,7 @@ int base64decodeFile(char *filename, FILE *in)
   while ((i = getc(in)) != '\n') {
         ungetc(i, in);
         buffer[0]=0;
-        if( fgets(buffer, STRINGSIZE, in)==NULL )
+        if( fgets((char*)buffer, STRINGSIZE, in)==NULL )
         {  if( buffer[0]==0 )
           { w_log(LL_ERR,"base64decodefile():%u Unexpected EOF (error %d)", __LINE__-2, errno);
             fclose(out);
@@ -186,9 +190,14 @@ int quotedPrintableDecodeLine(unsigned char **dstbuffer, const unsigned char *li
 { unsigned char hex[3]={0,0,0}; /* hex2char convertion buffer */
   unsigned char *ip, *op;  /* pointers to input & output chars in sequence */
   int bytes=0;
-  unsigned char *temp=sstrdup(line);
+  unsigned char *temp;
 
-  ip=op=temp;
+  if(!line)
+  { if(dstbuffer) *dstbuffer=NULL;
+    return 0;
+  }
+
+  ip=op=temp=(unsigned char*)sstrdup((char*)line);
 
   for( ; *ip; ip++, op++)
   { if (*ip == '=' && isxdigit(*(ip+1)) )  /* decode =XX */
@@ -196,7 +205,7 @@ int quotedPrintableDecodeLine(unsigned char **dstbuffer, const unsigned char *li
       hex[0] = *ip++;   /* ip now ip+=2 */
       if( *ip && isxdigit(*ip) )
       { hex[1] =  *ip;
-        *op = (char)strtol(hex, (char **)NULL, 16);
+        *op = (char)strtol((char*)hex, (char **)NULL, 16);
         bytes++;
         continue;
       }
@@ -347,7 +356,7 @@ unsigned uudecodeLine( unsigned char **dstbuffer, const unsigned char *line )
    register int len;
 
    nfree(*dstbuffer);   /* not let zero for prevent memory leak */
-   if( !sstrlen(line) )
+   if( !sstrlen((char*)line) )
      return 0;
 
    ip = (unsigned char *)line;
@@ -405,7 +414,7 @@ int uudecodeFile(char *name, FILE *from)
             if (i-- > 0)
                 fputc((char)(c<<6)|(d), to);
         }
-        fgets(buf, STRINGSIZE, from);
+        fgets((char*)buf, STRINGSIZE, from);
     }
     fclose(to);
 
