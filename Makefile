@@ -1,7 +1,12 @@
 # Makefile with Husky support
 # you will need huskymak.cfg that comes in the huskybse package.
 
+ifeq ($(DEBIAN), 1)
+# Every Debian-Source-Paket has one included.
+include debian/huskymak.cfg
+else
 include ../huskymak.cfg
+endif
 
 ifeq ($(DEBUG), 1)
   CFLAGS = $(WARNFLAGS) $(DEBCFLAGS) -I$(INCDIR)
