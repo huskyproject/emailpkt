@@ -73,8 +73,8 @@
   It is recommended that you install EmailPKT with HUSKY support only if you
   already have a working version of at least fidoconf. If not, go to the
   standalone section. BTW, if you have some free time and like to spend it
-  in a good way, get HUSKY from http://husky.physcip.uni-stuttgart.de and
-  take a look at it.
+  in a good way, get HUSKY from http://husky.sourceforge.net and take
+  a look at it.
 
   Husky is a joint effort of over a dozen developers from Germany, Russia and
   all over the world to develop a completely free, open-sourced and portable
@@ -89,7 +89,7 @@
   
   To compile the program with HUSKY support, you will need huskymak.cfg that
   comes in the huskybse package. It can be downloaded from
-  http://husky.physcip.uni-sttutgart.de in the huskybse section.
+  http://husky.sourceforge.net in the huskybse section.
   
   Take a look at it and its comments, and change whatever you want to fit
   your needs.

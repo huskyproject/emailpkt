@@ -1,4 +1,10 @@
-emailpkt (0.2-2) unstable; urgency=low
+emailpkt (0.2-3) stable; urgency=low
+
+  * debian/copyright: new http-location of sources
+
+ -- Pavel Andreew <pavel@collage.etel.ru>  Mon, 26 Aug 2002 11:53:08 +0600
+
+emailpkt (0.2-2) stable; urgency=low
 
   * New maintainer
   * New CVS release (0.2-stable)
