@@ -57,7 +57,13 @@ install:
 	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
 	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
 	-$(MKDIR) $(MKDIROPT) $(MANDIR)
-	$(INSTALL) $(IMOPT) man/*.1 $(MANDIR)/man1
+	$(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)/man1
+
+uninstall:
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
+	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-$(RM) $(RMOPT) $(MANDIR)/man1 $(MANPAGES)
 
 clean: commonclean
 

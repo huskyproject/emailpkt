@@ -7,8 +7,11 @@
 
 BINDIR = /usr/local/bin
 CFGDIR = /usr/local/etc
+HTMLDIR= /usr/local/share/doc/husky/emailpkt
+
 CC     = gcc
 CFLAGS = -Wall -O3 -DCFGDIR=\"$(CFGDIR)\"
+SRC_DIR= ../src/
 
 OBJ=.o
 EXE=
@@ -20,8 +23,8 @@ AR=ar
 AR_R=rs
 INSTALL=install -c
 
-%.o: ../%.c
-	$(CC) -c $(CFLAGS) ../$*.c
+%.o: $(SRC_DIR)%.c
+	$(CC) -c $(CFLAGS) $(SRC_DIR)$*.c
 
 include makefile.inc
 
@@ -30,14 +33,16 @@ all: commonall
 install:
 	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
 	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
-#	$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
 	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-$(MKDIR) $(MKDIROPT) $(MANDIR)
+	$(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)/man1
 
 uninstall:
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
-	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DOCSUBDIR)
+	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-$(RM) $(RMOPT) $(MANDIR)/man1 $(MANPAGES)
 
 clean: commonclean
 
