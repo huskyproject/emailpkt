@@ -6,12 +6,14 @@
 # No Husky build enviroment (huskymak.cfg) support
 #
 
-DEBUG	=
+#DEBUGCFLAGS	= -g
 
 BINDIR	= /usr/local/bin
 CFGDIR	= /usr/local/etc/fido
-cal/man= /usr/local/share/doc/husky/emailpkt
+HTMLDIR = /usr/local/share/doc/husky
+DOCSUBDIR = emailpkt
 MANDIR	= /usr/local/man
+DIRSEP	= /
 
 CC      = gcc
 OBJ	= .o
@@ -23,11 +25,14 @@ LIB	= .a
 AR	= ar
 AR_R	= rs
 INSTALL	= install -c
+MKDIR	= install -d
+MKDIROPT=
 
 SRC_DIR = ../src/
 LIBS	= -lfidoconfigbsd -lsmapibsd
 
-CFLAGS	= -s -Wall -O3 -c -I../h -I../..
+
+CFLAGS	= $(DEBUGCFLAGS) -s -Wall -O3 -c -I../h -I../..
 CDEFS	= -DUNIX -DCFGDIR=\"$(CFGDIR)\" -DDIRSEP=\'/\'
 
 LFLAGS  = -L../../smapi -L../../fidoconf
@@ -55,15 +60,15 @@ install:
 	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
 	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
 	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	$(INSTALL) $(IMOPT) ../README $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
 	-$(MKDIR) $(MKDIROPT) $(MANDIR)
-	$(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)/man1
+	(cd ../ ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)/man1)
 
 uninstall:
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
 	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	-$(RM) $(RMOPT) $(MANDIR)/man1 $(MANPAGES)
+	-(cd $(MANDIR)/man1 ; $(RM) $(RMOPT) $(MANPAGES))
 
 clean: commonclean
 
