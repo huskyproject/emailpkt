@@ -8,7 +8,7 @@
 
 LOGFILE=/home/fido/logs/procmail.log
 
-# You must declare here the full path to the config file if yo
+# You must declare here the full path to the alternate config file if you
 # want to use it.
 
 #FIDOCONFIG=/usr/local/etc/fido/config
