@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------------------
  * emailpkt.h
- *     Structs, define's and function definition
+ *     Structs, defines and function definitions
  * ------------------------------------------------------------------------
  *
  *  This file is part of EMAILPKT
@@ -10,11 +10,16 @@
 #define VERSION          "0.1"
 #define MAX              64
 
-#ifndef DEFAULTCFGFILE
-  #define DEFAULTCFGFILE   "/usr/local/etc/email.cfg"
+#ifndef CFGDIR
+  #define CFGDIR           "/usr/local/etc"
 #endif
 
-/* Should we backup incoming and outgoing plain texts? */
+#ifndef DEFAULTCFGFILE
+  #define DEFAULTCFGFILE   CFGDIR"/email.cfg"
+#endif
+
+/* Should we backup incoming and outgoing plain texts? I don't see why not...
+   TODO: put this in the configuration */
 #ifndef SAVE
   #define SAVE             1
 #endif

@@ -53,11 +53,10 @@ int main(int argc, char *argv[])
 
     c = config();
 
-    if (c == -1) {
-        fprintf(stderr, "Config file not found!\n");
+    if (c == -1)
         return -1;
-    } else if (c == 1) {
-        fprintf(stderr, "Error parsing config file!\n");
+    else if (c == 1) {
+        fprintf(stderr, "Error parsing EmailPKT config file!\n");
         return 1;
     }
 

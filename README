@@ -58,7 +58,7 @@
  ----------------------------------
 
   Currently, EmailPKT works only under Linux (and hopefully in any kind of
-  Unix). Future ports to non-Unix system could be (and should be) done in the
+  Unix). Future ports to non-Unix systems could (and should) be done in the
   (not so near) future.
 
   EmailPKT can be installed either standalone or with Husky support. The
@@ -94,7 +94,7 @@
   Assuming you have already instaled at least one package from HUSKY, the
   compiling process for EmailPKT is the same. Note that the makefile that
   must be used is called 'makefile', so you do not have to worry about extra
-  arguments to make.
+  arguments to make. For example, just write:
 
     $ make
     $ make install
@@ -112,8 +112,9 @@
   To compile the program standalone, you must use another makefile. The default
   one ('makefile') is used to compile a HUSKY dependant version. Right now, the
   only target platform for the standalone version is Linux, so the makefile to
-  use is called 'makefile.lnx' (Hey, you Unix guru! Change it and mail me back
-  your legacy makefile!). Thus, the steps to compile EmailPKT are:
+  use is called 'makefile.lnx' (Hey, you Unix guru! If you change it to compile
+  on your-favorite-os-here, plasea mail me back with a copy of your legacy
+  makefile!). Thus, the steps to compile EmailPKT are:
   
     $ make -f makefile.lnx
     $ make -f makefile.lnx install
@@ -222,7 +223,7 @@
    
      $ emailpkt send
      
-  So, you can easily add to your mailing scripts the above line and you are
+  So, you can easily add to your mailing scripts the above line, and you are
   done. E.g.:
      
      $ cat send
@@ -257,8 +258,8 @@
  4.2.2. procmail
  ---------------
   
-  If do not have a dedicated account, you must pipe to EmailPKT some mails
-  only. To do this with procmail, add a new rule to your ~/.procmail:
+  If do not have a dedicated account, you must pipe to EmailPKT only some
+  mails. To do this with procmail, add a new rule to your ~/.procmail:
      
        LOGFILE=/home/fido/logs/procmail.log
        EMAILPKT=/home/fido/cfg/email.cfg
@@ -275,7 +276,9 @@
   Because of an extrange reason, procmail does not see any external
   environment variable. So if you are using the standalone version of EmailPKT,
   you must write again the path to the config file if it is not in
-  /usr/local/etc.
+  /usr/local/etc. If EmailPKT complains about fidoconf configuration file in
+  the HUSKY version, please add a FIDOCONFIG variable pointing to the config
+  file of fidoconfig.
 
      
  4.3. Owner problems
@@ -285,11 +288,11 @@
   another one is a common practise. So, it is a mistake to try to write in
   another user's directory, and a security hole to let everyone write in the
   inbound directory. To solve this in an easy way, you can pipe all the mails
-  from user A that process the email (for example, runs fetchmail) to user B
+  from user A that processes the email (for example, runs fetchmail) to user B
   (the owner of the inbound directory), and then yes, in user's B ~/.forward
   finally call emailpkt.
      
-  For example, user A ~/.procmailrc:
+  For example, user's A ~/.procmailrc:
      
        ---cut---
        :0
@@ -309,6 +312,8 @@
        "|/usr/local/bin/emailpkt receive"
        ---cut---
 
+
+
  5. Notes about the program behaviour
  ------------------------------------
 
@@ -317,7 +322,7 @@
       tested with common email software.
 
    *  It will sure fail when dealing with non-sense information such as
-      malformed headers or bad encodings.
+      malformed headers or bad encodings. Do not try to test it against this!
 
    *  Be carefull with directory permissions! You will loose data if EmailPKT
       cannot write to a directory.
@@ -328,6 +333,9 @@
       decoding it.
 
    *  EmailPKT understands PLAIN TEXT, BASE64, QUOTED-PRINTABLE and UUENCODING.
+      S.E.A.T. (Simple Email Attach Transport) support will be added in the
+      future. However, EmailPKT understands and processes incoming SEAT mails
+      as normal attachments although it ignores extra information.
 
    *  Incoming and outgoing email plain texts will be kept as a backup feature
       in the temporary inbound and outbound directories. A weekly deletion is

@@ -174,22 +174,27 @@ int config(void)
         strncpy(cfg.email, "undefined@undefined", MAX);
     if (cfg.subject[0] == 0)
         strncpy(cfg.subject, "FIDONET Packet", MAX);
-    
-    if ((f = fopen(file, "rt")) == NULL)
-        return 0;
-    else
-        fclose(f);
+
 #endif
-
-
+        
     if (getenv("EMAILPKT") != NULL)
         strncpy(file, getenv("EMAILPKT"), MAX);
     else
         strncpy(file, DEFAULTCFGFILE, MAX);
 
+#ifdef HUSKY
     if ((f = fopen(file, "rt")) == NULL)
+        return 0;
+    else
+        fclose(f);
+#else
+    if ((f = fopen(file, "rt")) == NULL) {
+         fprintf(stderr, "Cannot find %s!\n", file);
          return -1;
-         
+    }
+#endif
+
+    /* parse the fucking config file */
     while (fgets(line, 2*MAX, f) != NULL) {
         if (line[0] != '\n' && line[0] != '#') {
             strcpy(keyword, strtok(line, " \t"));

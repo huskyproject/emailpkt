@@ -2,11 +2,12 @@
 # No Husky support
 
 BINDIR = /usr/local/bin
+CFGDIR = /usr/local/etc
 CC     = gcc
-CFLAGS = -Wall -O3
+CFLAGS = -Wall -O3 -DCFGDIR=\"$(CFGDIR)\"
 
 .o: %.c
-	$(CC) -c $(CFLAGS) $*.c
+	$(CC) -c $(CFLAGS) $*.c 
 
 OBJFILES = \
  config.o \
