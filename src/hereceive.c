@@ -1455,6 +1455,7 @@ main( int argc, char **argv)
    }
 #endif
 
+  set_module_vars();
   config = readConfig(cp);
   nfree(cp);
   if(quiet) config->logEchoToScreen=0;

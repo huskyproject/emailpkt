@@ -53,6 +53,7 @@
 #include <smapi/progprot.h>
 
 #include "ecommon.h"
+#include "../h/version.h"
 
 #ifndef O_EXLOCK
 # ifdef O_EXCL
@@ -703,4 +704,14 @@ FILE *createInboundFile(char **filename)
   }
   w_log( LL_FUNC, "createInboundFile() %s", fd ? "OK": "failed" );
   return fd;
+}
+
+void set_module_vars()
+{
+   char buff[sizeof(VER_MAJOR)*3+sizeof(VER_MINOR)*3+sizeof(VER_PATCH)*3+3];
+
+   setvar("module", "emailpkt");
+   sprintf(buff, "%u.%u.%u", VER_MAJOR, VER_MINOR, VER_PATCH);
+   setvar("version", buff);
+   SetAppModule(M_EMAILPKT);
 }

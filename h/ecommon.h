@@ -246,6 +246,11 @@ int uuencodeFile( FILE *infd, FILE *outfd, const char*filename,
  */
 FILE *createInboundFile(char **pathname);
 
+/* Define module information for config parser (config variables 'module',
+ * 'version'; fill structure sApp).
+ */
+void  set_module_vars();
+
 
 /* main vars ****************************************************/
 
