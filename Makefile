@@ -18,6 +18,8 @@ endif
 
 SRC_DIR = src$(DIRSEP)
 H_DIR   = h$(DIRSEP)
+MANSRCDIR= man$(DIRSEP)
+DOCSUBDIR= emailpkt
 
 CFLAGS	= $(WARNFLAGS) -I$(INCDIR) -I../ -I$(H_DIR)
 ifeq ($(DEBUG), 1)
@@ -58,15 +60,20 @@ hereceive: commonhereceive
 
 install: emailpkt
 	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
-	$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)hereceive
-	$(INSTALL) $(IMOPT) $(DOCS) $(HTMLDIR)$(DIRSEP)hereceive
+	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
+	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	$(INSTALL) $(IMOPT) $(DOCS) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-$(MKDIR) $(MKDIROPT) $(MANDIR)
+	cd $(MANSRCDIR) ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)$(DIRSEP)man1
 
 uninstall:
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
-	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)emailpkt
-	-$(RMDIR) $(RMOPT) $(HTMLDIR)
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
+	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)emailpkt$(DIRSEP)*.*
+	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DIRSEP)emailpkt
 
 clean:  commonclean
 	-$(RM) $(RMOPT) core
+	-$(RM) $(RMOPT) *.core
 
 distclean: commondistclean

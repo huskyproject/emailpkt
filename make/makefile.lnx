@@ -5,18 +5,21 @@
 # No Husky build enviroment (huskymak.cfg) support
 #
 
-BINDIR = /usr/local/bin
-CFGDIR = /usr/local/etc
-HTMLDIR= /usr/local/share/doc/husky/emailpkt
+BINDIR = /usr/local/bin/
+CFGDIR = /usr/local/etc/
+HTMLDIR= /usr/local/share/doc/husky/
+DOCSUBDIR=emailpkt
 
 CC     = gcc
 CFLAGS = -Wall -O3 -DCFGDIR=\"$(CFGDIR)\" -DDIRSEP=\'/\'
 SRC_DIR= ../src/
+MANSRCDIR=../man/
 
 OBJ=.o
 EXE=
 TPU=.tpu
 RM=rm
+RMOPT= -f
 RMDIR=rm -r
 LIB=.a
 AR=ar
@@ -34,15 +37,16 @@ install:
 	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
 	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
 	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	cd .. ; $(INSTALL) $(IMOPT) $(DOCS) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
 	-$(MKDIR) $(MKDIROPT) $(MANDIR)
-	$(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)/man1
+	cd $(MANSRCDIR) ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)$(DIRSEP)man1
 
 uninstall:
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
+	-cd $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR) ; $(RM) $(RMOPT) $(DOCS)
 	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	-$(RM) $(RMOPT) $(MANDIR)/man1 $(MANPAGES)
+	-cd $(MANDIR)$(DIRSEP)man1 ; $(RM) $(RMOPT) $(MANPAGES)
 
 clean: commonclean
 

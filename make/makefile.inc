@@ -6,9 +6,9 @@
 #
 
 OBJS	= encdec$(OBJ) misc$(OBJ)
-DOCS	+= README README.TXT
+DOCS	+= README
 HFILES	= cvsdate.h ecommon.h version.h
-MANPAGES= man/hesend.1 man/hereceive.1
+MANPAGES= hesend.1 hereceive.1
 
 commonall: commonhesend commonhereceive
 

@@ -62,15 +62,16 @@ install:
 	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
 	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
 	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	$(INSTALL) $(IMOPT) ../README $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	cd .. ; $(INSTALL) $(IMOPT) $(DOCS) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
 	-$(MKDIR) $(MKDIROPT) $(MANDIR)
-	(cd ../ ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)/man1)
+	cd $(MANSRCDIR) ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)$(DIRSEP)man1
 
 uninstall:
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
+	-cd $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR) ; $(RM) $(RMOPT) $(DOCS)
 	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	-(cd $(MANDIR)/man1 ; $(RM) $(RMOPT) $(MANPAGES))
+	-cd $(MANDIR)$(DIRSEP)man1 ; $(RM) $(RMOPT) $(MANPAGES)
 
 clean: commonclean
 
