@@ -59,6 +59,7 @@
 #include "version.h"
 
 #define PROGRAMNAME "hereceive"
+#define TEMPEXT "emi"    /* "e-mail incoming" */
 
 #define BUF_SIZE 65530      /* for DOS compatibility */
 

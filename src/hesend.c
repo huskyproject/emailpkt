@@ -60,7 +60,7 @@
 #endif
 
 #define PROGRAMNAME "hesend"
-#define TEMPEXT "eml"
+#define TEMPEXT "emo"        /* "e-mail outgoing" */
 #define TEMPFLOEXT "flo"
 #define myboundary MIMEBOUNDARY
 /*static char *myboundary=MYBOUNDARY;*/

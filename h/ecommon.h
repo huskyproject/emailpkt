@@ -53,7 +53,7 @@
 
 /* Sub-directory names in temporary inbound, outbound & etc */
 #define TempSubDir     "emailpkt"
-#define TEMPEXT "eml"
+/*#define TEMPEXT "eml"*/
 #define SECTIONS_SUBDIR "sections"
 #define TempInSubDir   "hereceive"
 #define TempOutSubDir  "hesend"
