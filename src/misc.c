@@ -701,13 +701,12 @@ FILE *createInboundFile(char **filename)
           w_log( LL_ERR, "Can't create '%s': %s", tempname, strerror(errno) );
         else{
           w_log( LL_DEBUG, "Use '%s'", tempname );
-          if( strlen(*filename)>=strlen(tempname) )
-            strcpy(*filename,tempname);
-          else{
+          if( strlen(*filename)>=strlen(tempname) ) {
+            strcpy(*filename,tempname); nfree(tempname);
+          }else{
             free(*filename); *filename = tempname;
           }
         }
-        if(*filename != tempname) free(tempname);
       }else  /* sl==0 if all filenames already used */
          w_log(LL_ERROR, "Can't create file: all possible filenames already used");
   }
