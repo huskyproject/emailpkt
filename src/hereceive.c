@@ -178,7 +178,7 @@ void dispose_msgHeader()
     do{
   w_log( LL_DEBUGX, __FILE__ ":%u:", __LINE__);
       --msgHeader.othercount;
-      nfree(msgHeader.other[msgHeader.othercount]);
+      nfree(msgHeader.other[msgHeader.othercount]); /*here free() warnings...*/
     }while( msgHeader.othercount>0 );
   }
   nfree(msgHeader.other);

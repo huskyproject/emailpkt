@@ -76,8 +76,9 @@ int debugflag=0; /* Execute in debug mode (not call sendmail, not remove files) 
  */
 char *writeMessage(const char *fullFileName, s_link link)
 { char adr[ADRS_MAX];
-  char basefilename[NAME_MAX];
-  char *tempfilename=NULL, timebuf[32], *msgidbuf;
+/*  char basefilename[NAME_MAX];*/
+  char *basefilename=NULL;
+  char *tempfilename=NULL, timebuf[32], *msgidbuf=NULL;
   FILE *infd=NULL, *tempfd=NULL;
   char *cp=NULL;
   time_t t=0;
@@ -100,10 +101,12 @@ char *writeMessage(const char *fullFileName, s_link link)
       w_log( LL_ERR, "Can't create temp file in '%s': %s",
                      config->tempOutbound, strerror(errno));
       return NULL;
-  }
+  } /*else w_log(LL_FILENAME, "tempfilename=%s", tempfilename);*/
 
   /* basename of file */
-  strncpy(basefilename, strrchr(fullFileName, DIRSEP)+1, sizeof(basefilename));
+/*  strncpy(basefilename, strrchr(fullFileName, DIRSEP)+1, sizeof(basefilename));
+*/
+  basefilename = basename(fullFileName);
   w_log(LL_FILENAME, "Base file name: '%s'", basefilename);
 
   /* for netmail (.?ut) change ext to pkt */
@@ -143,18 +146,22 @@ char *writeMessage(const char *fullFileName, s_link link)
   fprintf(tempfd, "Date: %s\n", timebuf);
 
   strftime(timebuf, sizeof (timebuf), "%s", tm);
+
+/*
+    xscatprintf( &msgidbuf, "%s %ul", timebuf, (unsigned long)random());
+*/
   if( link.emailFrom )
-    xscatprintf( &msgidbuf, "%s.%lu.%s", timebuf, random(), link.emailFrom );
+    xscatprintf( &msgidbuf, "%s.%lu.%s", timebuf, (unsigned long)random(), link.emailFrom );
   else if( link.ourAka[0].point )
     xscatprintf( &msgidbuf,
                     "%s.%lu@p%u.f%u.n%u.z%u.%s.org\n", timebuf,
-                    random(), link.ourAka[0].point, link.ourAka[0].node,
+                    (unsigned long)random(), link.ourAka[0].point, link.ourAka[0].node,
                     link.ourAka[0].net, link.ourAka[0].zone,
                     link.ourAka[0].domain ? link.ourAka[0].domain : "fidonet" );
   else
     xscatprintf( &msgidbuf,
                     "%s.%lu@f%u.n%u.z%u.%s.org\n", timebuf,
-                    random(), link.ourAka[0].node,
+                    (unsigned long)random(), link.ourAka[0].node,
                     link.ourAka[0].net, link.ourAka[0].zone,
                     link.ourAka[0].domain ? link.ourAka[0].domain : "fidonet" );
 
@@ -175,7 +182,7 @@ char *writeMessage(const char *fullFileName, s_link link)
       uuencodeFile(infd, tempfd, basefilename, 0, 0);
       break;
 
-/* IREX internal "protocol" - MIME/base64 encoding */
+/* SEAT internal "protocol" - MIME/base64 encoding */
 /*
   case eeIREX:
 
@@ -235,8 +242,9 @@ char *writeMessage(const char *fullFileName, s_link link)
   fclose(infd);
   fclose(tempfd);
 
-  nfree(tempfilename);
   nfree(msgidbuf);
+/*  nfree(cp);*/
+  nfree(basefilename);
   w_log(LL_FILENAME, "Return file name: '%s'", tempfilename );
   w_log(LL_FUNC,"writeMessage() OK");
   return sstrdup(tempfilename);
@@ -253,23 +261,22 @@ int sendFile(const char *filename, s_link link)
   /* Contruct sendmail command
      If $a and $f not present use 'sendmailcmd address < file'
   */
-  buf = sstrdup( config->sendmailcmd );
-w_log(LL_DEBUGS,"%s::sendFile():%u Command construct: '%s'", __FILE__, __LINE__, buf);
-  p=strstr(buf, "$a");
+  cmd = sstrdup( config->sendmailcmd );
+w_log(LL_DEBUGS,"%s::sendFile():%u Command construct: '%s'", __FILE__, __LINE__, cmd);
+  p=strstr(cmd, "$a");
   if( p ){
     *p++ = '%'; *p='s';
-w_log(LL_DEBUGS,"%s::sendFile():%u Command construct: '%s'", __FILE__, __LINE__, buf);
-    xscatprintf( &cmd, buf, link.email);
+    xscatprintf( &buf, cmd, link.email);
   }
   else
-    xscatprintf( &cmd, "%s %s", buf, link.email);
-  nfree(buf);
+    xscatprintf( &buf, "%s %s", config->sendmailcmd, link.email);
+  nfree(cmd);
 
-  buf = sstrdup( cmd );
+w_log(LL_DEBUGS,"%s::sendFile():%u Command construct: '%s'", __FILE__, __LINE__, cmd);
+
   p=strstr(buf, "$f");
   if( p ){
     *p++ = '%'; *p='s';
-w_log(LL_DEBUGS,"%s::sendFile():%u Command construct: '%s'", __FILE__, __LINE__, buf);
     xscatprintf( &cmd, buf, filename);
   }
   else
@@ -290,7 +297,7 @@ w_log(LL_DEBUGS,"%s::sendFile():%u Command construct: '%s'", __FILE__, __LINE__,
     }
 
   w_log(LL_FILESENT, "Sent '%s' to %s (%s)", filename, link.email,
-          snprintaddr(cmd, strlen(buf), link.hisAka)
+          snprintaddr(cmd, sstrlen(cmd), link.hisAka)
      );
 
   /* todo: save to confirmation */
@@ -751,12 +758,17 @@ main( int argc, char **argv)
     nfree(cp);
   }
 
-  if( debugflag )
-    w_log(LL_PRG,"Start %s %s (debug mode)", program_name, version());
-  else w_log(LL_PRG,"Start %s %s", program_name, version());
+  if( sstrlen(config->sendmailcmd) )
+  {
+    if( debugflag )
+      w_log(LL_PRG,"Start %s %s (debug mode)", program_name, version());
+    else w_log(LL_PRG,"Start %s %s", program_name, version());
 
-  rc = send();
-  w_log(LL_SUMMARY, "Summary sent %d files", allsent);
+    rc = send();
+    w_log(LL_SUMMARY, "Summary sent %d files", allsent);
+  }
+  else
+    w_log(LL_CRIT, "sendmailcmd not defined in config! Abort.");
 
   disposeConfig(config);
   w_log(LL_PRG,"Stop %s", program_name);
@@ -765,3 +777,4 @@ main( int argc, char **argv)
 
   return rc;
 }
+

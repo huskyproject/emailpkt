@@ -220,7 +220,10 @@ FILE *createbsy(s_link link)
 #else
   if( (fh = open(link.bsyFile, O_CREAT | O_TRUNC | O_WRONLY | O_EXCL | O_SHLOCK))<0 )
 #endif
-  { w_log(LL_LINKBUSY, "link %s is busy", snprintaddr(buf, sizeof(buf), link.hisAka) );
+  { if( errno==ENOENT )
+      w_log(LL_FILE, "Outbound for link not exist");
+    else
+      w_log(LL_LINKBUSY, "link %s is busy", snprintaddr(buf, sizeof(buf), link.hisAka) );
     w_log(LL_FUNC,"createbsy() unsuccesful");
     return NULL;
   }
