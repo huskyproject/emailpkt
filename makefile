@@ -4,10 +4,10 @@
 include ../huskymak.cfg
 
 ifeq ($(DEBUG), 1)
-  CFLAGS = $(WARNFLAGS) $(DEBCFLAGS)
+  CFLAGS = $(WARNFLAGS) $(DEBCFLAGS) -I$(INCDIR)
   LFLAGS = $(DEBLFLAGS)
 else
-  CFLAGS = $(WARNFLAGS) $(OPTCFLAGS)
+  CFLAGS = $(WARNFLAGS) $(OPTCFLAGS) -I$(INCDIR)
   LFLGAS = $(OPTLFLAGS)
 endif
 
