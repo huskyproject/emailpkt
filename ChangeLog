@@ -1,3 +1,13 @@
+2003-12-27 Saturday 21:21  d_sergienko
+
+	* src/: encdec.c, hereceive.c (emailpkt-1_4-stable.[1,2]): fix
+	compiler warnings about unused variables
+
+2003-12-27 Saturday 21:03  d_sergienko
+
+	* src/hereceive.c (emailpkt-1_4-stable.1): fixed compiler macroses
+	(#if __UNIX__	--> #if defined(__UNIX__))
+
 2003-04-13 Sunday 18:33  stas_degteff
 
 	* h/ecommon.h (1.13), src/hereceive.c (1.16), src/misc.c (1.16):
