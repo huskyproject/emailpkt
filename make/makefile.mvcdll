@@ -1,0 +1,37 @@
+# $Id$
+#
+# Microsoft Visual C++ Makefile for build emailpkt dinamic library
+
+CC	= cl
+
+CFLAGS	= -nologo -Zp1 -MD -I..\.. -I..\h
+CDEFS	= -D__NT__ -DNT -DWINNT -D_CONSOLE
+COPT	= -O2
+
+SRC_DIR	= ..\src\
+
+_C	= .c
+_OBJ	= .obj
+_EXE	= .exe
+
+OBJS	= encdec$(_OBJ) misc$(_OBJ)
+
+LIBS	= ..\..\fidoconf\fconfmvc.lib ..\..\smapi\smapimvc.lib \
+	  msvcrt.lib Kernel32.lib /link /opt:nowin98
+
+{$(SRC_DIR)}$(_C)$(_OBJ):
+	$(CC) $(CFLAGS) $(CDEFS) $(COPT) -c $<
+
+all: hesend$(_EXE) hereceive$(_EXE)
+
+hesend$(_EXE): $(OBJS)
+	$(CC) $(CFLAGS) $(COPT) $(CDEFS) -Fe$@ $(OBJS) $(SRC_DIR)\hesend$(_C) $(LIBS)
+
+hereceive$(_EXE): $(OBJS)
+	$(CC) $(CFLAGS) $(COPT) $(CDEFS) -Fe$@ $(OBJS) $(SRC_DIR)\hereceive$(_C) $(LIBS)
+
+clean:
+	-del *$(_OBJ)
+
+distclean: clean
+	-del hesend$(_EXE) hereceive$(_EXE)
