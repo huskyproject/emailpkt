@@ -80,6 +80,7 @@ int log(char *string);
 
 /* mime.c */
 int fromBase64(char *name, FILE *from);
+int fromUUencode(char *name, FILE *from);
 int fromText(char *name, char *boundary, FILE *in);
 int fromQuoted(char *name, char *boundary, FILE *in);
 int toBase64(FILE *inFile, FILE *outFile);
@@ -89,7 +90,7 @@ int findName(char *dir, char *name);
 int in(void);
 void lowercase(char *s);
 void normalize(char *s);
-int parseEntityHeaders(char *fileName);
+int parseMessages(char *fileName);
 int parseMultipart(char *fileName);
 int readBoundary(char *boundary, FILE *file);
 int readWholeMsg(char *dir, char *name);

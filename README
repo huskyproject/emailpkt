@@ -11,7 +11,7 @@
       2. Compiling & Installing EmailPKT
           2.1. With HUSKY support
           2.2. Standalone
-      3. Configuring EmailPKT
+      3. How to configure EmailPKT
           2.1. Fidoconf keywords 
           2.2. EmailPKT config file
       4. How to use it
@@ -31,10 +31,10 @@
   tics and files in general) via e-mail. It sends outgoing files as MIME
   Base64 attachments that can be decoded and processed either manually with
   a normal email client or automatically with any software like EmailPKT. To
-  receive incoming files, it reads the standard input for a MIME message with
-  encoded (Base64 or Quoted-Printable) files.
+  receive incoming files, it reads the standard input and processes emails
+  with either MIME attachments or UUENCODED files.
   
-  
+
  1.1. Why Email routing?
  -----------------------
  
@@ -62,8 +62,8 @@
   (not so near) future.
 
   EmailPKT can be installed either standalone or with Husky support. The
-  source distribution is the same for the two versions. The resulting flavour
-  depends on the makefile used to compile the program.
+  source distribution is the same for the two versions, but the installed
+  version depends on the makefile used to compile the program.
 
 
  2.1. With HUSKY support
@@ -88,7 +88,7 @@
   comes in the huskybse package. It can be downloaded from
   http://husky.physcip.uni-sttutgart.de in the huskybse section.
   
-  Take a look at it and its comments, and change whatever you need to meet
+  Take a look at it and its comments, and change whatever you want to meet
   your needs.
   
   Assuming you have already instaled at least one package from HUSKY, the
@@ -110,9 +110,10 @@
   you can use EmailPKT with an own config file instead of using a common one.
   
   To compile the program standalone, you must use another makefile. The default
-  one ('Makefile') is used to compile a HUSKY dependant version. Right now, the
+  one ('makefile') is used to compile a HUSKY dependant version. Right now, the
   only target platform for the standalone version is Linux, so the makefile to
-  use is called 'makefile.lnx'. Thus, the steps to compile EmailPKT are:
+  use is called 'makefile.lnx' (Hey, you Unix guru! Change it and mail me back
+  your legacy makefile!). Thus, the steps to compile EmailPKT are:
   
     $ make -f makefile.lnx
     $ make -f makefile.lnx install
@@ -122,8 +123,8 @@
   and change the variables as you want.
 
   
- 3. Configuring EmailPKT
- -----------------------
+ 3. How to configure EmailPKT
+ ----------------------------
  
  3.1. Fidoconf keywords
  ----------------------
@@ -308,11 +309,38 @@
        "|/usr/local/bin/emailpkt receive"
        ---cut---
 
-       
- 5. Contacting the author
+ 5. Notes about the program behaviour
+ ------------------------------------
+
+   *  Actually, it is compatible with almost any kind of decent software that
+      produces standard information. EmailPKT follows RFC 1349 and has been
+      tested with common email software.
+
+   *  It will sure fail when dealing with non-sense information such as
+      malformed headers or bad encodings.
+
+   *  Be carefull with directory permissions! You will loose data if EmailPKT
+      cannot write to a directory.
+
+   *  Outgoing attachments are always BASE64. It generates bigger data, but it
+      is an Internet standard and almost any program can handle MIME.
+      UUENCODING is smaller, but nor standard nor every program is capable of
+      decoding it.
+
+   *  EmailPKT understands PLAIN TEXT, BASE64, QUOTED-PRINTABLE and UUENCODING.
+
+   *  Incoming and outgoing email plain texts will be kept as a backup feature
+      in the temporary inbound and outbound directories. A weekly deletion is
+      recommended.
+
+   *  I am not responsable of any data lost caused either by human or computer
+      faults. USE AT YOUR OWN RISK! 
+  
+     
+ 6. Contacting the author
  ------------------------
   
-  If you have troubles using this software, have a bug report or have had a
+  If you have trouble using this software, have a bug report or have had a
   core dump write to:
    
      German Theler
@@ -320,5 +348,6 @@
      4:905/210
      
   If you have a general question or need technical support, link to
-  FIDOSOFT.HUSKY from your boss.
+  FIDOSOFT.HUSKY from your boss (you can ask me for an email feed, obviously
+  with EmailPKT :-)).
   

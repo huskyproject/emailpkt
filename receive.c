@@ -210,6 +210,42 @@ int parseMultipart(char *fileName)
     return 0;
 }
 
+int parseUUencode(char *fileName)
+{
+    FILE *file;
+    char buff[4*MAX];
+    char name[MAX];
+    int perms;
+
+    file = fopen(fileName, "r");
+
+    while (!feof(file)) {
+        name[0] = 0;
+        do {
+            fgets(buff, 4*MAX, file);
+            if (feof(file))
+                return 0;
+        } while (strncasecmp(buff, "begin ", 5) != 0);
+
+        sscanf(buff, "begin %o %s", &perms, name);
+        
+        if (name[0] != 0) {
+            normalize(name);
+            lowercase(name);
+            findName(cfg.inbound, name);
+            sprintf(buff, "%s/%s", cfg.inbound, name);
+            fromUUencode(buff, file);
+            sprintf(buff, "Received %s\n", name);
+            log(buff);
+        }
+    }
+
+    fclose(file);
+
+    return 0;
+}
+
+
 int parseApplication(char *fileName)
 {
     FILE *file;
@@ -260,21 +296,28 @@ int parseApplication(char *fileName)
 }
 
 
-int parseEntityHeaders(char *fileName)
+int parseMessage(char *fileName)
 {
     FILE *file;
     char buff[4*MAX];
 
     file = fopen(fileName, "r");
     
-    fgets(buff, 4*MAX, file);
-    while(buff[0] != '\n') {
-        if (strncasecmp(buff, "Content-Type: multipart", 23) == 0)
-            return MULTIPART;
-        if (strncasecmp(buff, "Content-Type: application", 25) == 0)
-            return APPLICATION;
-            
+    while(!feof(file)) {
         fgets(buff, 4*MAX, file);
+        
+        if (strncasecmp(buff, "Content-Type: multipart", 23) == 0) {
+            fclose(file);
+            return MULTIPART;
+        }
+        if (strncasecmp(buff, "Content-Type: application", 25) == 0) {
+            fclose(file);
+            return APPLICATION;
+        }
+        if (strncasecmp(buff, "begin ", 5) == 0) {
+            fclose(file);
+            return UUENCODE;
+        }
     }
     fclose(file);
 
@@ -292,11 +335,13 @@ int receive(void)
         return 1;
     }
 
-    c = parseEntityHeaders(fileName);
+    c = parseMessage(fileName);
     if (c == MULTIPART)
         parseMultipart(fileName);
     else if (c == APPLICATION)
         parseApplication(fileName);
+    else if (c == UUENCODE)
+        parseUUencode(fileName);
     else {
         fprintf(stderr, "[!] Unsuported encoding.\n");
         log("[!] Unsuported encoding.\n");
@@ -311,8 +356,6 @@ int receive(void)
 int in(void)
 {
     int error;
-
-    log("Incoming mail...\n");
 
     error = receive();
 

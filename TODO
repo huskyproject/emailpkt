@@ -1,6 +1,6 @@
 -find a way to put some information in the body of outgoing mails
 -better logging
--support more encodings (uuencode)
 -some kind of validation
 -return receipts
+-crc
 -s.e.a.t. (fsp-1015)

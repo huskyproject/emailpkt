@@ -38,7 +38,7 @@ void printUsage(void)
 {
     printf("Usage: emailpkt [action]\n");
     printf("    send       send outgoing messages\n");
-    printf("    receive    receive a mime encoded bundle from the standard input\n");
+    printf("    receive    receive and process an email from the standard input\n");
 }
 
 int main(int argc, char *argv[])

@@ -277,18 +277,12 @@ int out(void)
 {
     int error;
 
-    log("processing outbound...\n");
-
     error = send();
 
     switch (error) {
         case 0:
-            if (sent == 0) {
+            if (sent == 0)
                 printf("Nothing to send!\n");
-                log("Nothing to send!\n");
-            }
-
-            log("finnished OK\n");
             break;
         case 1:
             fprintf(stderr, "Error processing a flowfile. See logs for details.\n");
