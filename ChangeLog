@@ -1,3 +1,7 @@
+2002-11-02 Saturday 00:04  stas_degteff
+
+	* Makefile (1.10): fix generic makefile
+
 2002-11-01 Friday 14:35  stas_degteff
 
 	* src/hesend.c (1.9): Fix compilation warning
