@@ -1,0 +1,69 @@
+# $Id$
+#
+# Generic makefile for build and install 'static linked' Emailpkt binaries
+# on unix-like OS.
+#
+# No Husky build enviroment (huskymak.cfg) support
+#
+
+#DEBUGCFLAGS	= -g
+
+BINDIR	= /usr/local/bin
+CFGDIR	= /usr/local/etc/fido
+HTMLDIR = /usr/local/share/doc
+DOCSUBDIR = husky/emailpkt
+MANDIR	= /usr/local/man
+DIRSEP	= /
+IMOPT	= -m 444
+IBOPT	= -m 555
+
+MAN1DIR	= $(MANDIR)$(DIRSEP)man1
+
+CC      = gcc
+OBJ	= .o
+EXE	=
+RM	= rm
+RMDIR	= rm -r
+LIB	= .a
+AR	= ar
+AR_R	= rs
+INSTALL	= install -c
+MKDIR	= install -d
+MKDIROPT= -m 755
+
+SRC_DIR = ../src/
+MANSRCDIR= ../man
+LIBS	= ../../fidoconf/libfidoconfigunix.a ../../smapi/libsmapiunix.a
+
+CFLAGS	= $(DEBUGCFLAGS) -s -Wall -O3 -c -I../h -I../..
+CDEFS	= -DUNIX -DCFGDIR=\"$(CFGDIR)\" -DDIRSEP=\'/\'
+LFLAGS  =
+
+all: commonall
+
+# This is the rule if you are using GNU make
+%.o: $(SRC_DIR)%.c
+	$(CC) $(CFLAGS) $(CDEFS) $<
+
+# Include file contents common make commands for all platforms
+include makefile.inc
+
+
+install:
+	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
+	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
+	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	cd .. ; $(INSTALL) $(IMOPT) $(DOCS) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-$(MKDIR) $(MKDIROPT) $(MAN1DIR)
+	cd $(MANSRCDIR) ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MAN1DIR)
+
+uninstall:
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
+	-cd $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR) ; $(RM) $(RMOPT) $(DOCS)
+	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-cd $(MANDIR)$(DIRSEP)man1 ; $(RM) $(RMOPT) $(MANPAGES)
+
+clean: commonclean
+
+distclean: commondistclean
