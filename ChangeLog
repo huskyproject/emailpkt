@@ -1,3 +1,7 @@
+2004-03-18 Thursday 18:32  stas_degteff
+
+	* src/misc.c (1.17): Small simple
+
 2004-01-26 Monday 11:21  andr_lukyanov
 
 	* make/makefile.mvcdll (1.1): file makefile.mvcdll was initially
