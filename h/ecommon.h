@@ -141,7 +141,7 @@ extern char *program_name;
 void  dispose_SEAT_header(struct s_SEAT_header);
 int   truncat(const char *path);
 int   delete(const char *path);
-char *snprintaddr(char *string, const int size,const s_addr addr);
+char *snprintaddr(char *string, const int size,const hs_addr addr);
 int   setOutboundFilenames(s_link *link, e_flavour prio);
 FILE *createbsy(s_link link);
 int   removebsy(s_link link);

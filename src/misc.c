@@ -174,7 +174,7 @@ char *version()
   return versionStr;
 }
 
-char *snprintaddr(char *string, const int size, const s_addr addr)
+char *snprintaddr(char *string, const int size, const hs_addr addr)
 { char *temp=NULL;
   w_log(LL_FUNC,"snprintaddr()");
 
