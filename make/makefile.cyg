@@ -1,6 +1,8 @@
-# Mingw32 CPD makefile for crosscompiling for NT under Unix
+# $Id$
 #
-# tested with Mingw32 CPD on Linux
+# Cygwin and Mingw32 CPD makefile for compiling Emailpkt for Win32
+#
+# Tested on Cygwin
 
 DEBUG=
 # set to -g for debugging, NEVER use -s !!!
@@ -25,7 +27,10 @@ OBJ=.o
 EXE=.exe
 RM=rm
 
-LIBS= -lfidoconfigcyg -lsmapicyg -luser32
+LIBS	=  -lfidoconfigcyg -lsmapicyg -luser32
+
+# Comment out next line for old cygwin
+Libs	+= -lmingwex
 
 default: all
 

@@ -1,8 +1,8 @@
 # $Id$
 #
-# Legacy makefile for Linux systems
+# Legacy makefile for build Emailpkt on Linux systems
 #
-# No Husky build enviroment support
+# No Husky build enviroment (huskymak.cfg) support
 #
 
 BINDIR = /usr/local/bin

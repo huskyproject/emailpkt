@@ -1,7 +1,7 @@
 # $Id$
 #
-# Makefile with Husky build enviroment support
-# you will need huskymak.cfg that comes in the huskybse package.
+# Emailpkt Makefile with Husky build enviroment support.
+# You will need huskymak.cfg that comes in the huskybse package.
 #
 
 ifeq ($(DEBIAN), 1)
@@ -68,6 +68,5 @@ uninstall:
 
 clean:  commonclean
 	-$(RM) $(RMOPT) core
-	-$(RM) $(RMOPT) *~
 
 distclean: commondistclean
