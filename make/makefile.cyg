@@ -15,8 +15,11 @@ LIB=.a
 AR=ar
 AR_R=rs
 
-LIBSMAPI=../smapi/libsmapicyg.a
-LIBFIDOCONFIG = ../fidoconf/libfidoconfigcyg.a
+LIBSMAPI=../../smapi/libsmapicyg.a
+LIBFIDOCONFIG = ../../fidoconf/libfidoconfigcyg.a
+
+%.o: ../%.c
+	$(CC) -c $(CFLAGS) ../$*.c 
 
 default: all
 

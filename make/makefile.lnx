@@ -15,8 +15,8 @@ AR=ar
 AR_R=rs
 
 
-.o: %.c
-	$(CC) -c $(CFLAGS) $*.c 
+%.o: ../%.c
+	$(CC) -c $(CFLAGS) ../$*.c 
 
 include makefile.inc
 
