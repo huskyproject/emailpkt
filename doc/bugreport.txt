@@ -13,7 +13,7 @@ please and post report into one from:
 Operation system version ____________________________________
 
 Program version _____________________________________________
-(the 1st line from `hpt -h` output)
+(the 1st line from `hesend -h` or `hereceive -h` output)
 
 Bug description _____________________________________________
 _____________________________________________________________
