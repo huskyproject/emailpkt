@@ -1,3 +1,8 @@
+2002-12-04 Wednesday 05:40  stas_degteff
+
+	* src/hesend.c (1.12): Fix check result of makeUniqueDosFileName()
+	(Thanks to Ivan Gudym)
+
 2002-11-27 Wednesday 00:07  nssoft
 
 	* h/ecommon.h (1.7), src/misc.c (1.9): s_addr --> hs_addr
