@@ -45,8 +45,8 @@ CDEFS=-D$(OSTYPE) -DDIRSEP=\'$(DIRSEP)\' $(ADDCDEFS)
 include make/makefile.inc
 
 
-%$(OBJ): $(SRCDIR)%.c $(H_DIR)$(HFILES)
-	$(CC) -c $(CDEFS) $(CFLAGS) $*.c
+%$(OBJ): $(SRC_DIR)%.c
+	$(CC) -c $(CDEFS) $(CFLAGS) $(SRC_DIR)$*.c
 
 emailpkt:  all
 
