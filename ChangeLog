@@ -1,3 +1,12 @@
+2003-04-13 Sunday 18:33  stas_degteff
+
+	* h/ecommon.h (1.13), src/hereceive.c (1.16), src/misc.c (1.16):
+	Fix memory leak & fault
+
+2003-04-13 Sunday 18:26  stas_degteff
+
+	* h/version.h (emailpkt-1_4-stable.1): Fix version number
+
 2003-03-06 Thursday 10:15  stas_degteff
 
 	* HISTORY (1.2), VERSION (1.6): Branch 1.4-stable starts
