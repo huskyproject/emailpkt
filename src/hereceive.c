@@ -39,11 +39,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <dirent.h>
-#ifdef UNIX
-#  include <sys/syslimits.h>
-#else
-#  include <limits.h>
-#endif
+#include <limits.h>
 #include <ctype.h>
 #include <fcntl.h>
 

@@ -70,11 +70,8 @@
 #include <fidoconf/dirlayer.h>
 #include <fidoconf/fidoconf.h>
 #include <fidoconf/common.h>
-#ifdef UNIX
-#  include <sys/syslimits.h>
-#else
-#  include <limits.h>
-#endif
+#include <limits.h>
+
 #if defined (_MSC_VER) || defined (__CYGWIN__) || defined (__MINGW32__) || defined (_WIN32)
 #  include <stdint.h>
 #else

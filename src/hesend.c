@@ -37,11 +37,9 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <ctype.h>
+#include <limits.h>
 #ifdef UNIX
-#  include <sys/syslimits.h>
 #  include <unistd.h>
-#else
-#  include <limits.h>
 #endif
 
 /* husky */
