@@ -1,3 +1,18 @@
+2003-02-25 Tuesday 10:40  stas_degteff
+
+	* h/version.h (1.5), src/hereceive.c (1.15), src/hesend.c (1.19):
+	Move #include cvs_date.h into main() for each program
+
+2003-02-25 Tuesday 10:36  stas_degteff
+
+	* h/ecommon.h (1.12), src/hereceive.c (1.14), src/hesend.c (1.18),
+	src/misc.c (1.15): Define module information for config parser
+
+2003-02-25 Tuesday 09:17  stas_degteff
+
+	* h/ecommon.h (1.11), src/hereceive.c (1.13), src/hesend.c (1.17),
+	src/misc.c (1.12): Use macros defined in smapi/compiler.h
+
 2003-02-16 Sunday 18:19  stas_degteff
 
 	* INSTALL (1.1): Add build/install instructions
