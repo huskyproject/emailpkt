@@ -1,11 +1,20 @@
+# Emailpkt make file
+#
 # Makefile with Husky support
 # you will need huskymak.cfg that comes in the huskybse package.
+#
+# $Id$
+#
 
 ifeq ($(DEBIAN), 1)
-# Every Debian-Source-Paket has one included.
-include debian/huskymak.cfg
+  # Every Debian-Source-Paket has one included.
+  include debian/huskymak.cfg
 else
-include ../huskymak.cfg
+  include ../huskymak.cfg
+endif
+
+ifndef RMDIR
+  RMDIR	= rm -d
 endif
 
 ifeq ($(DEBUG), 1)
@@ -25,7 +34,9 @@ endif
 
 CDEFS=-DNOEXCEPTIONS -D$(OSTYPE) $(ADDCDEFS)
 
-%$(OBJ): %.c
+HFILES = emailpkt.h
+
+%$(OBJ): %.c $(HFILES)
 	$(CC) -c $(CDEFS) $(CFLAGS) -DHUSKY $*.c
 
 OBJFILES = \
@@ -37,6 +48,7 @@ OBJFILES = \
  send$(OBJ) \
  uue$(OBJ)
 
+
 all: emailpkt$(EXE)
 
 emailpkt: $(OBJFILES)
@@ -44,9 +56,13 @@ emailpkt: $(OBJFILES)
 
 install:
 	$(INSTALL) $(IBOPT) emailpkt$(EXE) $(BINDIR)
+	$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)emailpkt
+	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)emailpkt
 
 uninstall:
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)emailpkt$(EXE)
+	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)emailpkt
+	-$(RMDIR) $(RMOPT) $(HTMLDIR)
 
 clean:
 	-$(RM) $(RMOPT) *$(OBJ)

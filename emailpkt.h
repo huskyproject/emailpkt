@@ -5,7 +5,14 @@
  *
  *  This file is part of EMAILPKT
  *
+ * $Id$
  */
+
+#if UNIX==1
+#include <sys/syslimits.h>     /* for PATH_MAX */
+#else
+#define PATH_MAX 128
+#endif
 
 #define VERSION          "0.2"
 #define MAX              64
@@ -24,7 +31,7 @@
   #define SAVE             1
 #endif
 
-#define strip(s)  s[strlen(s)-1] = 0
+#define strip(s)  if(s[strlen(s)-1]=='\n') s[strlen(s)-1] = 0
 
 
 #define UNKNOWN          0
@@ -36,6 +43,14 @@
 #define QUOTED_PRINTABLE 5
 #define UUENCODE         6
 
+/* Default path to the sendmail binary. This can be a symlink! */
+#define SENDMAIL    "/usr/sbin/sendmail"
+
+#define LOGFILENAME "emailpkt.log"
+
+/* String to put in the body of the message if no one is found */
+#define DEFAULTBODY "This message contains a Fidonet bundle."
+
 
 /*
  * note for developers:
@@ -44,7 +59,7 @@
  *   sizes. If you need more, you are having problems with this or you
  *   think you will, either change the hardcoded values or write a new
  *   pointer version. It's up to you.
- *     
+ *
 */
 
 typedef struct address {
@@ -62,6 +77,7 @@ typedef struct system {
     char emailFrom[MAX];      /* our email to send from                 */
     char emailSubject[MAX];   /* email's subject                        */
     int encoding;             /* method of encoding                     */
+    char filebox[PATH_MAX];   /* path to filebox                        */
 } LINK;
 
 typedef struct config {
@@ -77,6 +93,7 @@ typedef struct config {
     char outbound[MAX];
     char tempoutbound[MAX];
     char logdir[MAX];         /* where to store the logfile             */
+    char sendmail[PATH_MAX];  /* command to send mail                   */
 
     unsigned int linkCount;
     LINK link[512];           /* is 512 enough? I think yes...          */
@@ -95,7 +112,7 @@ int main(int argc, char *argv[]);
 void printUsage(void);
 
 /* log.c */
-int log(char *string);
+int log(char *string, ...);
 
 /* mime.c */
 int fromBase64(char *name, FILE *from);

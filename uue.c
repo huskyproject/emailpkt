@@ -5,6 +5,7 @@
  *
  *  This file is part of EMAILPKT
  *
+ * $Id$
  */
 
 #include <stdio.h>
@@ -25,7 +26,7 @@ int toUUE(FILE *inFile, FILE *outFile)
 
     do {
         memset(buff, 0, 255);
-    
+
         /* are there less than 45 bytes left? */
         for (i = 0; i < 45; i++) {
             j = i;
@@ -53,7 +54,7 @@ int toUUE(FILE *inFile, FILE *outFile)
 
         fprintf(outFile, "\n");
     } while (i != 0);
-    
+
     return 0;
 }
 

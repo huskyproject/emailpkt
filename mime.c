@@ -5,6 +5,7 @@
  *
  *  This file is part of EMAILPKT
  *
+ * $Id$
  */
 
 #include <stdio.h>
@@ -59,7 +60,7 @@ int fromBase64(char *name, FILE *from)
         }
     }
     fclose(to);
-    
+
     return 0;
 }
 
@@ -119,7 +120,7 @@ int fromQuoted(char *name, char *boundary, FILE *in)
     fseek(out, -2, SEEK_CUR);
     fputc(0, out);
     fputc(0, out);
-    
+
     fclose(out);
 
     return 0;
@@ -137,7 +138,7 @@ int toBase64(FILE *inFile, FILE *outFile)
             counter = 4;
         } else
             counter += 4;
-            
+
         if ((y = getc(inFile)) == EOF) {
             a = x >> 2;
             b = x << 4 & 0x3F;
@@ -162,7 +163,7 @@ int toBase64(FILE *inFile, FILE *outFile)
             putc('=', outFile);
 
             fprintf(outFile, "\n");
-            
+
             return 0;
         }
 
@@ -179,7 +180,7 @@ int toBase64(FILE *inFile, FILE *outFile)
 
     fprintf(outFile, "\n");
     return 0;
-    
+
 }
 
 

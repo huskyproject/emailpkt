@@ -26,6 +26,7 @@
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 #include <string.h>
@@ -33,7 +34,7 @@
 #include <stdlib.h>
 
 #include "emailpkt.h"
-
+#include "cvsdate.h"
 
 void printUsage(void)
 {
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
     int c;
 
 #ifdef HUSKY
-    printf("EmailPKT v%s with Husky support\n", VERSION);
+    printf("EmailPKT v%s with Husky support (%s)\n", VERSION, cvs_date);
 #else
     printf("EmailPKT v%s standalone version\n", VERSION);
 #endif
@@ -66,14 +67,18 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-
-    if (strcasecmp(argv[1], "send") == 0)
+    if (strcasecmp(argv[1], "send") == 0){
+        log("Start send\n");
         out();
-    else if (strcasecmp(argv[1], "receive") == 0)
+        log("Done\n");
+    }else if (strcasecmp(argv[1], "receive") == 0){
+        log("Start receive");
         in();
-    else {
+        log("Done\n");
+    }else {
         printUsage();
         printf("Unknown action %s\n", argv[1]);
+        log("Unknown action %s\n", argv[1]);
 	return 2;
     }
 

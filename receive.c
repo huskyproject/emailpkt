@@ -5,6 +5,7 @@
  *
  *  This file is part of EMAILPKT
  *
+ * $Id$
  */
 
 #include <stdio.h>
@@ -12,7 +13,6 @@
 #include <time.h>
 
 #include "emailpkt.h"
-#include "receive.h"
 
 
 int readWholeMsg(char *dir, char *name)
@@ -117,7 +117,7 @@ void normalize(char *s)
 {
     int i;
     char buff[4*MAX];
-    
+
     /* strip what is after the string */
     i = 0;
     while (s[i] != ';' && s[i] != '\n')
@@ -142,7 +142,7 @@ int parseMultipart(char *fileName)
     int encoding;
 
     file = fopen(fileName, "r");
-    
+
     fgets(buff, 4*MAX, file);
     while(buff[0] != '\n') {
         if (strncasecmp(buff, "Content-Type: multipart", 23) == 0)
@@ -169,12 +169,12 @@ int parseMultipart(char *fileName)
             if (strncasecmp(buff, "Content-Disposition: attachment", 31) == 0)
                 if (strstr(buff, "name=") != NULL)
                     strcpy(name, strstr(buff, "name")+strlen("name="));
-        
+
             if (strncasecmp(buff, "Content-Transfer-Encoding: quoted-printable", 43) == 0)
                 encoding = QUOTED_PRINTABLE;
             if (strncasecmp(buff, "Content-Transfer-Encoding: base64", 33) == 0)
                 encoding = BASE64;
-                
+
             fgets(buff, 4*MAX, file);
         }
 
@@ -196,11 +196,11 @@ int parseMultipart(char *fileName)
             }
             sprintf(buff, "Received %s\n", name);
             log(buff);
-            
+
             do {
                 fgets(buff, 4*MAX, file);
             } while(strncmp(buff+2, boundary, strlen(boundary)) != 0);
-            
+
         } else
             skip(boundary, file);
     }
@@ -228,7 +228,7 @@ int parseUUencode(char *fileName)
         } while (strncasecmp(buff, "begin ", 5) != 0);
 
         sscanf(buff, "begin %o %s", &perms, name);
-        
+
         if (name[0] != 0) {
             normalize(name);
             lowercase(name);
@@ -260,14 +260,14 @@ int parseApplication(char *fileName)
 
     fgets(buff, 4*MAX, file);
     while(buff[0] != '\n') {
-    
+
         if (strncasecmp(buff, "Content-Type:", 13) == 0)
             if (strstr(buff, "name=") != NULL)
                 strcpy(name, strstr(buff, "name=")+strlen("name="));
         if (strncasecmp(buff, "Content-Disposition: attachment", 31) == 0)
             if (strstr(buff, "name=") != NULL)
                 strcpy(name, strstr(buff, "name")+strlen("name="));
-        
+
         if (strncasecmp(buff, "Content-Transfer-Encoding: quoted-printable", 43) == 0)
             encoding = QUOTED_PRINTABLE;
         if (strncasecmp(buff, "Content-Transfer-Encoding: base64", 33) == 0)
@@ -302,10 +302,10 @@ int parseMessage(char *fileName)
     char buff[4*MAX];
 
     file = fopen(fileName, "r");
-    
+
     while(!feof(file)) {
         fgets(buff, 4*MAX, file);
-        
+
         if (strncasecmp(buff, "Content-Type: multipart", 23) == 0) {
             fclose(file);
             return MULTIPART;
@@ -323,7 +323,7 @@ int parseMessage(char *fileName)
 
     return UNKNOWN;
 }
-            
+
 
 int receive(void)
 {

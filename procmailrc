@@ -12,10 +12,10 @@ LOGFILE=/home/fido/logs/procmail.log
 
 #EMAILPKT=$HOME/cfg/email.cfg
 
-# Here's the main thing. 
+# Here's the main thing.
 # Of course, you should change this regexp for one that suits you. See
 # procmail man page for details.
 
 :0
-* ^Subject.Fido.*
+* ^Subject:.*Fido.*
 | emailpkt receive

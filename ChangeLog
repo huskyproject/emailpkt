@@ -1,6 +1,11 @@
 EmailPkt 0.2-unstable
 =====================
 
+Fri 12 Nov 2001 12:54:29 YEKT
+Stas.Degteff
+* SendMail config keyword: sendmail command definition
+* Some vunerability patches
+
 Fri mar 23 13:52:52 ART 2001
 german.theler
 * make use of EmailFrom, EmailSubj and EmailEncoding keywords from fidoconf

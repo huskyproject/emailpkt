@@ -5,6 +5,7 @@
  *
  *  This file is part of EMAILPKT
  *
+ * $Id$
  */
 
 #include <stdio.h>
@@ -30,7 +31,7 @@ void getAddress(char *s, AKA *aka)
     int i, j;
 
     j = 0;
-    
+
     /* get zone */
     i = 0;
     while (s[j] != ':') {
@@ -119,7 +120,7 @@ void processLink(char *s)
     strncpy(cfg.link[cfg.linkCount].name, strtok(NULL, "#\n"), MAX);
 
     trimComments(cfg.link[cfg.linkCount].name);
-    
+
     cfg.linkCount += 1;
 }
 
@@ -137,7 +138,7 @@ int config(void)
     s_fidoconfig *husky;
     int i;
 #endif
-    
+
     memset(&cfg, 0, sizeof(cfg));
 
 #ifdef HUSKY
@@ -159,31 +160,38 @@ int config(void)
     trim(cfg.logdir);
 
     for (i = 0; i < husky->linkCount; i++) {
-        cfg.link[i].aka.zone = husky->links[i].hisAka.zone;
-        cfg.link[i].aka.net = husky->links[i].hisAka.net;
-        cfg.link[i].aka.node = husky->links[i].hisAka.node;
-        cfg.link[i].aka.point = husky->links[i].hisAka.point;
+      if (husky->links[i].email != NULL){
+/*        memset( cfg.link[i], 0, sizeof(cfg.link[i]) );*/
+
+        strncpy(cfg.link[cfg.linkCount].email, husky->links[i].email, MAX);
+        cfg.link[cfg.linkCount].aka.zone = husky->links[i].hisAka.zone;
+        cfg.link[cfg.linkCount].aka.net = husky->links[i].hisAka.net;
+        cfg.link[cfg.linkCount].aka.node = husky->links[i].hisAka.node;
+        cfg.link[cfg.linkCount].aka.point = husky->links[i].hisAka.point;
 
         if (husky->links[i].name != NULL)
-            strncpy(cfg.link[i].name, husky->links[i].name, MAX);
+            strncpy(cfg.link[cfg.linkCount].name, husky->links[i].name, MAX);
 
-        if (husky->links[i].email != NULL)
-            strncpy(cfg.link[i].email, husky->links[i].email, MAX);
+	if (husky->links[i].fileBox !=NULL)
+            strncpy(cfg.link[cfg.linkCount].filebox, husky->links[i].fileBox, sizeof(cfg.link[cfg.linkCount].filebox));
 
         if (husky->links[i].emailFrom != NULL)
-            strncpy(cfg.link[i].emailFrom, husky->links[i].emailFrom, MAX);
-            
+            strncpy(cfg.link[cfg.linkCount].emailFrom, husky->links[i].emailFrom, MAX);
+
         if (husky->links[i].emailSubj != NULL)
-            strncpy(cfg.link[i].emailSubject, husky->links[i].emailSubj, MAX);
+            strncpy(cfg.link[cfg.linkCount].emailSubject, husky->links[i].emailSubj, MAX);
 
         if (husky->links[i].emailEncoding == eeMIME)
-            cfg.link[i].encoding = BASE64;
+            cfg.link[cfg.linkCount].encoding = BASE64;
         else if (husky->links[i].emailEncoding == eeSEAT)
-            cfg.link[i].encoding = BASE64;        
+            cfg.link[cfg.linkCount].encoding = BASE64;
         else if (husky->links[i].emailEncoding == eeUUE)
-            cfg.link[i].encoding = UUENCODE;
+            cfg.link[cfg.linkCount].encoding = UUENCODE;
+        else
+            cfg.link[cfg.linkCount].encoding = BASE64;
 
         cfg.linkCount++;
+      }
     }
 
     disposeConfig(husky);
@@ -194,9 +202,11 @@ int config(void)
         strncpy(cfg.email, "undefined@fidonet.org", MAX);
     if (cfg.subject[0] == 0)
         strncpy(cfg.subject, "FIDONET Packet", MAX);
+    if ( strlen(cfg.sendmail)==0 )
+      strncpy(cfg.sendmail, SENDMAIL, PATH_MAX);
 
 #endif
-        
+
     if (getenv("EMAILPKT") != NULL)
         strncpy(file, getenv("EMAILPKT"), MAX);
     else
@@ -229,7 +239,7 @@ int config(void)
                 getAddress(value, &(cfg.aka));
             if (strcasecmp(keyword, "subject") == 0)
                 strncpy(cfg.subject, value, MAX);
-                
+
             if (strcasecmp(keyword, "inbound") == 0) {
                 strncpy(cfg.inbound, value, MAX);
                 trim(cfg.inbound);
@@ -250,10 +260,17 @@ int config(void)
                 strncpy(cfg.logdir, value, MAX);
                 trim(cfg.logdir);
             }
+            if (strcasecmp(keyword, "sendmail") == 0) {
+                strncpy(cfg.sendmail, value, PATH_MAX);
+                trim(cfg.sendmail);
+            }
             if (strcasecmp(keyword, "link") == 0)
                 processLink(value);
         }
     }
+
+    if ( strlen(cfg.sendmail)==0 )
+      strncpy(cfg.sendmail, SENDMAIL, PATH_MAX);
 
     /* we now have all the config we need. check if they are enough */
     if (cfg.inbound[0] == 0) {
