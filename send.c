@@ -26,19 +26,20 @@ int encodeAndSend(char *fullFileName, int n)
     FILE *input;
     FILE *output;
 
-    /* get the fileName */
-    strcpy(shortFileName, strrchr(fullFileName, '/')+1);
-    
     /* make a pseudo-random filename to store the temp file */
     sprintf(random, "%04x", (unsigned int)time(0));
-     
-    /* is it a netmail pkt? change its name */
-    if (shortFileName[10] == 'u' && shortFileName[11] == 't')
-        sprintf(shortFileName, "%s.pkt", random);
 
     /* search for an available name in the temp dir*/
     findName(cfg.tempoutbound, random);
     sprintf(buff, "%s/%s", cfg.tempoutbound, random);
+
+    /* get the fileName */
+    strcpy(shortFileName, strrchr(fullFileName, '/')+1);
+
+    /* is it a netmail pkt? change its name */
+    if (shortFileName[10] == 'u' && shortFileName[11] == 't')
+        sprintf(shortFileName, "%s.pkt", random);
+
 
     if ((output = fopen(buff, "wt")) == NULL) {
         sprintf(buff, "[!] Can't write to %s/%s\n", cfg.tempoutbound, random);
