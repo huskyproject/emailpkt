@@ -1,3 +1,11 @@
+2003-02-16 Sunday 18:19  stas_degteff
+
+	* INSTALL (1.1): Add build/install instructions
+
+2003-02-16 Sunday 18:17  stas_degteff
+
+	* make/makefile.unx (1.1): Add generic makefile for unix-like OS
+
 2002-12-16 Monday 07:16  stas_degteff
 
 	* h/ecommon.h (1.10), src/hereceive.c (1.12), src/hesend.c (1.16):
