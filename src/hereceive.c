@@ -672,7 +672,9 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
   UINT32 CRC32val=0xFFFFFFFFUl; /*  CRC32; init value */
   UINT32 sectsumr=0, sectsize=0, fullsumr=0, fullsize=0; /* from sum lines */
   struct dirent **ls=NULL;       /* 2nd arg of scandir() */
+#ifndef UNIX
   DIR *dirp=NULL;
+#endif
 
 #if UNIX
   /* scandir only for UNIXes */
@@ -688,8 +690,8 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
   }
 
   /* for sort of directory */
-  int dircmp(struct dirent *dp1, struct dirent *dp2) /* directory compare (4th arg of scandir())*/
-  { return sstrcmp(dp1->d_name,dp2->d_name);
+  int dircmp(const void *dp1,const void *dp2) /* directory compare (4th arg of scandir())*/
+  { return sstrcmp( ((const struct dirent *)dp1)->d_name,((const struct dirent *)dp2)->d_name);
   }
 #endif
   w_log( LL_FUNC, "processUUE() (%s)",buf );
