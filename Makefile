@@ -40,13 +40,13 @@ install:
 	$(INSTALL) $(IBOPT) emailpkt$(EXE) $(BINDIR)
 
 uninstall:
-	-$(RM) $(BINDIR)$(DIRSEP)emailpkt$(EXE)
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)emailpkt$(EXE)
 
 clean:
-	-$(RM) *$(OBJ)
-	-$(RM) core
-	-$(RM) *~
+	-$(RM) $(RMOPT) *$(OBJ)
+	-$(RM) $(RMOPT) core
+	-$(RM) $(RMOPT) *~
 
 distclean: clean
-	-$(RM) emailpkt$(EXE)
+	-$(RM) $(RMOPT) emailpkt$(EXE)
 
