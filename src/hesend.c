@@ -106,7 +106,7 @@ char *writeMessage(const char *fullFileName, s_link link)
   /* basename of file */
 /*  strncpy(basefilename, strrchr(fullFileName, DIRSEP)+1, sizeof(basefilename));
 */
-  basefilename = basename(fullFileName);
+  basefilename = (char*)basename(fullFileName);
   w_log(LL_FILENAME, "Base file name: '%s'", basefilename);
 
   /* for netmail (.?ut) change ext to pkt */
