@@ -13,6 +13,8 @@
 #ifndef DEFAULTCFGFILE
   #define DEFAULTCFGFILE   "/usr/local/etc/email.cfg"
 #endif
+
+/* Should we backup incoming and outgoing plain texts? */
 #ifndef SAVE
   #define SAVE             1
 #endif

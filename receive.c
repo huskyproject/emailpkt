@@ -186,15 +186,12 @@ int parseMultipart(char *fileName)
             switch (encoding) {
                 case QUOTED_PRINTABLE:
                     fromQuoted(buff, boundary, file);
-                    log("Encoding is: Quoted-Printable\n");
                 break;
                 case BASE64:
                     fromBase64(buff, file);
-                    log("Encoding is: BASE64\n");
                 break;
                 case TEXT:
                     fromText(buff, boundary, file);
-                    log("Encoding is: 7-BIT\n");
                 break;
             }
             sprintf(buff, "Received %s\n", name);
@@ -206,6 +203,55 @@ int parseMultipart(char *fileName)
             
         } else
             skip(boundary, file);
+    }
+
+    fclose(file);
+
+    return 0;
+}
+
+int parseApplication(char *fileName)
+{
+    FILE *file;
+    char buff[4*MAX];
+    char name[MAX];
+    int encoding;
+
+    file = fopen(fileName, "r");
+
+    name[0] = 0;
+    encoding = TEXT;
+
+    fgets(buff, 4*MAX, file);
+    while(buff[0] != '\n') {
+    
+        if (strncasecmp(buff, "Content-Type:", 13) == 0)
+            if (strstr(buff, "name=") != NULL)
+                strcpy(name, strstr(buff, "name=")+strlen("name="));
+        if (strncasecmp(buff, "Content-Disposition: attachment", 31) == 0)
+            if (strstr(buff, "name=") != NULL)
+                strcpy(name, strstr(buff, "name")+strlen("name="));
+        
+        if (strncasecmp(buff, "Content-Transfer-Encoding: quoted-printable", 43) == 0)
+            encoding = QUOTED_PRINTABLE;
+        if (strncasecmp(buff, "Content-Transfer-Encoding: base64", 33) == 0)
+            encoding = BASE64;
+
+        fgets(buff, 4*MAX, file);
+    }
+
+    if (name[0] != 0) {
+        normalize(name);
+        lowercase(name);
+        findName(cfg.inbound, name);
+        sprintf(buff, "%s/%s", cfg.inbound, name);
+        switch (encoding) {
+            case BASE64:
+                fromBase64(buff, file);
+            break;
+        }
+        sprintf(buff, "Received %s\n", name);
+        log(buff);
     }
 
     fclose(file);
@@ -225,7 +271,7 @@ int parseEntityHeaders(char *fileName)
     while(buff[0] != '\n') {
         if (strncasecmp(buff, "Content-Type: multipart", 23) == 0)
             return MULTIPART;
-        if (strncasecmp(buff, "Content-Type: application", 29) == 0)
+        if (strncasecmp(buff, "Content-Type: application", 25) == 0)
             return APPLICATION;
             
         fgets(buff, 4*MAX, file);
@@ -249,6 +295,8 @@ int receive(void)
     c = parseEntityHeaders(fileName);
     if (c == MULTIPART)
         parseMultipart(fileName);
+    else if (c == APPLICATION)
+        parseApplication(fileName);
     else {
         fprintf(stderr, "[!] Unsuported encoding.\n");
         log("[!] Unsuported encoding.\n");

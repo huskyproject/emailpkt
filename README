@@ -1,22 +1,27 @@
 
-  EmailPKT v0.1 |
-  --------------+
+                             EmailPKT v0.1 |
+                            ---------------+
+	                                FidoNet over Email
 
-    1. What is EmailPKT?
-      1.1. Why Email routing?
-    2. Compiling & Installing EmailPKT
-      2.1. With HUSKY support
-      2.2. Standalone
-    3. Configuring EmailPKT
-      2.1. Fidoconf keywords 
-      2.2. EmailPKT config file
-    4. How to use it
-      4.1. Sending
-      4.2. Receiving
-      4.2.1. ~/.forward
-      4.2.2. procmail
-      4.3. Owner problems
-    5. Contacting the author
+
+  Table of contents
+  
+      1. What is EmailPKT?
+          1.1. Why Email routing?
+      2. Compiling & Installing EmailPKT
+          2.1. With HUSKY support
+          2.2. Standalone
+      3. Configuring EmailPKT
+          2.1. Fidoconf keywords 
+          2.2. EmailPKT config file
+      4. How to use it
+          4.1. Sending
+          4.2. Receiving
+          4.2.1. ~/.forward
+          4.2.2. procmail
+          4.3. Owner problems
+      5. Contacting the author
+
 
 
  1. What is EmailPKT?
@@ -28,13 +33,14 @@
   a normal email client or automatically with any software like EmailPKT. To
   receive incoming files, it reads the standard input for a MIME message with
   encoded (Base64 or Quoted-Printable) files.
-
+  
+  
  1.1. Why Email routing?
  -----------------------
  
   If you have a link that is not in your same city or even in your same
-  country, using normal phone calls would be a big wasting of money. Using the
-  Internet to route is the way to solve this problem. Here come Fido-over-IP
+  country, using normal phone calls would be a big waste of money. Using the
+  Internet to route is the way to solve this problem. Here comes Fido-over-IP
   mailers like BinkD and Argus, but they have another problem. At least one of
   the two systems must be on-line 24 hours a day. When using e-mail routing,
   there are no long distance bills and there is no need of the both ends to be
@@ -47,16 +53,18 @@
   have no need of it today (maybe tomorrow you will need it).
 
 
+
  2. Compiling & installing EmailPKT
  ----------------------------------
 
   Currently, EmailPKT works only under Linux (and hopefully in any kind of
-  Unix). Future ports to non-Unix system could be done in the (not so near)
-  future.
+  Unix). Future ports to non-Unix system could be (and should be) done in the
+  (not so near) future.
 
   EmailPKT can be installed either standalone or with Husky support. The
-  source distribution is the same for the two flavours. The resulting flavour
+  source distribution is the same for the two versions. The resulting flavour
   depends on the makefile used to compile the program.
+
 
  2.1. With HUSKY support
  -----------------------
@@ -110,7 +118,8 @@
     $ make -f makefile.lnx install
     $ make -f makefile.lnx distclean
     
-  The binary will be installed in /usr/local/bin.
+  The binary will be installed in /usr/local/bin by default. Edit the makefile
+  and change the variables as you want.
 
   
  3. Configuring EmailPKT
@@ -160,8 +169,8 @@
     EMAILPKT=/home/fido/cfg/email.cfg
     export EMAILPKT
     
-  If it is not set, EmailPKT will try to open "./email.cfg". If boths methods
-  fail, it will exit with an error.
+  If it is not set, EmailPKT will try to open "/usr/local/etc/email.cfg". If
+  boths methods fail, it will exit with an error.
   
   The config file uses the following keywords:
   
@@ -184,7 +193,7 @@
       Temporary inbound directoy
        
     Outbound <string>
-      Binkley Styele outbound directoy
+      Binkley Style base outbound directoy (for the same zone as main aka)
              
     TempOutbound <string>
       Temporary outbound directoy
@@ -197,6 +206,7 @@
       the link's email and the third one is the link's name.
       
   Notes:
+    *  Keywords are CaSe InSeNsItIvE.
     *  AKAs can be 3d, 4d or 5d. 
     *  In all cases, EmailPKT config overrides Fidoconf.
       
@@ -240,7 +250,7 @@
   Notes:
       *  You need to put the full path to EmailPKT.
       *  The quotes are needed.
-      *  There must be no space between the piping character '|' and the
+      *  There must be no space between the pipe character (|) and the
          path to EmailPKT.
 	 
  4.2.2. procmail
@@ -257,24 +267,30 @@
        | emailpkt receive
        
   Of course, you must change the second line to one that suits you. For
-  more information, refer to procmail documentation.
+  more information, refer to procmail documentation. A procmailrc example is
+  provided with this package. Just change some variables and copy it to
+  ~/.procmailrc for a quick start.
      
-  For an extrange reason, procmail does not see any external environment
-  variable. So if you are using the standalone version of EmailPKT, you
-  must write again the path to the config file.
+  Because of an extrange reason, procmail does not see any external
+  environment variable. So if you are using the standalone version of EmailPKT,
+  you must write again the path to the config file if it is not in
+  /usr/local/etc.
+
      
  4.3. Owner problems
  -------------------
   
   Processing all the email with a user and having all the fido stuff with
   another one is a common practise. So, it is a mistake to try to write in
-  another user's directory. To solve this in an easy way, you can pipe all
-  the mails from user A that process the email (for example, runs fetchmail)
-  to user B (the owner of the inbound directory), and then yes, in user's B
-  ~/.forward call emailpkt.
+  another user's directory, and a security hole to let everyone write in the
+  inbound directory. To solve this in an easy way, you can pipe all the mails
+  from user A that process the email (for example, runs fetchmail) to user B
+  (the owner of the inbound directory), and then yes, in user's B ~/.forward
+  finally call emailpkt.
      
   For example, user A ~/.procmailrc:
      
+       ---cut---
        :0
        * ^Subject.*FIDO
        ! B
@@ -282,12 +298,15 @@
        :0
        * ^Subject.*Routing
        ! B
+       ---cut---
        
        [...]
        
   And user B ~/.forward:
-    
+  
+       ---cut---
        "|/usr/local/bin/emailpkt receive"
+       ---cut---
 
        
  5. Contacting the author
@@ -300,6 +319,6 @@
      german@linuxfreak.com
      4:905/210
      
-  If you have a general question or need technical support, refer to
-  FIDOSOFT.HUSKY echo.
+  If you have a general question or need technical support, link to
+  FIDOSOFT.HUSKY from your boss.
   

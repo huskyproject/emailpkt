@@ -11,5 +11,5 @@
 #define DEFAULTBODY "This message contains a MIME Base64 encoded FTN packet."
 
 /* Full path to the sendmail binary. This can be a symlink! */
-#define SENDMAIL    "/usr/sbin/sendmail"
+#define SENDMAIL    "/usr/lib/sendmail"
 
