@@ -1,6 +1,9 @@
 EmailPkt 0.2-stable
 =====================
 
+2002/07/18 18:09:14 YEKST, Stas
+* Fix log message
+
 2002/06/04 20:14:09, Stas
 * Start "emailpkt-0_2-stable" branch
 * Change 'SAVE' define to 0 (don't save temporary files)

@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
         out();
         log("Done\n");
     }else if (strcasecmp(argv[1], "receive") == 0){
-        log("Start receive");
+        log("Start receive\n");
         in();
         log("Done\n");
     }else {
