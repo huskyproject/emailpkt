@@ -1,3 +1,15 @@
+2003-03-06 Thursday 10:50  stas_degteff
+
+	* HISTORY (1.3), VERSION (1.7): Change version to 1.9-current
+
+2003-03-06 Thursday 10:15  stas_degteff
+
+	* HISTORY (1.2), VERSION (1.6): Branch 1.4-stable starts
+
+2003-03-06 Thursday 10:15  stas_degteff
+
+	* README (1.9), TODO (1.9): Rewrite documentation
+
 2003-02-25 Tuesday 10:40  stas_degteff
 
 	* h/version.h (1.5), src/hereceive.c (1.15), src/hesend.c (1.19):
