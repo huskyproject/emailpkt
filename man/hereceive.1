@@ -1,10 +1,12 @@
-.TH EMAILPKT 1 "hereseive 0.9"
+.TH hereseive 1 "Oct 31 2002" "EmailPkt 0.9"
 .SH NAME
-hereseive.1 \- receive FTN bundles via e-mail
+.B hereseive
+\- receive FTN bundles via e-mail
 .SH SYNTAX
 .TP
-  hereceive [-qVD] [-c configfile] [input_file]
-  hereceive [--help] [--version] [--debug] [--quiet] [--config=configfile] [input_file]
+.B hereceive [-qVD] [-c configfile] [input_file]
+.PP
+.B hereceive [--help] [--version] [--debug] [--quiet] [--config=configfile] [input_file]
 
 .SH DESCRIPTION
 HeReceive is a part of the Emailpkt package (other part is HeSend program).
@@ -15,38 +17,50 @@ plain text) or uuencoded files. Use S.E.A.T. (FSP-1015) for reliability check.
 
 .SH OPTIONS
 
-.Fl c configfile
-.Fl .Fl config=configfile
+.B -c configfile
+.br
+.B --config=configfile
 Specify alternate config file
 
-.Fl D
-.Fl .Fl debug
+.B -D
+.br
+.B --debug
 Debug mode: save all processed e-mail messages and don't exec programs.
 
-.Fl h
-.Fl .Fl help
+.B -h
+.br
+.B --help
 Print usage information and exit.
 
-.Fl q
-.Fl .Fl quiet
+.B -q
+.br
+.B --quiet
 Quiet mode: don't print messages into screen
 
-.Fl V
-.Fl .Fl version
+.B -V
+.br
+.B --version
 Print version and exit.
 
 
 .SH SEE ALSO
-hesend(1)   Emailpkt send program
-.sp
-http://husky.sf.net/emailpkt.html emailpkt web page
+.I hesend(1)
+Emailpkt send program
+.PP
+.BI http://husky.sf.net/emailpkt.html emailpkt web page
 
 .SH BUGS
 Can't decode BASE64 and uu-encoded data if line too long (>65530 chars)
 (This lines can't presents in normal messages)
 
 .SH AUTHORS
-Year 2000-2001: German Theler (german@linuxfreak.com) 4:905/210@fidonet
+
+Year 2000-2001:
+.B German Theler 4:905/210@fidonet
+.BI german@linuxfreak.com
 (First developer, now don't work)
-.sp
-Year 2002: Stas Degteff 2:5080/102 stas_degteff@users.sourceforge.net
+.PP
+Year 2002:
+.B Stas Degteff 2:5080/102
+.BI stas_degteff@users.sourceforge.net
+
