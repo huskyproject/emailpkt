@@ -28,7 +28,7 @@ SRC_DIR = ../src/
 LIBS	= -lfidoconfigbsd -lsmapibsd
 
 CFLAGS	= -s -Wall -O3 -c -I../h -I../..
-CDEFS	= -DUNIX -DCFGDIR=\"$(CFGDIR)\"
+CDEFS	= -DUNIX -DCFGDIR=\"$(CFGDIR)\" -DDIRSEP=\'/\'
 
 LFLAGS  = -L../../smapi -L../../fidoconf
 

@@ -10,7 +10,7 @@ CFGDIR = /usr/local/etc
 HTMLDIR= /usr/local/share/doc/husky/emailpkt
 
 CC     = gcc
-CFLAGS = -Wall -O3 -DCFGDIR=\"$(CFGDIR)\"
+CFLAGS = -Wall -O3 -DCFGDIR=\"$(CFGDIR)\" -DDIRSEP=\'/\'
 SRC_DIR= ../src/
 
 OBJ=.o

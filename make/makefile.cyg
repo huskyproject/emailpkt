@@ -19,9 +19,10 @@ H_DIR   = ../h/
 
 INCLUDEDIRS = -I../.. -I$(H_DIR)
 
-CFLAGS=  -c -O3 -Wall $(DEBUG) -mno-cygwin -pedantic
-LFLAGS=  $(DEBUG) -mno-cygwin -L../../smapi  -L../../fidoconf
-#CDEFS =  -D__NT__
+CFLAGS	= -c -O3 -Wall $(DEBUG) -mno-cygwin -pedantic
+LFLAGS	= $(DEBUG) -mno-cygwin -L../../smapi  -L../../fidoconf
+CDEFS	= -DDIRSEP=\'/\'
+#CDEFS	+= -D__NT__
 
 OBJ=.o
 EXE=.exe
