@@ -5,4 +5,5 @@
 -crc
 -s.e.a.t. (fsp-1015)
 -uue and other encodings for outgoing mails
+-use emailFrom, emailSubj and emailEncoding from fidoconfig
 
