@@ -14,7 +14,7 @@
 #define PATH_MAX 128
 #endif
 
-#define VERSION          "0.2"
+#define VERSION          "0.3"
 #define MAX              64
 
 #ifndef CFGDIR
