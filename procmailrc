@@ -1,0 +1,21 @@
+# Sample .procmailrc file for calling emailpkt to automatically receive
+# FTN packets via email.
+# Copy and rename it to ~/.procmailrc
+
+# It is a good idea to have a log when something goes wrong
+
+LOGFILE=/home/fido/logs/procmail.log
+
+# You must declare here the full path to the EmailPKT config file if you
+# want to use it, _even_ if you have already set the EMAILPKT environment
+# value before. I don't know why, simply procmail ignores it...
+
+EMAILPKT=$HOME/cfg/main
+
+# Here's the main thing. 
+# Of course, you should change this regexp for one that suits you. See
+# procmail man page for details.
+
+:0
+* ^Subject.Fido.*
+| emailpkt receive

@@ -1,0 +1,33 @@
+# Legacy makefile for Linux systems
+# No Husky support
+
+include ../huskymak.cfg
+
+GCC    = gcc
+CFLAGS = -Wall -O3
+
+%$(OBJ): %.c
+	$(CC) -c $(CFLAGS) $*.c
+
+OBJFILES = \
+ config$(OBJ) \
+ emailpkt$(OBJ) \
+ log$(OBJ) \
+ mime$(OBJ) \
+ receive$(OBJ) \
+ send$(OBJ) \
+
+all: emailpkt
+
+emailpkt: $(OBJFILES)
+	$(CC) -o emailpkt $(OBJFILES)
+
+install:
+	install -s emailpkt /usr/local/bin
+
+clean:
+	-rm *$(OBJ)
+
+distclean: clean
+	-rm emailpkt
+
