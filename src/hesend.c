@@ -243,8 +243,8 @@ char *writeMessage(const char *fullFileName, s_link link)
   fclose(tempfd);
 
   nfree(msgidbuf);
-/*  nfree(cp);*/
-  nfree(basefilename);
+/*  nfree(cp);            not malloc'ed */
+/*  nfree(basefilename);  not malloc'ed */
   w_log(LL_FILENAME, "Return file name: '%s'", tempfilename );
   w_log(LL_FUNC,"writeMessage() OK");
   return sstrdup(tempfilename);
@@ -714,12 +714,12 @@ main( int argc, char **argv)
          }
          if(strcmp(argv[op]+2,"version")) {
                 printver();
-                nfree(program_name);
+                nfree(cp); nfree(program_name);
                 return 0;
          }
          if(strcmp(argv[op]+2,"help")) {
                 usage();
-                nfree(program_name);
+                nfree(cp); nfree(program_name);
                 return 0;
          }
        }else{
@@ -732,18 +732,18 @@ main( int argc, char **argv)
          }
          if(strchr(argv[op],'V')) {
                 printver();
-                nfree(program_name);
+                nfree(cp); nfree(program_name);
                 return 0;
          }
          if(strchr(argv[op],'h')) {
                 usage();
-                nfree(program_name);
+                nfree(cp); nfree(program_name);
                 return 0;
          }
        }
      }else{
         fprintf(stderr,"Illegal parameter: %s", argv[op]);
-        nfree(program_name);
+        nfree(cp); nfree(program_name);
         return 1;
      }
    }
@@ -754,9 +754,7 @@ main( int argc, char **argv)
   if(quiet) config->logEchoToScreen=0;
 
   if( !openLog( LOGFILE, program_name, config) )
-  { fprintf(stderr, "Can't init log()! Use stderr instead.\n");
-    nfree(cp);
-  }
+   fprintf(stderr, "Can't init log()! Use stderr instead.\n");
 
   if( sstrlen(config->sendmailcmd) )
   {
