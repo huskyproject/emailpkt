@@ -1,3 +1,23 @@
+2002-10-26 Saturday 10:12  stas_degteff
+
+	* make/makefile.lnx (1.3): Linux legacy makefile for new version
+
+2002-10-26 Saturday 10:08  stas_degteff
+
+	* .forward (1.2), Makefile (1.8), VERSION (1.4), procmailrc (1.4),
+	h/ecommon.h (1.1), h/version.h (1.1), make/makefile.cyg (1.3),
+	make/makefile.inc (1.2), man/hereseive.1 (1.1), man/hesend.1 (1.1),
+	src/encdec.c (1.1), src/hereceive.c (1.1), src/hesend.c (1.1),
+	src/misc.c (1.1): New emailpkt package version: 0.9-current with
+	full re-written code.
+
+2002-10-26 Saturday 09:58  stas_degteff
+
+	* config.c (1.8), emailpkt.1 (1.3), emailpkt.c (1.9), emailpkt.h
+	(1.11), log.c (1.3), mime.c (1.6), receive.c (1.7), receive.h
+	(1.4), send.c (1.8), send.h (1.5), uue.c (1.3): Stop emailpkt
+	0.3-current; remove sources
+
 2002-08-26 Monday 07:57  sfpavel
 
 	* README (1.8), VERSION (1.3), emailpkt.h (1.10), debian/changelog
