@@ -14,7 +14,7 @@
 #ifdef HUSKY
   #include <fidoconf/fidoconf.h>
   #include <fidoconf/common.h>
-#endif HUSKY
+#endif /* HUSKY */
 
 #include "emailpkt.h"
 
