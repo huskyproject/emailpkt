@@ -432,7 +432,7 @@ int storeSEATHeaderLine(const char *buf)
        w_log(LL_DEBUG, "SEAThdr.FileID='%s'", SEAThdr.FileID);
     }
     else if( !sstrnicmp( buf, "Ftn-Crc32: ", 11 ) )
-    {  SEAThdr.Crc32 = (uint32_t)strtoul(buf + 11, NULL, 16);
+    {  SEAThdr.Crc32 = (UINT32)strtoul(buf + 11, NULL, 16);
        w_log(LL_DEBUG, "SEAThdr.Crc32='%x'", (unsigned long)SEAThdr.Crc32);
     }
     else if( !sstrnicmp( buf, "Ftn-Seg: ", 9 ) )
@@ -443,7 +443,7 @@ int storeSEATHeaderLine(const char *buf)
        w_log(LL_DEBUG, "SEAThdr.SegCount='%u'", (unsigned)SEAThdr.SegCount);
     }
     else if( !sstrnicmp( buf, "Ftn-Seg-Crc32: ", 15 ) )
-    {  SEAThdr.SegCrc32 = (uint32_t)strtoul(buf + 15, NULL, 16);
+    {  SEAThdr.SegCrc32 = (UINT32)strtoul(buf + 15, NULL, 16);
        w_log(LL_DEBUG, "SEAThdr.SegCrc32='%x'", (unsigned long)SEAThdr.SegCrc32);
     }
     else if( !sstrnicmp( buf, "Ftn-Seg-ID: ", 12) )

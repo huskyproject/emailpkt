@@ -122,9 +122,9 @@ struct s_msgHeader{
 
 struct s_SEAT_header{
         char *FileID;          /* Ftn-File-ID:   */
-        uint32_t Crc32;          /* Ftn-Crc32:     */
+        UINT32 Crc32;          /* Ftn-Crc32:     */
         unsigned short SegNo, SegCount; /* Ftn-Seg:       */
-        uint32_t SegCrc32;       /* Ftn-Seg-Crc32: */
+        UINT32 SegCrc32;       /* Ftn-Seg-Crc32: */
         char *SegID;           /* Ftn-Seg-ID:    */
 };
 
