@@ -5,29 +5,39 @@
 # No Husky build enviroment (huskymak.cfg) support
 #
 
-BINDIR = /usr/local/bin/
-CFGDIR = /usr/local/etc/
-HTMLDIR= /usr/local/share/doc/husky/
-DOCSUBDIR=emailpkt
+BINDIR  = /usr/local/bin
+CFGDIR  = /usr/local/etc
+MANDIR  = /usr/local/man
+HTMLDIR = /usr/local/share/doc
+DOCSUBDIR= husky/emailpkt
 
-CC     = gcc
-CFLAGS = -Wall -O3 -DCFGDIR=\"$(CFGDIR)\" -DDIRSEP=\'/\'
-SRC_DIR= ../src/
-MANSRCDIR=../man/
+IMOPT   = -m 444
+IBOPT   = -m 555
+MKDIROPT= -m 755
 
-OBJ=.o
-EXE=
-TPU=.tpu
-RM=rm
-RMOPT= -f
-RMDIR=rm -r
-LIB=.a
-AR=ar
-AR_R=rs
-INSTALL=install -c
+DIRSEP  = /
+CC      = gcc
+CFLAGS  = -Wall -O3 -DCFGDIR=\"$(CFGDIR)\" -DDIRSEP=\'/\'
+SRC_DIR = ../src
+MANSRCDIR=../man
 
-%.o: $(SRC_DIR)%.c
-	$(CC) -c $(CFLAGS) $(SRC_DIR)$*.c
+MAN1DIR	= $(MANDIR)$(DIRSEP)man1
+
+OBJ	= .o
+EXE	=
+LIB	= .a
+
+RM	= rm
+RMOPT	= -f
+RMDIR	= rm -r
+MKDIR	= install -d
+AR	= ar
+AR_R	= rs
+INSTALL = install -c
+
+
+%.o: $(SRC_DIR)$(DIRSEP)%.c
+	$(CC) -c $(CFLAGS) $<
 
 include makefile.inc
 
@@ -38,16 +48,17 @@ install:
 	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
 	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
 	cd .. ; $(INSTALL) $(IMOPT) $(DOCS) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	-$(MKDIR) $(MKDIROPT) $(MANDIR)
-	cd $(MANSRCDIR) ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)$(DIRSEP)man1
+	-$(MKDIR) $(MKDIROPT) $(MAN1DIR)
+	cd $(MANSRCDIR) ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MAN1DIR)
 
 uninstall:
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
 	-cd $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR) ; $(RM) $(RMOPT) $(DOCS)
 	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	-cd $(MANDIR)$(DIRSEP)man1 ; $(RM) $(RMOPT) $(MANPAGES)
+	-cd $(MAN1DIR) ; $(RM) $(RMOPT) $(MANPAGES)
 
 clean: commonclean
 
 distclean: commondistclean
+

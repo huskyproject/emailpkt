@@ -10,17 +10,18 @@
 
 BINDIR	= /usr/local/bin
 CFGDIR	= /usr/local/etc/fido
-HTMLDIR = /usr/local/share/doc/husky
-DOCSUBDIR = emailpkt
+HTMLDIR = /usr/local/share/doc
+DOCSUBDIR = husky/emailpkt
 MANDIR	= /usr/local/man
 DIRSEP	= /
 IMOPT	= -m 444
 IBOPT	= -m 555
 
+MAN1DIR	= $(MANDIR)$(DIRSEP)man1
+
 CC      = gcc
 OBJ	= .o
 EXE	=
-TPU	= .tpu
 RM	= rm
 RMDIR	= rm -r
 LIB	= .a
@@ -63,8 +64,8 @@ install:
 	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
 	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
 	cd .. ; $(INSTALL) $(IMOPT) $(DOCS) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	-$(MKDIR) $(MKDIROPT) $(MANDIR)
-	cd $(MANSRCDIR) ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)$(DIRSEP)man1
+	-$(MKDIR) $(MKDIROPT) $(MAN1DIR)
+	cd $(MANSRCDIR) ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MAN1DIR)
 
 uninstall:
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
