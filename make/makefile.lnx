@@ -1,5 +1,9 @@
+# $Id$
+#
 # Legacy makefile for Linux systems
-# No Husky support
+#
+# No Husky build enviroment support
+#
 
 BINDIR = /usr/local/bin
 CFGDIR = /usr/local/etc
@@ -10,20 +14,30 @@ OBJ=.o
 EXE=
 TPU=.tpu
 RM=rm
+RMDIR=rm -r
 LIB=.a
 AR=ar
 AR_R=rs
-
+INSTALL=install -c
 
 %.o: ../%.c
-	$(CC) -c $(CFLAGS) ../$*.c 
+	$(CC) -c $(CFLAGS) ../$*.c
 
 include makefile.inc
 
 all: commonall
 
 install:
-	install -s emailpkt $(BINDIR)
+	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
+	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
+#	$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+
+uninstall:
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
+	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DOCSUBDIR)
 
 clean: commonclean
 
