@@ -969,7 +969,7 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
 int processMime( const char *inbound, FILE *fd, const s_link *link )
 {
   int rc=0;
-  char *fname=NULL, *tofname=NULL;
+  char *fname=NULL;
 /*char *temp=NULL;*/
 
   w_log( LL_FUNC, "processMime(%s)", inbound );
@@ -990,19 +990,7 @@ int processMime( const char *inbound, FILE *fd, const s_link *link )
   do{
     fname = processMIMESection( config->tempInbound, fd, link );
     if( fname )
-    { /* move file from temporary to sec/unseq/listed inbound */
-      if(tofname) *tofname='\0';
-      xstrscat( &tofname, inbound, basename(fname), NULL );
-      createInboundFile(&tofname); /*to select notused filename*/
-      if( move_file(fname,tofname, 1) )
-      { rc++;
-        w_log( LL_ERR, "Can't move %s to %s: %s", fname, tofname, strerror(errno) );
-      }else
-      {    w_log( LL_FILE, "File %s moved to %s", fname, tofname );
-           w_log( LL_INFO, "File %s received", tofname );
-      }
-      nfree(tofname);
-    }
+       rc += moveInboundFile(fname,inbound);
   }while( msgHeader.boundary && !feof(fd) && sstrcmp( buf, msgHeader.endboundary ) );
 
   w_log( LL_FUNC, "processMime() OK" );
@@ -1021,15 +1009,7 @@ int composeSEAT(const char *inbound, const char *fname)
 
   if( SEAThdr.SegCount>1 )
   { /* Rename to wait other sections */
-    tofname = sstrdup(config->tempInbound);
-    xscatprintf( &tofname, "%8X.%u", SEAThdr.Crc32, SEAThdr.SegNo );
-    createInboundFile(&tofname); /*to select notused filename*/
-    if( move_file(fname,tofname, 1) )
-    { rc++;
-      w_log( LL_ERR, "Can't rename %s to %s: %s", fname, tofname, strerror(errno) );
-    }else
-      w_log( LL_DEBUG, "File %s renamed to %s", fname, tofname );
-    nfree(tofname);
+    rc += moveInboundFile(fname,inbound);
     /* Check for all sections */
     i=0;
     if(( dirp = opendir(inbound) )){
@@ -1092,15 +1072,7 @@ int processSEAT( const char *inbound, FILE *fd, const s_link *link )
     {
       if( SEAThdr.SegCount>1 )
       { /* Rename to wait other sections */
-        tofname = sstrdup(config->tempInbound);
-        xscatprintf( &tofname, "%8X.%u", SEAThdr.Crc32, SEAThdr.SegNo );
-        createInboundFile(&tofname); /*to select notused filename*/
-        if( move_file(fname,tofname, 1) )
-        { rc++;
-          w_log( LL_ERR, "Can't rename %s to %s: %s", fname, tofname, strerror(errno) );
-        }else
-          w_log( LL_DEBUG, "File %s renamed to %s", fname, tofname );
-        nfree(tofname);
+        rc += moveInboundFile(fname,inbound);
         /* Check for all sections */
 #if __UNIX__ && 0
      /* Need declare dirfilter() and dircmp() local for processSEAT() */
@@ -1130,17 +1102,7 @@ int processSEAT( const char *inbound, FILE *fd, const s_link *link )
         nfree(tofname);
       }
       else
-      { /* move file from temporary to sec/unseq/listed inbound */
-        if(tofname) *tofname='\0';
-        xstrscat( &tofname, inbound, basename(fname), NULL );
-        createInboundFile(&tofname); /*to select notused filename*/
-        if( move_file(fname,tofname, 1) )
-        { rc++;
-          w_log( LL_ERR, "Can't move %s to %s: %s", fname, tofname, strerror(errno) );
-        }else
-          w_log( LL_DEBUG, "File %s moved to %s", fname, tofname );
-        nfree(tofname);
-      }
+        rc += moveInboundFile(fname,inbound);
     }
   }while( !feof(fd) && sstrcmp( buf, msgHeader.endboundary ) );
 

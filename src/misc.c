@@ -592,7 +592,15 @@ char *next_inbound_filename(const char *filename)
   unsigned short counter=1;
 
   w_log( LL_FUNC, "next_inbound_filename()");
-  tempname=sstrdup(filename);
+  if(!filename || !(*filename)){
+    w_log(LL_ERR, __FILE__ "::next_inbound_filename() FAILED: empty filename!");
+    return NULL;
+  }
+  tempname=strdup(filename);
+  if(!tempname){
+    w_log(LL_ERR, "Out of memory!");
+    return NULL;
+  }
   cp = strrchr(tempname, '.'); /* find ext */
   if( cp && cp!=tempname && cp>strrchr(tempname, DIRSEP) )
     do{
@@ -671,7 +679,6 @@ char *stripRoundingChars(char *str, const char *chrs)
 FILE *createInboundFile(char **filename)
 { FILE *fd=NULL;
   char *tempname=NULL;
-  unsigned sl=0;
 
   if(!(*filename) || !(*filename)[0] )
   { w_log( LL_ERR, "createInboundFile(NULL): Can't create file with empty name" );
@@ -694,16 +701,46 @@ FILE *createInboundFile(char **filename)
           w_log( LL_ERR, "Can't create '%s': %s", tempname, strerror(errno) );
         else{
           w_log( LL_DEBUG, "Use '%s'", tempname );
-          if( strlen(*filename)!=(sl=strlen(tempname)) )
-            realloc(*filename,++sl);
-          strcpy(*filename,tempname);
+          if( strlen(*filename)>=strlen(tempname) )
+            strcpy(*filename,tempname);
+          else{
+            free(*filename); *filename = tempname;
+          }
         }
-        nfree(tempname);
+        if(*filename != tempname) free(tempname);
       }else  /* sl==0 if all filenames already used */
          w_log(LL_ERROR, "Can't create file: all possible filenames already used");
   }
   w_log( LL_FUNC, "createInboundFile() %s", fd ? "OK": "failed" );
   return fd;
+}
+
+/* Move file into inbound directory. If file exist increment:
+ * - base part of filename - tic or pkt,
+ * - suffix ("extension") for other.
+ * Return 0 if success.
+ */
+int moveInboundFile( const char *srcfname, const char *dstdir )
+{ int rc=0;
+  FILE*ttfd;
+  char *tofname=NULL;
+
+  xstrscat( &tofname, dstdir, basename(srcfname), NULL );
+  ttfd = createInboundFile(&tofname); /*to select notused filename*/
+  if(!ttfd){
+    rc++;
+    w_log( LL_ERR, "Can't move %s to %s: can't create destination file: %s", srcfname, tofname, strerror(errno) );
+  }else{
+    fclose(ttfd);
+    if( move_file(srcfname,tofname, 1) )
+    { rc++;
+      w_log( LL_ERR, "Can't move %s to %s: %s", srcfname, tofname, strerror(errno) );
+    }else
+    {    w_log( LL_FILE, "File %s moved to %s", srcfname, tofname );
+    }
+  }
+  nfree(tofname);
+  return rc;
 }
 
 void set_module_vars()
