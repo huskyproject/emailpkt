@@ -1,3 +1,30 @@
+2002-10-30 Wednesday 20:35  stas_degteff
+
+	* make/makefile.bsd (1.5), man/hesend.1 (1.3), src/hesend.c (1.7):
+	Feature: two debug modes
+
+2002-10-30 Wednesday 15:46  stas_degteff
+
+	* man/: hereceive.1 (1.1), hereseive.1 (1.5): Fix man page name
+
+2002-10-30 Wednesday 15:45  stas_degteff
+
+	* src/: hereceive.c (1.5), hesend.c (1.6), misc.c (1.6): Fixes:
+	memory usage & other
+
+2002-10-30 Wednesday 15:43  stas_degteff
+
+	* make/makefile.bsd (1.4): Fix install tag
+
+2002-10-30 Wednesday 13:17  stas_degteff
+
+	* src/misc.c (1.5): Fix outbound fule names generation
+
+2002-10-30 Wednesday 13:15  stas_degteff
+
+	* make/: makefile.bsd (1.3), makefile.cyg (1.6), makefile.lnx
+	(1.6): Insert DIRSEP declaration info CDEFS
+
 2002-10-29 Tuesday 18:35  stas_degteff
 
 	* h/ecommon.h (1.4), src/hereceive.c (1.4), src/hesend.c (1.5): Fix
