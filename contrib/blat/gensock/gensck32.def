@@ -1,0 +1,14 @@
+LIBRARY   gensck32
+
+CODE      PRELOAD MOVEABLE DISCARDABLE
+DATA      PRELOAD SINGLE
+
+EXPORTS
+	gensock_connect		@1
+	gensock_getchar		@2
+	gensock_put_data	@3
+	gensock_close		@4
+	gensock_gethostname	@5
+	gensock_put_data_buffered	@6
+	gensock_put_data_flush	@7
+

@@ -1,0 +1,39 @@
+## $Id$
+## Makefile for build BLAT with cygwin/mingw32
+
+TARGET   =blat.exe
+OBJ      = .o
+C        = .cpp
+
+OBJS     = blat$(OBJ) gensock/gensock$(OBJ)
+LINKOBJS = blat$(OBJ) gensock/gensock$(OBJ)
+LIBFILES = -lwsock32 -lmingw32
+
+
+CC       = g++
+LINK     = g++
+
+LFLAGS   = -mno-cygwin
+CFLAGS   = -c -mno-cygwin
+CDEFS    = -DGENSOCK_STATIC_LINK
+TARGETFLAG= -o
+
+
+
+$(TARGET): $(LINKOBJS)
+	$(LINK) $(LFLAGS) $(TARGETFLAG) $(TARGET) $(OBJS) $(LIBPATH) $(LIBFILES)
+
+#%$(OBJ): %$(C)
+#	$(CC) $(CFLAGS) $(CDEFS) -o $*$(OBJ) $<
+
+#.$(C).$(OBJ):
+#	$(CC) $(CFLAGS) $(CDEFS) $<
+
+#gensock\gensock$(OBJ) : gensock\gensock.cpp gensock\gensock.h
+#        cd gensock
+#        $(CC) $(CFLAGS) gensock.cpp
+#        cd ..
+
+
+clean:
+	$(RM) $(OBJS)

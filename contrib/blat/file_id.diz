@@ -1,0 +1,10 @@
+(v1.8.2b) Blat - Windows NT/95 util to send
+SMTP mail from the command line (Intel
+version) Useful for sending mail from
+automated jobs, HTML CGI scripts, etc.
+Includes source code.
+Public Domain, by prm@aber.ac.uk and
+mjn@aber.ac.uk.
+Modifications by tcharron@interlog.com,
+ch@innocent.com, & info@winimage.com
+

@@ -1,0 +1,25 @@
+#include "gensock.h"
+
+// GENSOCK			ICON	DISCARDABLE	"GENSOCK.ICO"
+
+STRINGTABLE
+BEGIN
+  ERR_CANT_MALLOC, "Invalid argument"
+  ERR_SENDING_DATA, "Error sending data"
+  ERR_INITIALIZING, "Error initializing"
+  ERR_VER_NOT_SUPPORTED, "Socket library version not supported"
+  ERR_EINVAL, "Invalid Argument"
+  ERR_SYS_NOT_READY, "System not ready"
+  ERR_CANT_RESOLVE_HOSTNAME, "Can't resolve hostname"
+  ERR_CANT_GET_SOCKET, "Can't get socket"
+  ERR_READING_SOCKET, "Error reading socket"
+  ERR_NOT_A_SOCKET, "Not a socket"
+  ERR_BUSY, "socket is busy"
+  ERR_CLOSING, "error closing socket"
+  WAIT_A_BIT, "wait a bit"
+  ERR_CANT_RESOLVE_SERVICE, "can't resolve service"
+  ERR_CANT_CONNECT, "can't connect"
+  ERR_NOT_CONNECTED, "not connected"
+  ERR_CONNECTION_REFUSED, "connection refused"
+END
+

@@ -1,0 +1,28 @@
+## Compiler, linker, and lib stuff
+## Makefile for use with watcom win95/winnt executable.
+
+CC=wpp386
+LINK=wlink
+
+#disabled for faster compiler
+LFLAGS=sys nt op st=16384 op version=180 op map
+CFLAGS=/zp4 /fpd /5s /fp5 /bm /mf /oantex /bt=nt /DWATCOM=1 /DGENSOCK_STATIC_LINK
+
+## variables
+OBJS = FILE blat.obj, GENSOCK\gensock.obj
+LINKOBJS = blat.obj GENSOCK\gensock.obj
+LIBFILES =
+
+BINNAME=blat.exe
+
+$(BINNAME): $(LINKOBJS)
+        $(LINK) $(LFLAGS) NAME $(BINNAME) $(OBJS) $(LIBPATH) $(LIBFILES)
+
+blat.obj : blat.cpp gensock.h
+        $(CC) $(CFLAGS) blat.cpp
+
+GENSOCK\gensock.obj : GENSOCK\gensock.cpp GENSOCK\gensock.h
+        cd GENSOCK
+        $(CC) $(CFLAGS) gensock.cpp
+        cd ..
+
