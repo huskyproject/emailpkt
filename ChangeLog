@@ -1,3 +1,12 @@
+2002-12-05 Thursday 13:41  stas_degteff
+
+	* h/version.h (1.4), src/hereceive.c (1.8), src/hesend.c (1.13),
+	src/misc.c (1.10): Use unify version string generation
+
+2002-12-05 Thursday 13:41  stas_degteff
+
+	* make/makefile.cyg (1.7): Remove -luser32
+
 2002-12-04 Wednesday 05:40  stas_degteff
 
 	* src/hesend.c (1.12): Fix check result of makeUniqueDosFileName()
