@@ -36,8 +36,8 @@
 
 void printUsage(void)
 {
-    printf("Usage: emailpkt [action]\n");
-    printf("    send       send outgoing messages\n");
+    printf("Usage: emailpkt [send | receive]\n");
+    printf("    send       process and send outgoing messages\n");
     printf("    receive    receive and process an email from the standard input\n");
 }
 
@@ -51,6 +51,11 @@ int main(int argc, char *argv[])
     printf("EmailPKT v%s standalone version\n", VERSION);
 #endif
 
+    if (argc != 2) {
+        printUsage();
+        return 0;
+    }
+
     c = config();
 
     if (c == -1)
@@ -60,10 +65,6 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (argc != 2) {
-        printUsage();
-        return 0;
-    }
 
     if (strcasecmp(argv[1], "send") == 0)
         out();

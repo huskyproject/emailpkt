@@ -2,7 +2,7 @@
                              EmailPKT v0.1 |
                             ---------------+
 	                                FidoNet over Email
-
+                                              October 2000
 
   Table of contents
   
@@ -342,6 +342,13 @@
       in the temporary inbound and outbound directories. A weekly deletion is
       recommended.
 
+   *  The inbound directory defined in the config file should be the protected
+      inbound, as ther is no way (yet) of authentication.
+      
+   *  Please TEST THE PROGRAM BEFORE START USING IT! Mail any file in local
+      mode first to ensure that everything is OK. If you do not have it 100%
+      right, you will loose data.
+      
    *  I am not responsable of any data lost caused either by human or computer
       faults. USE AT YOUR OWN RISK! 
   
@@ -350,13 +357,19 @@
  ------------------------
   
   If you have troubles using this software, have a bug report or have had a
-  core dump write me. I will reply you ASAP.
+  core dump write me. I will reply you ASAP. And anyway, if you are using
+  this program, take five minutes and mail me. I want to know if someone is
+  using this software...
    
      German Theler
      german@linuxfreak.com
      4:905/210
+
+  Anyway, the sources are on a CVS Server, and you are welcome to commit your
+  patches or new features.
      
   If you have a general question or need technical support, link to
   FIDOSOFT.HUSKY from your boss (you can ask me for an email feed, obviously
   with EmailPKT :-)).
   
+               
