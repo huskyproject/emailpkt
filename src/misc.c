@@ -721,19 +721,3 @@ FILE *createInboundFile(char **filename)
   w_log( LL_FUNC, "createInboundFile() %s", fd ? "OK": "failed" );
   return fd;
 }
-
-
-
-/*
- * Return pointer to base ('clean') filename in pathname
- */
-const char *basename(const char *pathname)
-{
-  char *temp;
-
-  temp = strrchr(pathname, DIRSEP);
-  if(temp) temp++; /* skip directory separator */
-  else return pathname;
-
-  return temp;
-}

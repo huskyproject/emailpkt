@@ -250,11 +250,6 @@ int uuencodeFile( FILE *infd, FILE *outfd, const char*filename,
 FILE *createInboundFile(char **pathname);
 
 
-/*
- * Return pointer to base ('clean') filename in pathname
- */
-const char *basename(const char *pathname);
-
 /* main vars ****************************************************/
 
 extern s_fidoconfig *config;
