@@ -36,7 +36,10 @@ int encodeAndSend(char *fullFileName, int n)
     if (shortFileName[10] == 'u' && shortFileName[11] == 't')
         sprintf(shortFileName, "%s.pkt", random);
 
+    /* search for an available name in the temp dir*/
+    findName(cfg.tempoutbound, random);
     sprintf(buff, "%s/%s", cfg.tempoutbound, random);
+
     if ((output = fopen(buff, "wt")) == NULL) {
         sprintf(buff, "[!] Can't write to %s/%s\n", cfg.tempoutbound, random);
         log(buff);

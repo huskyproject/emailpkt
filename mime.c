@@ -168,7 +168,7 @@ int toBase64(FILE *inFile, FILE *outFile)
     while ((x = getc(inFile)) != EOF) {
         if (counter >= 64) {
             fprintf(outFile, "\n");
-            counter = 0;
+            counter = 4;
         } else
             counter += 4;
             
