@@ -218,7 +218,7 @@ FILE *createbsy(s_link link)
 #if defined (_WIN32) || defined (__CYGWIN__) ||  defined (__MINGW32__) || defined (_MSC_VER) || defined (MSDOS)
   if( (fh = sopen(link.bsyFile, O_CREAT | O_TRUNC | O_WRONLY | O_EXCL, SH_DENYWR))<0 )
 #else
-  if( (fh = open(link.bsyFile, O_CREAT | O_TRUNC | O_WRONLY | O_EXCL | O_SHLOCK))<0 )
+  if( (fh = open(link.bsyFile, O_CREAT | O_TRUNC | O_WRONLY | O_EXCL))<0 )
 #endif
   { if( errno==ENOENT )
       w_log(LL_FILE, "Outbound for link not exist");
