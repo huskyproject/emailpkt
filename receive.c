@@ -95,7 +95,7 @@ int findName(char *dir, char *name)
     char foo[MAX];
     char bar[MAX];
 
-    /* check if the names ends in .out, .cut or .dut and translate to .pkt */
+    /* check if the name ends in .out, .cut or .dut and translate to .pkt */
     strcpy(bar, name);
     if ((bar[strlen(bar)-2] == 'u') && (bar[strlen(bar)-1] == 't'))
         strcpy(bar+strlen(bar)-3, "pkt");

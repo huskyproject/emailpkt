@@ -1,6 +1,10 @@
 EmailPkt 0.2-unstable
 =====================
 
+Sun oct 29 12:16:16 ART 2000
+german.theler:
+* another fix when creating temp outbound files
+
 Sat oct 28 11:54:56 ART 2000
 german.theler:
 * small bugfix with temp outbound files

@@ -21,7 +21,7 @@ int encodeAndSend(char *fullFileName, int n)
 {
     char buff[4*MAX];
     char shortFileName[MAX];
-    char random[10];
+    char random[MAX];
 
     FILE *input;
     FILE *output;
@@ -33,19 +33,19 @@ int encodeAndSend(char *fullFileName, int n)
     findName(cfg.tempoutbound, random);
     sprintf(buff, "%s/%s", cfg.tempoutbound, random);
 
-    /* get the fileName */
-    strcpy(shortFileName, strrchr(fullFileName, '/')+1);
-
-    /* is it a netmail pkt? change its name */
-    if (shortFileName[10] == 'u' && shortFileName[11] == 't')
-        sprintf(shortFileName, "%s.pkt", random);
-
-
     if ((output = fopen(buff, "wt")) == NULL) {
         sprintf(buff, "[!] Can't write to %s/%s\n", cfg.tempoutbound, random);
         log(buff);
         return 1;
     }
+
+    /* get the fileName */
+    strcpy(shortFileName, strrchr(fullFileName, '/')+1);
+
+    /* is it a netmail pkt? change its name */
+    if (shortFileName[10] == 'u' && shortFileName[11] == 't')
+        sprintf(shortFileName, "%04x.pkt", (unsigned int)time(0));
+
 
     /* print some headers */
     fprintf(output, "From: \"%s\" <%s>\n", cfg.name, cfg.email);
@@ -90,6 +90,8 @@ int encodeAndSend(char *fullFileName, int n)
     if (system(buff) != 0) {
         log("[!] Error while calling sendmail!\n");
         log(strcat(buff, "\n"));
+        fprintf(stderr, "[!] Error while calling sendmail!\n");
+        fprintf(stderr, "%s\n", buff);
         return -1;
     }
 
