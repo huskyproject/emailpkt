@@ -1,0 +1,65 @@
+# $Id$
+#
+# Legacy makefile for build 'static linked' Emailpkt binaries on FreeBSD,
+# OpenBSd or NetBSD using GNU version of make utility (usualy gmake).
+#
+# No Husky build enviroment (huskymak.cfg) support
+#
+
+DEBUG	=
+
+BINDIR	= /usr/local/bin
+CFGDIR	= /usr/local/etc/fido
+cal/man= /usr/local/share/doc/husky/emailpkt
+MANDIR	= /usr/local/man
+
+CC      = gcc
+OBJ	= .o
+EXE	=
+TPU	= .tpu
+RM	= rm
+RMDIR	= rm -r
+LIB	= .a
+AR	= ar
+AR_R	= rs
+INSTALL	= install -c
+
+SRC_DIR = ../src/
+LIBS	= -lfidoconfigbsd -lsmapibsd
+
+CFLAGS	= -s -Wall -O3 -c -I../h -I../..
+CDEFS	= -DUNIX -DCFGDIR=\"$(CFGDIR)\"
+
+LFLAGS  = -L../../smapi -L../../fidoconf
+
+all: commonall
+
+
+# This is the rule for BSD make
+.PATH.c	:  $(SRC_DIR)
+.c.o:
+	$(CC) $(CFLAGS) $(CDEFS) $<
+
+# And this is the rule if you are using GNU make
+%.o: $(SRC_DIR)%.c
+	$(CC) $(CFLAGS) $(CDEFS) $(SRC_DIR)$*.c
+
+# luckily, the rules from above do not interfere with each other - BSD make
+# ignores the second one, gmake ignores the first one.
+
+# Include file contents common make commands for all platforms
+include makefile.inc
+
+
+install:
+	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
+	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
+	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-$(MKDIR) $(MKDIROPT) $(MANDIR)
+	$(INSTALL) $(IMOPT) man/*.1 $(MANDIR)/man1
+
+clean: commonclean
+
+distclean: commondistclean
+
