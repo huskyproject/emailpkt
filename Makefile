@@ -56,13 +56,13 @@ emailpkt: $(OBJFILES)
 
 install:
 	$(INSTALL) $(IBOPT) emailpkt$(EXE) $(BINDIR)
-	$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)emailpkt
-	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)emailpkt
+#	$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)emailpkt
+#	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)emailpkt
 
 uninstall:
 	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)emailpkt$(EXE)
-	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)emailpkt
-	-$(RMDIR) $(RMOPT) $(HTMLDIR)
+#	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)emailpkt
+#	-$(RMDIR) $(RMOPT) $(HTMLDIR)
 
 clean:
 	-$(RM) $(RMOPT) *$(OBJ)

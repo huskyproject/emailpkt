@@ -9,7 +9,11 @@
  */
 
 #if UNIX==1
+#if LINUX==1
 #include <sys/syslimits.h>     /* for PATH_MAX */
+#else
+#include <linux/limits.h>      /* for PATH_MAX */
+#endif
 #else
 #define PATH_MAX 128
 #endif
