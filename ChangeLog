@@ -1,3 +1,33 @@
+2004-01-26 Monday 14:19  stas_degteff
+
+	* make/: makefile.mvc, makefile.mvcdll (emailpkt-1_4-stable.[2,2]):
+	Remove obsoleted defines
+
+2004-01-26 Monday 14:14  stas_degteff
+
+	* doc/: bugreport.rus, bugreport.txt (emailpkt-1_4-stable.[1,1]):
+	Fix the bugreport forms
+
+2004-01-26 Monday 11:21  andr_lukyanov
+
+	* make/: makefile.mvc, makefile.mvcdll (emailpkt-1_4-stable.[1,1]):
+	Add MSVC compilation
+
+2004-01-26 Monday 11:21  andr_lukyanov
+
+	* make/makefile.mvcdll (1.1): file makefile.mvcdll was initially
+	added on branch emailpkt-1_4-stable.
+
+2004-01-26 Monday 11:21  andr_lukyanov
+
+	* make/makefile.mvc (1.1): file makefile.mvc was initially added on
+	branch emailpkt-1_4-stable.
+
+2004-01-14 Wednesday 15:25  stas_degteff
+
+	* h/version.h (emailpkt-1_4-stable.2): Fix branch identification.
+	Thanks to Viktor Pilpenok (2:400/567)
+
 2003-12-27 Saturday 21:21  d_sergienko
 
 	* src/: encdec.c, hereceive.c (emailpkt-1_4-stable.[1,2]): fix
