@@ -1,0 +1,6 @@
+# $Id$
+#
+# Sample file for use emailpkt with dedicated unix/email account
+#
+
+"|/usr/local/bin/emailpkt receive"
