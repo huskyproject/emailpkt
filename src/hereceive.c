@@ -689,11 +689,11 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
   DIR *dirp=NULL;
 #endif
 
-#if __UNIX__
+#if defined(__UNIX__)
   /* scandir only for UNIXes */
   /* compare dirent with mask: inbound/file.suffix
      use in scandir */
-  int dirfilter(struct dirent *ds) /* directory filter: 3rd arg of scandir() */
+  int dirfilter(const struct dirent *ds) /* directory filter: 3rd arg of scandir() */
   { int j;
     for( j=1; j<=sectlast; j++ )
     { sprintf(cp+i,"%u",j);   /* 'i' var: suffix pos, set in function processUUE()*/
@@ -925,7 +925,7 @@ char *processUUE( const char *inbound, FILE *ifd, const char *_filename )
   if(sectnum /*&& sectnum==sectlast*/)
   {  /* check for all parts received (& compose file) */
 
-#if __UNIX__
+#if defined(__UNIX__)
      if ( scandir( tp, &ls, dirfilter, dircmp)==sectlast ) /* all part files exists */
 #else
      i=0;
@@ -1074,7 +1074,7 @@ int processSEAT( const char *inbound, FILE *fd, const s_link *link )
       { /* Rename to wait other sections */
         rc += moveInboundFile(fname,inbound);
         /* Check for all sections */
-#if __UNIX__ && 0
+#if defined(__UNIX__) && 0
      /* Need declare dirfilter() and dircmp() local for processSEAT() */
         if ( scandir( inbound, &ls, dirfilter, dircmp)==SEAThdr.SegCount ) /* all part files exists */
 #else
@@ -1310,7 +1310,7 @@ main( int argc, char **argv)
 
   program_name = GenVersionStr( PROGRAMNAME, VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH, cvs_date );
 
-#if __UNIX__
+#if defined(__UNIX__)
   opterr = 0;
   while ((op = getopt(argc, argv, "DVc:d:hq")) != -1)
     switch (op) {
