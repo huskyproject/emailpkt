@@ -38,8 +38,12 @@
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
-#include <unistd.h>
-#include <dirent.h>
+#ifdef UNIX
+#   include <unistd.h> /*mktemp()*/
+#   include <dirent.h>
+#else
+#  include <share.h>
+#endif
 
 /* Husky library */
 #include <fidoconf/fidoconf.h>
@@ -62,6 +66,18 @@
 #define COPY_FILE_BUFFER_SIZE 128000
 #else
 #define COPY_FILE_BUFFER_SIZE 32000
+#endif
+
+#ifndef F_OK
+#define F_OK 0
+#endif
+
+#ifndef R_OK
+#define R_OK 04
+#endif
+
+#ifndef W_OK
+#define W_OK 02
 #endif
 
 

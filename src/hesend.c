@@ -34,12 +34,12 @@
 #include <time.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <dirent.h>
 #include <sys/types.h>
 #include <ctype.h>
 #include <limits.h>
 #ifdef UNIX
 #  include <unistd.h>
+#  include <dirent.h>
 #endif
 
 /* husky */

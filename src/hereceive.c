@@ -32,13 +32,14 @@
 /*#include <math.h> */  /*log()*/
 #include <string.h>
 #include <stdio.h>  /*FILE operations*/
-#include <unistd.h> /*mktemp()*/
+#ifdef UNIX
+#   include <unistd.h> /*mktemp()*/
+#   include <dirent.h>
+#endif
 #include <time.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <dirent.h>
 #include <sys/types.h>
-#include <dirent.h>
 #include <limits.h>
 #include <ctype.h>
 #include <fcntl.h>
@@ -425,37 +426,6 @@ int storeSEATHeaderLine(const char *buf)
 { register int rc=0;
   char *cp;
 
-  w_log( LL_FUNC, "storeSEATHeaderLine() begin" );
-
-    if( !sstrnicmp( buf, "Ftn-File-ID: ", 13 ) )
-    {  SEAThdr.FileID = stripLeadingChars(sstrdup(buf + 13), " \t");
-       w_log(LL_DEBUG, "SEAThdr.FileID='%s'", SEAThdr.FileID);
-    }
-    else if( !sstrnicmp( buf, "Ftn-Crc32: ", 11 ) )
-    {  SEAThdr.Crc32 = (UINT32)strtoul(buf + 11, NULL, 16);
-       w_log(LL_DEBUG, "SEAThdr.Crc32='%x'", (unsigned long)SEAThdr.Crc32);
-    }
-    else if( !sstrnicmp( buf, "Ftn-Seg: ", 9 ) )
-    {  SEAThdr.SegNo = (unsigned short)strtoul(buf + 9, &cp, 10);
-       if( *cp && *cp=='-' )
-         SEAThdr.SegCount = (unsigned short)strtoul(cp+1, NULL, 10);
-       w_log(LL_DEBUG, "SEAThdr.SegNo='%u'", (unsigned)SEAThdr.SegNo);
-       w_log(LL_DEBUG, "SEAThdr.SegCount='%u'", (unsigned)SEAThdr.SegCount);
-    }
-    else if( !sstrnicmp( buf, "Ftn-Seg-Crc32: ", 15 ) )
-    {  SEAThdr.SegCrc32 = (UINT32)strtoul(buf + 15, NULL, 16);
-       w_log(LL_DEBUG, "SEAThdr.SegCrc32='%x'", (unsigned long)SEAThdr.SegCrc32);
-    }
-    else if( !sstrnicmp( buf, "Ftn-Seg-ID: ", 12) )
-    {  SEAThdr.SegID = stripLeadingChars(sstrdup(buf + 12), " \t");
-       w_log(LL_DEBUG, "SEAThdr.SegID='%s'", SEAThdr.SegID);
-    }
-    else
-       rc=1;
-
-  w_log( LL_FUNC, "storeSEATHeaderLine() end, rc=%d", rc );
-  return rc;
-}
 
 /*  Return content-type enum value
  */
