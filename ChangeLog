@@ -1,3 +1,7 @@
+2002-11-27 Wednesday 00:07  nssoft
+
+	* h/ecommon.h (1.7), src/misc.c (1.9): s_addr --> hs_addr
+
 2002-11-19 Tuesday 07:05  stas_degteff
 
 	* man/: hereceive.1 (1.2), hesend.1 (1.4): Fix man pages
