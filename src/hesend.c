@@ -74,13 +74,13 @@ int debugflag=0; /* Execute in debug mode (not call sendmail, not remove files) 
  */
 char *writeMessage(const char *fullFileName, s_link link)
 { char adr[ADRS_MAX];
-/*  char basefilename[NAME_MAX];*/
-  char *basefilename=NULL;
+  char basefilename[NAME_MAX];
   char *tempfilename=NULL, timebuf[32], *msgidbuf=NULL;
   FILE *infd=NULL, *tempfd=NULL;
   char *cp=NULL;
   time_t t=0;
   struct tm *tm=NULL;
+  int i;
 
   w_log(LL_FUNC,"writeMessage()");
 
@@ -101,19 +101,17 @@ char *writeMessage(const char *fullFileName, s_link link)
       return NULL;
   } /*else w_log(LL_FILENAME, "tempfilename=%s", tempfilename);*/
 
-  /* basename of file */
-/*  strncpy(basefilename, strrchr(fullFileName, DIRSEP)+1, sizeof(basefilename));
-*/
-  basefilename = (char*)basename(fullFileName);
-  w_log(LL_FILENAME, "Base file name: '%s'", basefilename);
-
   /* for netmail (.?ut) change ext to pkt */
-  if( tolower(basefilename[10]) == 'u' && tolower(basefilename[11]) == 't' )
+  i = sstrlen(fullFileName);
+  if( tolower(fullFileName[i-2]) == 'u' && tolower(fullFileName[i-1]) == 't' )
   { if( (cp = makeUniqueDosFileName( "", "pkt", config))==NULL )
-      w_log(LL_CRIT, "Can't generate unique dos file name: memory too low" );
-    strncpy(basefilename, cp, NAME_MAX);
-    nfree( cp );
-    w_log(LL_FILENAME, "Base file name changed to: '%s'", basefilename);
+    { strncpy(basefilename, cp, sizeof(basefilename));
+      nfree( cp );
+    }else w_log(LL_CRIT, "Can't generate unique dos file name: memory too low" );
+  }else
+  {
+    sstrncpy( basefilename, (char*)basename(fullFileName), sizeof(basefilename) );
+    w_log(LL_FILENAME, "Base file name: '%s'", basefilename);
   }
 
   /* print some headers */
