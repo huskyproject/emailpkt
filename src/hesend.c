@@ -674,6 +674,7 @@ int
 main( int argc, char **argv)
 { int rc=0, op=0, quiet=0;
   char *cp=NULL;
+#include "../h/cvsdate.h"
 
   program_name = GenVersionStr( PROGRAMNAME, VER_MAJOR, VER_MINOR, VER_PATCH, VER_BRANCH, cvs_date );
 
