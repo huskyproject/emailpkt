@@ -1,19 +1,16 @@
 
-                             EmailPKT v0.3 |
-                            ---------------+
+                             EmailPKT |
+                            ----------+
 	                                FidoNet over Email
-                                                March 2001
+                                                March 2003
 
   Table of contents
   
       1. What is EmailPKT?
           1.1. Why Email routing?
       2. Compiling & Installing EmailPKT
-          2.1. With HUSKY support
-          2.2. Standalone
       3. How to configure EmailPKT
-          2.1. Fidoconf keywords 
-          2.2. EmailPKT config file
+          3.1. Fidoconfig keywords 
       4. How to use it
           4.1. Sending
           4.2. Receiving
@@ -27,13 +24,15 @@
  1. What is EmailPKT?
  --------------------
  
-  EmailPKT is a program to send & receive FTN bundles (echomail, netmail,
-  tics and files in general) via e-mail. It sends outgoing files either as
-  MIME Base64 or UUE attachments that can be decoded and processed either
-  manually with a normal email client or automatically with any software like
-  EmailPKT. To receive incoming files, it reads the standard input and
-  processes emails with either MIME attachments (base64, quoted printable or
-  plain text) or UUENCODED files.
+  EmailPKT is a program package to send & receive FTN bundles (echomail,
+  netmail, tics and files in general) via e-mail. It sends outgoing files
+  either as MIME Base64 or UUE attachments that can be decoded and processed
+  either manually with a normal email client or automatically with any
+  software like EmailPKT. To receive incoming files, it reads the standard
+  input or specified file and processes emails with either MIME attachments
+  (base64, quoted printable or plain text) or UUENCODED files.
+  Emailpkt make email message in RFC822 format and use external program to
+  send it to recipient.
   
 
  1.1. Why Email routing?
@@ -42,10 +41,10 @@
   If you have a link that is not in your same city or even in your same
   country, using normal phone calls would be a big waste of money. Using the
   Internet to route is the way to solve this problem. Here comes Fido-over-IP
-  mailers like BinkD and Argus, but they have another problem. At least one of
-  the two systems must be on-line 24 hours a day. When using e-mail routing,
-  there are no long distance bills and there is no need of the both ends to be
-  always on-line.
+  mailers like BinkD, ifcico or Argus, but they have another problem:
+  destination system must be on-line when your mailer try to establish session.
+  When using e-mail routing, there are no long distance bills and there is no
+  need of the both system to be on-line simultaneously.
 
   Of course, email routing is not the best way of routing. The traffic
   generated is 30% more than the used for example in BinkD and there is no
@@ -53,105 +52,74 @@
   Nevertheless, it is a good idea to have an email system set up even if you
   have no need of it today (maybe you will need it tomorrow).
 
+  Other consideration for email transport is: on leased line internet
+  comnnection if traffic from/to mail server of you provider is free (no
+  paiment) and traffic to/from world is expensive.
 
 
  2. Compiling & installing EmailPKT
  ----------------------------------
 
-  Currently, EmailPKT works only under Linux and BSD (and hopefully under any
-  kind of Unix). Future ports to non-Unix systems could (and should) be done
-  in the (not so near) future.
+  Step one: get packages.
+  -----------------------
+  Get binary package for you platform from HUSKY site or sources from site
+  or CVS server: http://husky.sourceforge.net, cvs -d cvs.sf.net/cvsroot/husky
+  http://sourceforge.net/projects/husky. You need download following packages:
+  huskybse (if you have build programs from sources)
+  smapi
+  fidoconfig (packages named like pattern fidoconf*)
+  emailpkt
 
-  EmailPKT can be installed either standalone or with Husky support. The
-  source distribution is the same for the two versions, but the installed
-  version depends on the makefile used to compile the program.
+  All packages MUST be compatible versions: emailpkt 1.4 require smapi v.2.4
+  and fidoconfig v.1.4.
 
+  Step two: build from sources.
+  -----------------------------
+  Build and install: smapi, fidoconfig and emailpkt (in this order!). On
+  unix-like OS you may use huskymak.cfg from huskybse package or OS specific
+  makefile.
 
- 2.1. With HUSKY support
- -----------------------
- 
-  It is recommended that you install EmailPKT with HUSKY support only if you
-  already have a working version of at least fidoconf. If not, go to the
-  standalone section. BTW, if you have some free time and like to spend it
-  in a good way, get HUSKY from http://husky.sourceforge.net and take
-  a look at it.
+  Step three: create config file.
+  -------------------------------
+  Read documentation of fidoconfig and make config file (may use config file
+  example included into fidoconfig package). Do not forget check edited config
+  file using tparser tool each time!
 
-  Husky is a joint effort of over a dozen developers from Germany, Russia and
-  all over the world to develop a completely free, open-sourced and portable
-  fidonet software suite.  Husky currently runs on Linux, FreeBSD and many
-  other free and commercial Unix systems, and also on OS/2, Windows and DOS,
-  and features a state of the art tosser, ticker, and various other useful
-  fidonet utilties.
-  
-  It is based on a single configuration file that can be used by many
-  different programs. So, if EmailPKT is compiled with HUSKY support you will
-  have a lot of work already done (assuming you have a working config file).
-  
-  To compile the program with HUSKY support, you will need huskymak.cfg that
-  comes in the huskybse package. It can be downloaded from
-  http://husky.sourceforge.net in the huskybse section.
-  
-  Take a look at it and its comments, and change whatever you want to fit
-  your needs.
-  
-  Assuming you have already installed at least one package from HUSKY, the
-  compiling process for EmailPKT is the same. Note that the makefile that
-  must be used is called 'Makefile', so you do not have to worry about extra
-  arguments to make. For example, just write:
-
-    $ make
-    $ make install
-    $ make distclean
-  
-  Refer to INSTALL guide in huskybse for more information.
-
-  
- 2.2. Standalone
- ---------------
- 
-  If you do not have a working HUSKY environment or do not want to use it,
-  you can use EmailPKT with an own config file instead of using a common one.
-  Note that EmailPKT own configuration file has less features than the
-  fidoconf file.
-  
-  To compile the program standalone, you must use another makefile. The default
-  one ('Makefile') is used to compile a HUSKY dependant version. Right now, the
-  only target platform for the standalone version is Linux, so the makefile to
-  use is called 'makefile.lnx' (Hey, you Unix guru! If you change it to compile
-  on your-favorite-os-here, please mail me back with a copy of your legacy
-  makefile!). Thus, the steps to compile EmailPKT for Linux are:
-  
-    $ make -f makefile.lnx
-    $ make -f makefile.lnx install
-    $ make -f makefile.lnx distclean
-    
-  The binary will be installed in /usr/local/bin by default. Edit the makefile
-  and change the variables as you want.
+  Additional information.
+  -----------------------
+  Refer to INSTALL guide in each package for more information.
 
   
  3. How to configure EmailPKT
  ----------------------------
  
- 3.1. Fidoconf keywords
- ----------------------
- 
+  Refer to documentation of fidoconfig for all tokens usage details.
+
   EmailPKT will use the following fidoconf keywords if available:
 
      Global  
-         sysop
-         address
-         protinbound
-         tempinbound
-         outbound
-         tempoutbound
-         logfiledir        - Optional (if none specified, logging is off)
-  
+       sysop             - Your name
+       address           - FTN address of your system
+       email             - default e-mail address of your system
+       protinbound       - protected inbound, main for links with password
+       localinbound      - listed inbound, for bundles from links with known
+                           email address
+       inbound           - unprotected inbound, for bundles from other senders
+       tempinbound       - incoming files spool (create and use subdir here)
+       outbound          - common fidonet outbound of your system
+       tempoutbound      - outgoing mesages spool (create and use subdir here)
+       logfiledir        (optional)
+       loglevels         (optional)
+       screenloglevels   (optional)
+       logechotoscreen   (optional)
+
      For each link
-         Email
-	 EmailFrom
-	 EmailSubj
-	 EmailEncoding
-     
+       Email             - e-mail address of his system
+       EmailFrom         - (optional) FTN address of your system for this link
+       EmailSubj         - (optional) string inserted to end of email subject
+       EmailEncoding     - (optional) files encoding method
+
+
   For each link that you want to route via e-mail, specify an email address
   for him. If you do not want to route via e-mail with a link, do not give
   an email address. For example, the simpliest form:
@@ -182,65 +150,10 @@
       
   Adding all this info for each would be a waste of time, so it is recommended
   that you put common information (like EmailFrom and EmailSubj) in a
-  LinkDefaults section. See fidoconf documentation for details.
-  
+  LinkDefaults section. See fidoconfig documentation for details.
+
   The default encoding method is MIME Base64.
 
-  If for some reason you do no want to use the values above, you can override
-  fidoconf by using an EmailPKT own config file. See below.
-
-
- 3.2. Standalone
- ---------------
- 
-  To let EmailPKT know where the config file is, you must set an environment
-  variable called EMAILPKT with the full path to it. For example, in your
-  ~/.bash_profile you should write:
-  
-    EMAILPKT=/home/fido/cfg/email.cfg
-    export EMAILPKT
-    
-  If it is not set, EmailPKT will try to open "/usr/local/etc/email.cfg". If
-  both methods fail, it will exit with an error.
-  
-  The config file uses the following keywords:
-  
-    Name <string>
-      The sysop name (Optional)
-      
-    AKA <aka>
-      The main address of the system
-      
-    Email <string>
-      Email address of the system (Optional)
-      
-    Subject <string>
-      Subject of outgoing messages (Optional)
-
-    Inbound <string>
-      Protected inbound directoy
-             
-    TempInbound <string>
-      Temporary inbound directoy
-       
-    Outbound <string>
-      Binkley Style base outbound directoy (for the same zone as main aka)
-             
-    TempOutbound <string>
-      Temporary outbound directoy
-  
-    LogDir <string>
-      Directory for storing logs (Optional). If none is given, logging is off.
-             
-    Link <aka> <email> (MIME | UUE) <name>
-      Defintion of link. The first token is the link's aka, the second one is
-      the link's email, the third is either MIME or UUE and the rest of
-      the line is the link's name.
-      
-  Notes:
-    *  Keywords are CaSe InSeNsItIvE.
-    *  AKAs can be 3d, 4d or 5d. 
-    *  In all cases, EmailPKT config overrides Fidoconf.
       
  4. How to use it
  ----------------
@@ -249,97 +162,99 @@
  ------------
  
   To send all the files that are waiting in the outbound to the links
-  specified in the configuration, you must simply call EmailPKT like this:
+  specified in the configuration, you must simply call EmailPKT like this
+  (example for unixes, "$" is shell prompt):
    
-     $ emailpkt send
+     $ hesend
      
   So, you can easily add to your mailing scripts the above line, and you are
   done. E.g.:
      
-     $ cat send
      hpt scan
      hpt pack
-     emailpkt send
-     $
+     hesend
      
 
  4.2. Receiving
  --------------
   
-  The receiving part of EmailPKT acts like a filter. You can call it from
-  the ~/.forward file or from procmail.
+  The receiving part of EmailPKT named "hereceive". It acts like a filter or
+  get input filename from command line. You can call it from the ~/.forward
+  file or from procmail.
+
     
  4.2.1. ~/.forward
  -----------------
   
-  If you have a dedicated account, then you can call EmailPKT directly from
+  If you have a dedicated account, then you can call hereceive directly from
   the ~/.forward file:
-    
-      $ cat ~/.forward file
-      "|/usr/local/bin/emailpkt receive"
+
+      $ cat ~/.forward
+      "|/usr/local/bin/hereceive"
       $
 
   Notes:
-      *  You need to put the full path to EmailPKT.
+      *  You need to put the full path to hereceive.
       *  The quotes are needed.
       *  There must be no space between the pipe character (|) and the
-         path to EmailPKT.
-	 
+         path to hereceive.
+
  4.2.2. procmail
  ---------------
-  
-  If you do not have a dedicated account, you must pipe to EmailPKT only some
-  mails. To do this with procmail, add a new rule to your ~/.procmail:
-     
+
+  If you do not have a dedicated account, you must pipe to hereceive only some
+  mails. To do this with procmail, add a new rule to your ~/.procmailrc:
+
+      $ cat ~/.forward
+      "|/usr/local/bin/hereceive"
+      $ cat ~/.procmailrc
        LOGFILE=/home/fido/logs/procmail.log
-       EMAILPKT=/home/fido/cfg/email.cfg
-     
+       FIDOCONFIG=/home/fido/cfg/emailpkt.cfg
+
        :0
        * ^Subject.*FIDO
-       | emailpkt receive
-       
+       | hereceive
+
   Of course, you must change the second line to one that suits you. For
   more information, refer to procmail documentation. A procmailrc example is
   provided with this package. Just change some variables and copy it to
   ~/.procmailrc for a quick start.
-     
-  Because of an extrange reason, procmail does not see any external
-  environment variable. So if you are using the standalone version of EmailPKT,
-  you must write again the path to the config file if it is not in
-  /usr/local/etc. If EmailPKT complains about fidoconf configuration file in
-  the HUSKY version, please add a FIDOCONFIG variable pointing to the config
-  file of fidoconfig.
 
-     
- 4.3. Owner problems
- -------------------
-  
+  procmail does not see any external environment variable. So you must write
+  into .procmailrc file a FIDOCONFIG variable pointing to the config file
+  of fidoconfig if it is not in standard directory. (Refer to fidoconfig
+  documentation for details).
+
+
+ 4.3. Owner problems on unixes
+ -----------------------------
+
   Processing all the email with a user and having all the fido stuff with
   another one is a common practise. So, it is a mistake to try to write in
   another user's directory, and a security hole to let everyone write in the
   inbound directory. To solve this in an easy way, you can pipe all the mails
   from user A that processes the email (for example, runs fetchmail) to user B
   (the owner of the inbound directory), and then yes, in user's B ~/.forward
-  finally call emailpkt.
-     
+  finally call hereceive.
+
   For example, user's A ~/.procmailrc:
-     
+
        ---cut---
        :0
-       * ^Subject.*FIDO
+       * ^Subject: *FTN email transport
        ! B
-       
+
        :0
        * ^Subject.*Routing
        ! B
        ---cut---
-       
+
        [...]
-       
+
   And user B ~/.forward:
-  
+
        ---cut---
-       "|/usr/local/bin/emailpkt receive"
+       "|/usr/local/bin/hereceive"
        ---cut---
 
 
@@ -358,9 +273,10 @@
       cannot write to a directory.
 
    *  EmailPKT understands PLAIN TEXT, BASE64, QUOTED-PRINTABLE and UUENCODING.
-      S.E.A.T. (Simple Email Attach Transport) support will be added in the
-      future. However, EmailPKT understands and processes incoming SEAT mails
-      as normal attachments although it ignores extra information.
+      S.E.A.T. (Simple Email Attach Transport, see FSP1015) support will be
+      added in the near future. However, EmailPKT understands and processes
+      incoming SEAT mails as normal attachments although it ignores extra
+      information.
 
    *  Incoming and outgoing email plain texts will be kept as a backup feature
       in the temporary inbound and outbound directories. A weekly deletion is
@@ -368,32 +284,56 @@
 
    *  The inbound directory defined in the config file should be the protected
       inbound, as ther is no way (yet) of authentication.
-      
+
    *  Please TEST THE PROGRAM BEFORE START USING IT! Mail any file in local
       mode first to ensure that everything is OK. If you do not have it 100%
       right, you will loose data.
-      
+
    *  I am not responsable of any data lost caused either by human or computer
       faults. USE AT YOUR OWN RISK! 
-  
-     
- 6. Contacting the author
- ------------------------
-  
-  If you have troubles using this software, have a bug report or have had a
-  core dump write me. I will reply you ASAP. And anyway, if you are using
-  this program, take five minutes and mail me. I want to know if someone is
-  using this software...
-   
+
+
+ 6. Contacting the author(s)
+ ---------------------------
+
+  If you have troubles using this software, make a bug report please, based on
+  form in bugreport.txt. You may place report into bugtrack area on the Husky
+  site (http:sourceforge.net/projects/husky/, link "bugs"), fidonet
+  echoconference FIDOSOFT.HUSKY or (russian) RU.HUSKY
+
+  Anyway, the sources are on a CVS Server, and you are welcome to make your
+  patches with bugfixes or new features.
+
+  If you have a general question or need technical support, link to
+  FIDOSOFT.HUSKY or RU.HUSKY from your uplink (boss if you have point address)
+  If this echoes not exist on his node, you can ask authors for an email feed,
+  obviously with EmailPKT :-)).
+
+
+ 7. Contributions
+ ----------------
+  Author of 1st (beta) version of emailpkt is:
+
      German Theler
      german@linuxfreak.com
-     4:905/210
+     4:905/210@FIDONET
 
-  Anyway, the sources are on a CVS Server, and you are welcome to commit your
-  patches or new features.
-     
-  If you have a general question or need technical support, link to
-  FIDOSOFT.HUSKY from your boss (you can ask me for an email feed, obviously
-  with EmailPKT :-)).
-  
-               
+  Unfortunately, German quit development at 2001.
+
+  Author of the 1.4-stable and new current version is:
+
+     Stas Degteff
+     stas_degteff@users.sourceforge.net
+     2:5080/102@FIDONET
+
+  Author of Microsoft Visual C/C++ build is:
+
+     Max Chernogor
+     mche@users.sourceforge.net
+     2:464/108
+
+  Some patches maked by members of the Husky Development Team
+
+
+Last modifyed by $Author$ at $Date$
+File revision is $Revision$

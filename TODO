@@ -1,7 +1,6 @@
 TODO-List for EmailPkt
 ======================
 
-
 Category 1: Will certainly be implemented until next release
 ============================================================
 - Full support for S.E.A.T. (fsp-1015)
@@ -13,6 +12,6 @@ Category 2: Might be implemented, but volunteers are always very welcome!
 - dupes check
 - SMTP send program (or internal function for hereceive)
 
-
 Category 3: Will only be included if volunteers send patches
 ============================================================
+- ASO support
