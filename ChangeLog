@@ -1,3 +1,8 @@
+2002-10-29 Tuesday 18:35  stas_degteff
+
+	* h/ecommon.h (1.4), src/hereceive.c (1.4), src/hesend.c (1.5): Fix
+	openLog() usage; fix DIRSEP declaration"
+
 2002-10-28 Monday 14:41  stas_degteff
 
 	* h/ecommon.h (1.3), h/version.h (1.3), src/encdec.c (1.3),
