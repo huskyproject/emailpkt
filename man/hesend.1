@@ -1,0 +1,50 @@
+.TH EMAILPKT 1 "hesend 0.9"
+.SH NAME
+hesend.1 \- send FTN bundles via e-mail from BSO queue and fileboxes
+.SH SYNTAX
+.TP
+   hesend [-qVD] [-c configfile]
+   hesend [--help] [--version] [--debug] [--quiet] [--config=configfile]
+
+.SH DESCRIPTION
+Hesend is a part of the Emailpkt package (other part is Hereceive program).
+Hesend is a program to send FTN bundles (echomail, netmail,
+tics and files in general) via e-mail. It sends outgoing files either as
+MIME Base64 or UUE attachments that can be decoded and processed either
+manually with a normal email client or automatically with any software like
+EmailPKT.
+
+.SH OPTIONS
+
+.Fl c configfile
+.Fl .Fl config=configfile
+Specify alternate config file
+
+.Fl D
+.Fl .Fl debug
+Debug mode: save all processed e-mail messages and don't exec programs.
+
+.Fl h
+.Fl .Fl help
+Print usage information and exit.
+
+.Fl q
+.Fl .Fl quiet
+Quiet mode: don't print messages into screen
+
+.Fl V
+.Fl .Fl version
+Print version and exit.
+
+
+.SH SEE ALSO
+hereceive(1)   Emailpkt receive program
+.sp
+http://husky.sf.net/emailpkt.html emailpkt web page
+
+
+.SH AUTHORS
+Year 2001: German Theler (german@linuxfreak.com) 4:905/210@fidonet
+(First developer, now don't work)
+.sp
+Year 2002: Stas Degteff 2:5080/102 stas_degteff@users.sourceforge.net

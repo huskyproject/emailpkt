@@ -1,5 +1,5 @@
-# Sample .procmailrc file for calling emailpkt to automatically receive
-# FTN packets via email.
+# Sample .procmailrc file for calling emailpkt/hereceive to automatically
+# receive FTN packets via email.
 # Copy and rename it to ~/.procmailrc
 
 # It is a good idea to have a log when something goes wrong
@@ -18,4 +18,4 @@ LOGFILE=/home/fido/logs/procmail.log
 
 :0
 * ^Subject:.*Fido.*
-| emailpkt receive
+| /usr/local/bin/hereceive -q

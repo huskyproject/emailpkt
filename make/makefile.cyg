@@ -1,35 +1,53 @@
-# Makefile for Mingw32 CPD to cross-compile NT executables
+# Mingw32 CPD makefile for crosscompiling for NT under Unix
+#
+# tested with Mingw32 CPD on Linux
+
+DEBUG=
+# set to -g for debugging, NEVER use -s !!!
+
+DOCSUBDIR=emailpkt
+
+DOCS	+= .forward
 
 CC=gcc
-# the space after the o is important!
-EXENAMEFLAG=-o 
-CDEFS=	-DNT -D__NT__ -DWINNT -D__CYG__ -I.. -Wall -pedantic -c -Wno-char-subscripts -mno-cygwin
-COPT=	-O2
-LFLAGS=-mno-cygwin
+EXENAMEFLAG=-o
+
+SRC_DIR = ../src/
+H_DIR   = ../h/
+
+INCLUDEDIRS = -I../.. -I$(H_DIR)
+
+CFLAGS=  -c -O3 -Wall $(DEBUG) -mno-cygwin -pedantic
+LFLAGS=  $(DEBUG) -mno-cygwin -L../../smapi  -L../../fidoconf
+#CDEFS =  -D__NT__
 
 OBJ=.o
 EXE=.exe
-TPU=.tpu
 RM=rm
-LIB=.a
-AR=ar
-AR_R=rs
 
-LIBSMAPI=../../smapi/libsmapicyg.a
-LIBFIDOCONFIG = ../../fidoconf/libfidoconfigcyg.a
-
-%.o: ../%.c
-	$(CC) -c $(CFLAGS) ../$*.c 
+LIBS= -lfidoconfigcyg -lsmapicyg -luser32
 
 default: all
 
+%$(OBJ): $(SRC_DIR)%.c $(H_DIR)$(HFILES)
+	$(CC) $(CFLAGS) $(CDEFS) $(INCLUDEDIRS) $(SRC_DIR)$*.c
+
 include makefile.inc
 
-all: commonprog
+all: commonall
 
 clean: commonclean
 
 distclean: commondistclean
 
 install:
-	install -s emailpkt $(BINDIR)
+	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
+	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
+#	$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+
+uninstall:
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hereceive$(EXE)
+	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
+	-$(RMDIR) $(RMOPT) $(HTMLDIR)$(DOCSUBDIR)

@@ -1,19 +1,25 @@
-OBJFILES = \
- config$(OBJ) \
- emailpkt$(OBJ) \
- log$(OBJ) \
- mime$(OBJ) \
- receive$(OBJ) \
- send$(OBJ) \
- uue$(OBJ)
+# $Id$
+# include-file for other makefiles
+#
+# This file is part of the Emailpkt package,
+# part of the husky fidosoft project
+#
 
-commonall: commonprog
+OBJS	= encdec$(OBJ) misc$(OBJ)
+DOCS	+= README README.TXT
+HFILES	= cvsdate.h ecommon.h version.h
 
-commonprog: $(OBJFILES)
-	$(CC) -o emailpkt$(EXE) $(OBJFILES)
+commonall: commonhesend commonhereceive
+
+commonhesend: $(OBJS) hesend$(OBJ)
+	$(CC) $(LFLAGS) -o hesend$(EXE) $(OBJS) hesend$(OBJ) $(LIBS)
+
+commonhereceive:  $(OBJS) hereceive$(OBJ)
+	$(CC) $(LFLAGS) -o hereceive$(EXE) $(OBJS) hereceive$(OBJ) $(LIBS)
 
 commonclean:
-	-$(RM) *$(OBJ)
+	-$(RM) $(RMOPT) *$(OBJ)
 
-commondistclean: clean
-	-$(RM) emailpkt$(EXE)
+commondistclean: commonclean
+	-$(RM) $(RMOPT) hesend$(EXE)
+	-$(RM) $(RMOPT) hereceive$(EXE)

@@ -1,9 +1,7 @@
-# Emailpkt make file
-#
-# Makefile with Husky support
-# you will need huskymak.cfg that comes in the huskybse package.
-#
 # $Id$
+#
+# Makefile with Husky build enviroment support
+# you will need huskymak.cfg that comes in the huskybse package.
 #
 
 ifeq ($(DEBIAN), 1)
@@ -13,62 +11,63 @@ else
   include ../huskymak.cfg
 endif
 
+
 ifndef RMDIR
   RMDIR	= rm -d
 endif
 
+SRC_DIR = src$(DIRSEP)
+H_DIR   = h$(DIRSEP)
+
+CFLAGS	= $(WARNFLAGS) -I$(INCDIR) -I../ -I$(H_DIR)
 ifeq ($(DEBUG), 1)
-  CFLAGS = $(WARNFLAGS) $(DEBCFLAGS) -I$(INCDIR)
+  CFLAGS += $(DEBCFLAGS)
   LFLAGS = $(DEBLFLAGS)
 else
-  CFLAGS = $(WARNFLAGS) $(OPTCFLAGS) -I$(INCDIR)
-  LFLGAS = $(OPTLFLAGS)
+  CFLAGS += $(OPTCFLAGS)
+  LFLAGS = $(OPTLFLAGS)
 endif
+
+# local libraries
+#LIBS	= -L../smapi -L../fidoconf -L$(LIBDIR) -lsmapi
+# Libraries installed into /usr/local/lib (or other system library dir)
+LIBS	= -L$(LIBDIR) -lsmapi
 
 ifeq ($(SHORTNAME), 1)
-  LIBS   = -L$(LIBDIR) -lsmapi -lfidoconf
+  LIBS	+= -lfidoconf
 else
-  LIBS   = -L$(LIBDIR) -lsmapi -lfidoconfig
+  LIBS	+= -lfidoconfig
 endif
 
+#CDEFS=-DNOEXCEPTIONS -D$(OSTYPE) -DDIRSEP=\'$(DIRSEP)\' $(ADDCDEFS)
+CDEFS=-D$(OSTYPE) -DDIRSEP=\'$(DIRSEP)\' $(ADDCDEFS)
 
-CDEFS=-DNOEXCEPTIONS -D$(OSTYPE) $(ADDCDEFS)
-
-HFILES = emailpkt.h
-
-%$(OBJ): %.c $(HFILES)
-	$(CC) -c $(CDEFS) $(CFLAGS) -DHUSKY $*.c
-
-OBJFILES = \
- config$(OBJ) \
- emailpkt$(OBJ) \
- log$(OBJ) \
- mime$(OBJ) \
- receive$(OBJ) \
- send$(OBJ) \
- uue$(OBJ)
+include make/makefile.inc
 
 
-all: emailpkt$(EXE)
+%$(OBJ): $(SRCDIR)%.c $(H_DIR)$(HFILES)
+	$(CC) -c $(CDEFS) $(CFLAGS) $*.c
 
-emailpkt: $(OBJFILES)
-	$(CC) $(LFLAGS) -o emailpkt$(EXE) $(OBJFILES) $(LIBS)
+emailpkt:  all
 
-install:
-	$(INSTALL) $(IBOPT) emailpkt$(EXE) $(BINDIR)
-#	$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)emailpkt
-#	$(INSTALL) $(IMOPT) README $(HTMLDIR)$(DIRSEP)emailpkt
+all:       commonall
+
+hesend:    commonhesend
+
+hereceive: commonhereceive
+
+install: emailpkt
+	$(INSTALL) $(IBOPT) hesend$(EXE) $(BINDIR)
+	$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)hereceive
+	$(INSTALL) $(IMOPT) $(DOCS) $(HTMLDIR)$(DIRSEP)hereceive
 
 uninstall:
-	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)emailpkt$(EXE)
-#	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)emailpkt
-#	-$(RMDIR) $(RMOPT) $(HTMLDIR)
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)hesend$(EXE)
+	-$(RM) $(RMOPT) $(HTMLDIR)$(DIRSEP)emailpkt
+	-$(RMDIR) $(RMOPT) $(HTMLDIR)
 
-clean:
-	-$(RM) $(RMOPT) *$(OBJ)
+clean:  commonclean
 	-$(RM) $(RMOPT) core
 	-$(RM) $(RMOPT) *~
 
-distclean: clean
-	-$(RM) $(RMOPT) emailpkt$(EXE)
-
+distclean: commondistclean

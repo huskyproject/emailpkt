@@ -1,0 +1,52 @@
+.TH EMAILPKT 1 "hereseive 0.9"
+.SH NAME
+hereseive.1 \- receive FTN bundles via e-mail
+.SH SYNTAX
+.TP
+  hereceive [-qVD] [-c configfile] [input_file]
+  hereceive [--help] [--version] [--debug] [--quiet] [--config=configfile] [input_file]
+
+.SH DESCRIPTION
+HeReceive is a part of the Emailpkt package (other part is HeSend program).
+HeReceive is a program to receive FTN bundles (echomail, netmail,
+tics and files in general) via e-mail. Processes emails from standard input
+or file with either MIME attachments (base64, quoted printable or
+plain text) or uuencoded files. Use S.E.A.T. (FSP-1015) for reliability check.
+
+.SH OPTIONS
+
+.Fl c configfile
+.Fl .Fl config=configfile
+Specify alternate config file
+
+.Fl D
+.Fl .Fl debug
+Debug mode: save all processed e-mail messages and don't exec programs.
+
+.Fl h
+.Fl .Fl help
+Print usage information and exit.
+
+.Fl q
+.Fl .Fl quiet
+Quiet mode: don't print messages into screen
+
+.Fl V
+.Fl .Fl version
+Print version and exit.
+
+
+.SH SEE ALSO
+hereceive(1)   Emailpkt receive program
+.sp
+http://husky.sf.net/emailpkt.html emailpkt web page
+
+.SH BUGS
+Can't decode BASE64 and uu-encoded data if line too long (>65530 chars)
+(This lines can't presents in normal messages)
+
+.SH AUTHORS
+Year 2001: German Theler (german@linuxfreak.com) 4:905/210@fidonet
+(First developer, now don't work)
+.sp
+Year 2002: Stas Degteff 2:5080/102 stas_degteff@users.sourceforge.net

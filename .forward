@@ -1,6 +1,6 @@
 # $Id$
 #
-# Sample file for use emailpkt with dedicated unix/email account
+# Sample file for use emailpkt/hereceive with dedicated unix/email account
 #
 
-"|/usr/local/bin/emailpkt receive"
+"|/usr/local/bin/hereceive -q"
