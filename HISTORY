@@ -1,24 +1,19 @@
-EmailPkt 0.2-stable
-=====================
+EMAILPKT 1.4-stable (started 06.03.2003)
 
-2002/06/04 20:14:09, Stas
-* Start "emailpkt-0_2-stable" branch.
-* Change 'SAVE' define to 0 (don't save temporary files)
+This file describe changes between EmailPkt 0.* and EmailPkt 1.4-stable
 
-EmailPkt 0.2-unstable
-=====================
+1. MAJOR feature improvements:
 
-Fri mar 23 13:52:52 ART 2001
-german.theler
-* make use of EmailFrom, EmailSubj and EmailEncoding keywords from fidoconf
-* support for UUE in outgoing emails
-* changed default location for sendmail to /usr/sbin/sendmail to work
-with FreeBSD.
+    - code a rewroted full
+    - split into two programs: hesend & hereceive
+    - drop "standalone" version
+    - man page created
+    - win32 build (in addition to unix)
 
-EmailPkt 0.1-stable
-===================
-(released on Mon oct 16 19:24:12 ART 2000)
+2. CONFIG changes:
+    - new token: sendmailcmd
 
-Mon oct 16 19:24:12 ART 2000
-german.theler:
-* First stable release
+3. IMPORTANT bugfixes:
+
+
+$Id$
