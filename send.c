@@ -302,8 +302,9 @@ int processFlow(int n)
 
     fclose(flowFile);
     remove(flowName);
-    temp = fopen(bsyName, "wb");
-    fclose(temp);
+/*    temp = fopen(bsyName, "wb");
+    fclose(temp);*/
+    remove(bsyName);
 
     return 0;
 }
