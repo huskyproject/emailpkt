@@ -14,6 +14,8 @@ HTMLDIR = /usr/local/share/doc/husky
 DOCSUBDIR = emailpkt
 MANDIR	= /usr/local/man
 DIRSEP	= /
+IMOPT	= -m 444
+IBOPT	= -m 555
 
 CC      = gcc
 OBJ	= .o
@@ -26,7 +28,7 @@ AR	= ar
 AR_R	= rs
 INSTALL	= install -c
 MKDIR	= install -d
-MKDIROPT=
+MKDIROPT= -m 755
 
 SRC_DIR = ../src/
 LIBS	= -lfidoconfigbsd -lsmapibsd

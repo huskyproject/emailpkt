@@ -284,7 +284,7 @@ w_log(LL_DEBUGS,"%s::sendFile():%u Command construct: '%s'", __FILE__, __LINE__,
   nfree(buf);
 
   w_log(LL_EXEC,"Execute '%s'",cmd);
-  if( debugflag ){
+  if( debugflag>1 ){
     w_log(LL_ERR, "(debug) Cmd line: '%s'", cmd);
   }else
     if( (rc = system(cmd)) != 0)
@@ -683,10 +683,10 @@ main( int argc, char **argv)
     case 'c': /* config file */
               cp=sstrdup(optarg);
     case 'D': /* debug mode */
-              debugflag=1;
+              debugflag++;
               break;
     case 'q': /* quiet mode */
-              quiet=0;
+              quiet=1;
               break;
     case 'V': /* version */
               printver();
@@ -706,7 +706,7 @@ main( int argc, char **argv)
          if(strcmp(argv[op]+2,"quiet"))
                 quiet=0;
          if(strcmp(argv[op]+2,"debug"))
-                debugflag=1;
+                debugflag++;
          if( strstr(argv[op]+2,"config=")==(argv[op]+2) ) {
              cp = strchr(argv[op], '=');
              if( cp ) cp = sstrdup(++cp);
@@ -726,7 +726,7 @@ main( int argc, char **argv)
          if(strchr(argv[op],'q'))
                 quiet=0;
          if(strchr(argv[op],'D'))
-                debugflag=1;
+                debugflag++;
          if(strchr(argv[op],'c')) {
                 cp = sstrdup(argv[++op]); /* config-file */
          }
@@ -761,9 +761,13 @@ main( int argc, char **argv)
   if( sstrlen(config->sendmailcmd) )
   {
     if( debugflag )
-      w_log(LL_PRG,"Start %s %s (debug mode)", program_name, version());
+      w_log(LL_PRG,"Start %s %s (debug%u mode)", program_name, version(), debugflag);
     else w_log(LL_PRG,"Start %s %s", program_name, version());
 
+    if (debugflag == 1)
+    {  SAVEFLAG++;
+       debugflag = 0;
+    }
     rc = send();
     w_log(LL_SUMMARY, "Summary sent %d files", allsent);
   }
