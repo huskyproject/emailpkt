@@ -39,6 +39,9 @@ emailpkt: $(OBJFILES)
 install:
 	$(INSTALL) $(IBOPT) emailpkt$(EXE) $(BINDIR)
 
+uninstall:
+	-$(RM) $(BINDIR)$(DIRSEP)emailpkt$(EXE)
+
 clean:
 	-$(RM) *$(OBJ)
 	-$(RM) core
