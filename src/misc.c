@@ -226,7 +226,7 @@ FILE *createbsy(s_link link)
   }
   fd = fdopen(fh, "w");
 #ifdef UNIX
-  fprintf(fd,"%l", (unsigned long)getpid());
+  fprintf(fd,"%u", (unsigned)getpid());
 #endif
   w_log(LL_FILE,"Created '%s'",link.bsyFile );
   w_log(LL_FUNC,"createbsy() OK");

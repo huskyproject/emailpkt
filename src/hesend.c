@@ -39,6 +39,7 @@
 #include <ctype.h>
 #ifdef UNIX
 #  include <sys/syslimits.h>
+#  include <unistd.h>
 #else
 #  include <limits.h>
 #endif
