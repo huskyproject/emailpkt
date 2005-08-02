@@ -66,7 +66,7 @@
 #define PROGRAMNAME "hereceive"
 #define TEMPEXT "emi"    /* "e-mail incoming" */
 
-#if defined(__UNIX_) || defined(__WIN32__) || defined(__FLAT__)
+#if defined(__UNIX__) || defined(__WIN32__) || defined(__FLAT__)
 #define BUF_SIZE 128000
 #else
 #define BUF_SIZE 32000    /* for DOS compatibility */
@@ -266,7 +266,7 @@ void storeHdrLine(const char *line)
   else if( !sstrnicmp(line, "X-Mailer:", 9) )
   {  msgHeader.XMailer = stripRoundingChars(sstrdup(line+9), " \t");
      w_log( LL_DEBUG, "msgHeader.XMailer='%s'", msgHeader.XMailer );
-     if( sstrnicmp( msgHeader.XMailer, "Internet Rex", 52 ) )
+     if(! sstrnicmp( msgHeader.XMailer, "Internet Rex", 52 ) )
      { msgHeader.f_IREX = 1;
        w_log( LL_INFO, "Internet Rex detected" );
      }
@@ -365,18 +365,50 @@ void storeHdrLine(const char *line)
  */
 unsigned getMsgHeader(FILE *fd)
 {
+  /* Second buffer for multi-line cludges */
+#define BUF_2_SIZE 1002
+#define RFC_822_MAXLINE 1000  /* Limit of the header line length */
+#define BUF_1_SIZE (sizeof(buf) - BUF_2_SIZE)
+  char buf_2[BUF_2_SIZE];
   w_log( LL_FUNC, "getMsgHeader()" );
   dispose_msgHeader();
-  do{
+
+  fgets(buf_2, BUF_2_SIZE, fd);
+  if( feof(fd) || ferror(fd) )
+  { w_log( LL_ERR, "Can't read message header: %s", feof(fd)? "EOF" : strerror(errno) );
+    w_log( LL_FUNC, "getMsgHeader() rc=1" );
+    return 1;
+  }
+  if(strlen(buf_2) > RFC_822_MAXLINE){
+      w_log( LL_ERR,  "Error in message header: line too long" );
+      w_log( LL_FUNC, "getMsgHeader() rc=1" );
+      return 1;      /* todo: Need skip input to next line */
+  }
+  stripCRLF(buf_2);
+  do{ /* Read header kludge */
 
     buf[0]=0;
-    fgets(buf, sizeof(buf), fd);
-    if( feof(fd) || ferror(fd) )
-    { w_log( LL_ERR, "Can't read message header: %s", feof(fd)? "EOF" : strerror(errno) );
-      w_log( LL_FUNC, "getMsgHeader() rc=1" );
-      return 1;
-    }
-    stripCRLF(buf);
+    do { /* Read additional header lines */
+      if( strlen(buf) + strlen(buf_2) > sizeof[buf] - 1){
+          w_log( LL_ERR,  "Error in message header: header too long" );
+          w_log( LL_FUNC, "getMsgHeader() rc=1" );
+          return 1;      
+      }
+      strcat(buf, buf_2);
+      if(!buf[0]) break;
+      fgets(buf_2, BUF_2_SIZE, fd);
+      if( feof(fd) || ferror(fd) )
+      { w_log( LL_ERR, "Can't read message header: %s", feof(fd)? "EOF" : strerror(errno) );
+        w_log( LL_FUNC, "getMsgHeader() rc=1" );
+        return 1;
+      }
+      if(strlen(buf_2) > RFC_822_MAXLINE){
+          w_log( LL_ERR,  "Error in message header: line too long" );
+          w_log( LL_FUNC, "getMsgHeader() rc=1" );
+          return 1;  /* todo: Need skip input to next line */    
+      }
+      stripCRLF(buf_2);
+    }while(isspace(buf_2[0]));
     if( buf && buf[0] )
       storeHdrLine(buf);
     else
@@ -643,6 +675,12 @@ char *processBASE64( const char *inbound, FILE *fd, const char *filename )
 
   xstrscat(&pathname, inbound, filename, NULL);
   fout = createInboundFile(&pathname);
+  if(!fout)
+  { w_log(LL_ERR, "createInboundFile() failure");
+    w_log( LL_FUNC, "processBASE64() rc=NULL" );
+    return NULL;
+  }
+  
   w_log(LL_INFO, "Created '%s'", pathname);
 
   do{  /* Process base64 lines */

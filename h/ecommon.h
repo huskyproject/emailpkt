@@ -237,7 +237,7 @@ int uuencodeFile( FILE *infd, FILE *outfd, const char*filename,
 
 /* Case-incensitive string compare, return values eq. strncmp()
  */
-//int strincmp(const char *str1, const char *str2, unsigned len);
+/*int strincmp(const char *str1, const char *str2, unsigned len);*/
 
 
 /* Create new file (into inbound directory), if file exist increment:

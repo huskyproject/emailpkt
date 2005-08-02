@@ -377,7 +377,7 @@ unsigned uudecodeLine( unsigned char **dstbuffer, const unsigned char *line )
         if(len<=0) break;
         *(op++)=(c<<6)|(d);    len--;
      }
-//     op--;
+/*     op--; */
      len = op - temp;
      realloc( temp, len);
      *dstbuffer = temp;
