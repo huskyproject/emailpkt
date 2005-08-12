@@ -368,7 +368,6 @@ unsigned getMsgHeader(FILE *fd)
   /* Second buffer for multi-line cludges */
 #define BUF_2_SIZE 1002
 #define RFC_822_MAXLINE 1000  /* Limit of the header line length */
-#define BUF_1_SIZE (sizeof(buf) - BUF_2_SIZE)
   char buf_2[BUF_2_SIZE];
   w_log( LL_FUNC, "getMsgHeader()" );
   dispose_msgHeader();
@@ -389,10 +388,10 @@ unsigned getMsgHeader(FILE *fd)
 
     buf[0]=0;
     do { /* Read additional header lines */
-      if( strlen(buf) + strlen(buf_2) > sizeof[buf] - 1){
+      if( strlen(buf) + strlen(buf_2) > sizeof(buf) - 1){
           w_log( LL_ERR,  "Error in message header: header too long" );
           w_log( LL_FUNC, "getMsgHeader() rc=1" );
-          return 1;      
+          return 1;
       }
       strcat(buf, buf_2);
       if(!buf[0]) break;
@@ -405,7 +404,7 @@ unsigned getMsgHeader(FILE *fd)
       if(strlen(buf_2) > RFC_822_MAXLINE){
           w_log( LL_ERR,  "Error in message header: line too long" );
           w_log( LL_FUNC, "getMsgHeader() rc=1" );
-          return 1;  /* todo: Need skip input to next line */    
+          return 1;  /* todo: Need skip input to next line */
       }
       stripCRLF(buf_2);
     }while(isspace(buf_2[0]));
@@ -680,7 +679,7 @@ char *processBASE64( const char *inbound, FILE *fd, const char *filename )
     w_log( LL_FUNC, "processBASE64() rc=NULL" );
     return NULL;
   }
-  
+
   w_log(LL_INFO, "Created '%s'", pathname);
 
   do{  /* Process base64 lines */
