@@ -72,7 +72,7 @@
 #define BUF_SIZE 32000    /* for DOS compatibility */
 #endif
 
-/* processUUE inteernal codes (negative!) */
+/* processUUE internal codes (negative!) */
 #define processUUE_end    -1   /* end line detected */
 #define processUUE_sum    -2   /* sum line detected */
 #define processUUE_eof    -3   /* EOF */
@@ -88,6 +88,7 @@ char buf[BUF_SIZE];     /* input buffer (one line from RFC822 message)*/
 int debugflag=0; /* Execute in debug mode (not call extern programs,
                     not remove files, save processed e-mail messages */
 
+/* Release a members of the structure 'SEAThdr' */
 #define disposeSEATHeader() { if(SEAThdr.FileID) nfree(SEAThdr.FileID); \
                               if(SEAThdr.SegID) nfree(SEAThdr.SegID); \
                               memset(&SEAThdr,0,sizeof(SEAThdr)); }
@@ -96,7 +97,7 @@ int debugflag=0; /* Execute in debug mode (not call extern programs,
 #define isSEATheader(str) ( !sstrnicmp(str,"SEAT_HEADER_SIGNATURE", sizeof(SEAT_HEADER_SIGNATURE)-1) )
 
 /* This file functions (declarations) */
-FILE *saveToTemp(FILE *fd);
+FILE *copy_to_temp(FILE *fd, char **fname);
 void dispose_msgHeader();
 void storeHdrLine(const char *line);
 unsigned getMsgHeader(FILE *fd);
@@ -123,41 +124,48 @@ void usage();
 
 /*
  * Copy file to temp file, return temp file descriptor
+ * if fname != NULL fill it with temp file name
+ *                                                 /keu/
  */
-FILE *saveToTemp(FILE *fd)
-{ FILE *tempfd=NULL; char *tempfilename=NULL;
+FILE *copy_to_temp(FILE *fd, char **fname)
+{
+#define fail_return {w_log(LL_FUNC, "copy_to_temp(): %s:%d: FAILED", __FILE__, __LINE__); return NULL;}
 
-  w_log( LL_FUNC, "saveToTemp()" );
-  if( (tempfd=createTempFileIn( config->tempInbound, TEMPEXT, 't', &tempfilename)) )
-  {
-      while( fwrite(buf, 1, fread( buf, 1, sizeof(buf), fd), tempfd )>0 )
-      {
-        if( feof(fd) )
-          break;
-        if( ferror(fd) )
-        { fclose (tempfd);
-          w_log( LL_ERR, "savemsg():%d Can't read message: \"%s\"", __LINE__, strerror(errno) );
-          return NULL;
+    FILE *tempfd = NULL;
+
+    w_log( LL_FUNC, "copy_to_temp() start" );
+    if((tempfd = createTempFileIn(config->tempInbound, TEMPEXT, 't', fname))){
+        while(fwrite(buf, 1, fread(buf, 1, sizeof(buf), fd), tempfd) > 0){
+            if(feof(fd)) break;
+            if(ferror(fd)){
+                fclose (tempfd);
+                w_log(LL_ERR, "copy_to_temp():%d Can't read message: \"%s\"", __LINE__, strerror(errno));
+                fail_return;
+            }
+            if(ferror(tempfd)){
+                fclose (tempfd);
+                w_log(LL_ERR, "copy_to_temp():%d Can't write message to temp file \"%s\": \"%s\"", __LINE__, fname, strerror(errno));
+                fail_return;
+            }
         }
-        if( ferror(tempfd) )
-        { fclose (tempfd);
-          w_log( LL_ERR, "savemsg():%d Can't save message to temp file: \"%s\"", __LINE__, strerror(errno) );
-          w_log( LL_FUNC, "saveToTemp() failed" );
-          return NULL;
+        w_log(LL_FILE, "Message saved to temp inbound: %d bytes (\"%s\")", ftell(tempfd), fname);
+        fclose(tempfd);
+        if(!(tempfd = fopen(*fname, "r+t"))){
+            w_log(LL_ERR, "copy_to_temp():%d Can't open created temp file \"%s\": \"%s\"", __LINE__, fname, strerror(errno));
+            fail_return;
         }
-      }
-      w_log( LL_FILE, "Message saved to temp inbound: %d bytes", ftell(tempfd) );
+    }
+    else{
+        w_log(LL_CRIT, "copy_to_temp(): Can't create temp file");
+        fail_return;
+    }
 
-      rewind(tempfd);
-  }
-  else
-  {   w_log( LL_CRIT, "savemsg(): Can't create temp file" );
-      return NULL;
-  }
+    w_log(LL_FUNC, "copy_to_temp() OK");
+    return tempfd;
 
-  w_log( LL_FUNC, "saveToTemp() OK" );
-  return tempfd;
+#undef fail_return
 }
+
 
 /*
  * De-allocate memory & clear msgHeader
@@ -1291,42 +1299,61 @@ int processEml( FILE *fd, const s_link *link )
  * Process message
  */
 int receive(FILE *fd)
-{ int rc=0, i=0;
-  FILE *myfd;
+{
+#define fail_return(r) {w_log(LL_FUNC, "receive(): %s:%d: FAILED",__FILE__,__LINE__); nfree(tempfilename); return(r);}
 
-  w_log( LL_FUNC, "receive()" );
+    int rc=0, i=0;
+    FILE *myfd, *badfd;
+    char *tempfilename = NULL;
 
-  if( debugflag && fd==stdin )
-  { if( (myfd = saveToTemp(fd))==NULL )  /* Save message to temp file */
-    { w_log( LL_FUNC, "receive() failed" );
-      return -1;
+    w_log( LL_FUNC, "receive()" );
+
+    if( (myfd = copy_to_temp(fd, &tempfilename)) == NULL )  /* Save message to temp file */
+        fail_return(-1);
+
+    if( getMsgHeader(myfd) ){  /* Read error */
+        fclose(myfd);
+        fail_return(1);
     }
-  }
-  else myfd=fd;
-  if( getMsgHeader(myfd) ) return 1; /* Read error */
-
-  /* Check sender */
-  i = 0;
-  if( msgHeader.fromaddr )
-    for (; i < config->linkCount; i++)
-    {
-      /* Known sender? */
-      if( config->links[i].email &&
-          !sstricmp(config->links[i].email,msgHeader.fromaddr) )
-      {  w_log( LL_LINK, "Email from %s (%s)", aka2str(config->links[i].hisAka), msgHeader.fromaddr );
-         rc=processEml( myfd, config->links+i );
-         break;
+    if(msgHeader.isbad){  /* incorrect message, move to BADs */
+        char *badfilename = NULL;
+        fclose(myfd);
+        if((badfd = createTempFileIn(config->tempInbound, "bad", 't', &badfilename))){
+            fclose(badfd);
+            rename(tempfilename, badfilename);
+            w_log(LL_WARN, "receive(): Bad message header. Message placed to %s", badfilename);
+        }else{
+            w_log(LL_CRIT, "receive(): Can't create temp file");
+        }
+        nfree(badfilename);
+        fail_return(1);
+    }
+    /* Check sender */
+    i = 0;
+    if( msgHeader.fromaddr )
+      for (; i < config->linkCount; i++)
+      {
+        /* Known sender? */
+        if( config->links[i].email &&
+            !sstricmp(config->links[i].email,msgHeader.fromaddr) )
+        {  w_log( LL_LINK, "Email from %s (%s)", aka2str(config->links[i].hisAka), msgHeader.fromaddr );
+           rc=processEml( myfd, config->links+i );
+           break;
+        }
       }
+    if( !msgHeader.fromaddr || i >= config->linkCount ) /* Unknown sender */
+    {  w_log( LL_LINK, "Email from unknown (%s)", msgHeader.fromaddr );
+       rc=processEml( myfd, NULL );
     }
-  if( !msgHeader.fromaddr || i >= config->linkCount ) /* Unknown sender */
-  {  w_log( LL_LINK, "Email from unknown (%s)", msgHeader.fromaddr );
-     rc=processEml( myfd, NULL );
-  }
 
-  if( debugflag && fd!=myfd ) fclose(myfd); /* Close temporary file */
+    fclose(myfd);
+    if(!debugflag)   /* Leave temp file for debug */
+        unlink(tempfilename);
+    nfree(tempfilename);
+    w_log( LL_FUNC, "receive() OK" );
+    return rc;
 
-  w_log( LL_FUNC, "receive() OK" );
-  return rc;
+#undef fail_return;
 }
 
 void printver()
@@ -1421,7 +1448,7 @@ main( int argc, char **argv)
                 debugflag=1;
          if(strchr(argv[op],'c')) {
                 if(++op < argc){
-                  if( argv[op] && argv[op])	
+                  if( argv[op] && argv[op])
                     cp = sstrdup(argv[op]); /* config-file */
                   else{
                     fprintf(stderr, "Config file name is empty!\n");
@@ -1485,11 +1512,13 @@ main( int argc, char **argv)
 
 
   if( !sstrlen(config->protInbound) )
-    w_log(LL_CRIT, "protInbound not defined in config file! Abort");
+    w_log(LL_CRIT, "protInbound is not defined in config file! Abort");
+  else if( !sstrlen(config->tempInbound) )
+    w_log(LL_CRIT, "tempInbound is not defined in config file! Abort");
   else if( !sstrlen(config->listInbound) )
-    w_log(LL_CRIT, "listInbound not defined in config file! Abort");
+    w_log(LL_CRIT, "listInbound is not defined in config file! Abort");
   else if( !sstrlen(config->inbound) )
-    w_log(LL_CRIT, "inbound not defined in config file! Abort");
+    w_log(LL_CRIT, "inbound is not defined in config file! Abort");
   else{
     /* Normal operations */
 
