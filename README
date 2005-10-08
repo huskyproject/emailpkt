@@ -5,12 +5,12 @@
                                                 March 2003
 
   Table of contents
-  
+
       1. What is EmailPKT?
           1.1. Why Email routing?
       2. Compiling & Installing EmailPKT
       3. How to configure EmailPKT
-          3.1. Fidoconfig keywords 
+          3.1. Fidoconfig keywords
       4. How to use it
           4.1. Sending
           4.2. Receiving
@@ -23,7 +23,7 @@
 
  1. What is EmailPKT?
  --------------------
- 
+
   EmailPKT is a program package to send & receive FTN bundles (echomail,
   netmail, tics and files in general) via e-mail. It sends outgoing files
   either as MIME Base64 or UUE attachments that can be decoded and processed
@@ -33,11 +33,11 @@
   (base64, quoted printable or plain text) or UUENCODED files.
   Emailpkt make email message in RFC822 format and use external program to
   send it to recipient.
-  
+
 
  1.1. Why Email routing?
  -----------------------
- 
+
   If you have a link that is not in your same city or even in your same
   country, using normal phone calls would be a big waste of money. Using the
   Internet to route is the way to solve this problem. Here comes Fido-over-IP
@@ -89,15 +89,15 @@
   -----------------------
   Refer to INSTALL guide in each package for more information.
 
-  
+
  3. How to configure EmailPKT
  ----------------------------
- 
+
   Refer to documentation of fidoconfig for all tokens usage details.
 
   EmailPKT will use the following fidoconf keywords if available:
 
-     Global  
+     Global
        sysop             - Your name
        address           - FTN address of your system
        email             - default e-mail address of your system
@@ -123,21 +123,21 @@
   For each link that you want to route via e-mail, specify an email address
   for him. If you do not want to route via e-mail with a link, do not give
   an email address. For example, the simpliest form:
-  
+
       Link		Joe Sysop
       Aka		4:905/100
       ourAka		4:905/210
       Email		joe@fidonet.org
 
   EmailPKT _will_ route files to this link via e-mail.
-  
+
       Link      	Pepe Bondiola
       Aka		4:905/209
       ourAka		4:905/210
-      
+
   EmailPKT _won't_ route files to this link via e-mail, as it has not any
   address defined.
-  
+
   You can also use all of the keywords:
 
       Link		Joe Sysop
@@ -147,45 +147,45 @@
       EmailFrom 	pepe@bondiola.net.ar
       EmailSubj 	A Fido packet for you, Joe
       EmailEncoding	UUE
-      
+
   Adding all this info for each would be a waste of time, so it is recommended
   that you put common information (like EmailFrom and EmailSubj) in a
   LinkDefaults section. See fidoconfig documentation for details.
 
   The default encoding method is MIME Base64.
 
-      
+
  4. How to use it
  ----------------
- 
+
  4.1. Sending
  ------------
- 
+
   To send all the files that are waiting in the outbound to the links
   specified in the configuration, you must simply call EmailPKT like this
   (example for unixes, "$" is shell prompt):
-   
+
      $ hesend
-     
+
   So, you can easily add to your mailing scripts the above line, and you are
   done. E.g.:
-     
+
      hpt scan
      hpt pack
      hesend
-     
+
 
  4.2. Receiving
  --------------
-  
+
   The receiving part of EmailPKT named "hereceive". It acts like a filter or
   get input filename from command line. You can call it from the ~/.forward
   file or from procmail.
 
-    
+
  4.2.1. ~/.forward
  -----------------
-  
+
   If you have a dedicated account, then you can call hereceive directly from
   the ~/.forward file:
 
@@ -258,6 +258,16 @@
        ---cut---
 
 
+ 4.4. Using in non-unix
+ ----------------------
+
+ Instead sendmail should be use any SMTP/POP3 software with command line
+ interface. You may try following programs:
+
+ - Postie (http://www.infradig.com)
+ - ZeRAT (http://ironfist.at.tut.by/, http://adom.nm.ru/)
+ - Blat (http://www.interlog.com/~tcharron/blat.html)
+
 
  5. Notes about the program behaviour
  ------------------------------------
@@ -290,7 +300,7 @@
       right, you will loose data.
 
    *  I am not responsable of any data lost caused either by human or computer
-      faults. USE AT YOUR OWN RISK! 
+      faults. USE AT YOUR OWN RISK!
 
 
  6. Contacting the author(s)
