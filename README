@@ -267,6 +267,8 @@
  - Postie (http://www.infradig.com)
  - ZeRAT (http://ironfist.at.tut.by/, http://adom.nm.ru/)
  - Blat (http://www.interlog.com/~tcharron/blat.html)
+ - Perl script using the Mail::Sendmail module
+   (http://alma.ch/perl/mail.htm#Mail::Sendmail)
 
 
  5. Notes about the program behaviour
