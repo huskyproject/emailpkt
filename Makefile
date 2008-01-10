@@ -63,7 +63,7 @@ install: emailpkt
 	$(INSTALL) $(IBOPT) hereceive$(EXE) $(BINDIR)
 	-$(MKDIR) $(MKDIROPT) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
 	$(INSTALL) $(IMOPT) $(DOCS) $(HTMLDIR)$(DIRSEP)$(DOCSUBDIR)
-	-$(MKDIR) $(MKDIROPT) $(MANDIR)
+	-$(MKDIR) $(MKDIROPT) $(MANDIR)/man1
 	cd $(MANSRCDIR) ; $(INSTALL) $(IMOPT) $(MANPAGES) $(MANDIR)$(DIRSEP)man1
 
 uninstall:
