@@ -1,3 +1,10 @@
+emailpkt (1.4+rc1-1) unstable; urgency=low
+
+  * New CVS version (1.4, release candidate 1)
+  * debian/manpages: fix pathnames
+
+ -- stas Degteff <stas_degteff@users.sourceforge.net>  Fri, 10 Jan 2007 02:19:21 +0500
+
 emailpkt (0.3-1) unstable; urgency=low
 
   * New CVS version (0.3-current)

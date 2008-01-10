@@ -9,7 +9,7 @@
 export DH_COMPAT=4
 export DEBIAN=1
 export PACKAGE=emailpkt
-export VERSION=0.3
+#export VERSION=0.3
 
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
