@@ -7,6 +7,9 @@
 ifeq ($(DEBIAN), 1)
   # Every Debian-Source-Paket has one included.
   include debian/huskymak.cfg
+else ifdef RPM_BUILD_ROOT
+# RPM build requires all files to be in the source directory
+  include huskymak.cfg
 else
   include ../huskymak.cfg
 endif
