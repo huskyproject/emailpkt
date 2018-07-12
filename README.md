@@ -1,8 +1,8 @@
+# EmailPKT - FidoNet over Email
+[![Build Status](https://travis-ci.org/huskyproject/emailpkt.svg?branch=master)](https://travis-ci.org/huskyproject/emailpkt)
 
-                             EmailPKT |
-                            ----------+
-	                                FidoNet over Email
-                                                March 2003
+
+**March 2003**
 
   Table of contents
 
@@ -20,7 +20,7 @@
 
 
 
- 1. What is EmailPKT?
+ ## 1. What is EmailPKT?
  --------------------
 
   EmailPKT is a program package to send & receive FTN bundles (echomail,
@@ -34,7 +34,7 @@
   send it to recipient.
 
 
- 1.1. Why Email routing?
+ ### 1.1. Why Email routing?
  -----------------------
 
   If you have a link that is not in your same city or even in your same
@@ -56,10 +56,10 @@
   paiment) and traffic to/from world is expensive.
 
 
- 2. Compiling & installing EmailPKT
+ ## 2. Compiling & installing EmailPKT
  ----------------------------------
 
-  Step one: get packages.
+  #### Step one: get packages.
   -----------------------
   Get binary package for you platform from HUSKY site or sources from site
   or CVS server: http://husky.sourceforge.net, cvs -d cvs.sf.net/cvsroot/husky
@@ -72,24 +72,24 @@
   All packages MUST be compatible versions: emailpkt 1.4 require smapi v.2.4
   and fidoconfig v.1.4.
 
-  Step two: build from sources.
+  #### Step two: build from sources.
   -----------------------------
   Build and install: smapi, fidoconfig and emailpkt (in this order!). On
   unix-like OS you may use huskymak.cfg from huskybse package or OS specific
   makefile.
 
-  Step three: create config file.
+  #### Step three: create config file.
   -------------------------------
   Read documentation of fidoconfig and make config file (may use config file
   example included into fidoconfig package). Do not forget check edited config
   file using tparser tool each time!
 
-  Additional information.
+  #### Additional information.
   -----------------------
   Refer to INSTALL guide in each package for more information.
 
 
- 3. How to configure EmailPKT
+ ## 3. How to configure EmailPKT
  ----------------------------
 
   Refer to documentation of fidoconfig for all tokens usage details.
@@ -154,10 +154,10 @@
   The default encoding method is MIME Base64.
 
 
- 4. How to use it
+ ## 4. How to use it
  ----------------
 
- 4.1. Sending
+ ### 4.1. Sending
  ------------
 
   To send all the files that are waiting in the outbound to the links
@@ -174,7 +174,7 @@
      hesend
 
 
- 4.2. Receiving
+ ### 4.2. Receiving
  --------------
 
   The receiving part of EmailPKT named "hereceive". It acts like a filter or
@@ -182,7 +182,7 @@
   file or from procmail.
 
 
- 4.2.1. ~/.forward
+ #### 4.2.1. ~/.forward
  -----------------
 
   If you have a dedicated account, then you can call hereceive directly from
@@ -198,7 +198,7 @@
       *  There must be no space between the pipe character (|) and the
          path to hereceive.
 
- 4.2.2. procmail
+ #### 4.2.2. procmail
  ---------------
 
   If you do not have a dedicated account, you must pipe to hereceive only some
@@ -225,7 +225,7 @@
   documentation for details).
 
 
- 4.3. Owner problems on unixes
+ ### 4.3. Owner problems on unixes
  -----------------------------
 
   Processing all the email with a user and having all the fido stuff with
@@ -258,7 +258,7 @@
 
 
 
- 5. Notes about the program behaviour
+ ## 5. Notes about the program behaviour
  ------------------------------------
 
    *  Actually, it is compatible with almost any kind of decent software that
@@ -292,7 +292,7 @@
       faults. USE AT YOUR OWN RISK!
 
 
- 6. Contacting the author(s)
+ ## 6. Contacting the author(s)
  ---------------------------
 
   If you have troubles using this software, make a bug report please, based on
@@ -309,7 +309,7 @@
   obviously with EmailPKT :-)).
 
 
- 7. Contributions
+ ## 7. Contributions
  ----------------
   Author of 1st (beta) version of emailpkt is:
 
@@ -331,8 +331,4 @@
      mche@users.sourceforge.net
      2:464/108
 
-  Some patches maked by members of the Husky Development Team
-
-
-Last modifyed by $Author$ at $Date$
-File revision is $Revision$
+  Some patches were made by members of the Husky Development Team
